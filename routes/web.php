@@ -17,6 +17,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/ComponenteUser', function () {
+    return view('User.ComponenteUser');
+});
+
+Route::get('/cli-component','App\Http\livewire\cliente');
+
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
