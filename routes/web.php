@@ -20,8 +20,12 @@ Route::get('/', function () {
 Route::get('/ComponenteUser', function () {
     return view('User.ComponenteUser');
 });
+Route::get('/embebido2', function () {
+    return view('livewire.cliente');
+});
 
 Route::get('/cli-component','App\Http\livewire\cliente');
+Route::get('/embebido','App\Http\livewire\embebidocomponent');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
