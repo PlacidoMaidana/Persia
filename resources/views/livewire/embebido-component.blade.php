@@ -21,11 +21,12 @@
           <small id="helpId" class="text-muted">Help text</small>
         </div>
 
+        <input type="hidden" name="detalles_string" wire:model="detalles_string">
 
     </div>
     <div class="row ">
       <div class="col-md-4  ">
-        <button type="button  " wire:click='addDetalles' class="btn btn-primary">Agregar</button>
+        <button type="button  " wire:click.prevent='addDetalles' class="btn btn-primary">Agregar</button>
       </div>
     </div>
 
@@ -61,7 +62,8 @@
         </tr>
       </tbody>
     </table>
-
+        
+      
   </div>
 </div>
 

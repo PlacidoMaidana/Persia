@@ -13,6 +13,7 @@ class EmbebidoComponent extends Component
     public $total_linea;
 
     public $detalles=array();
+    public $detalles_string="El hombre nace y muere a veces sin vivir";
     public $contador=5;
 
     public function render()
@@ -40,7 +41,8 @@ class EmbebidoComponent extends Component
        'cantidad'=> $this->cantidad,
        'precio'=>  $this->precio,
        'total-linea' =>$this->total_linea);
-       $this->detalles[]=$a;       
+       $this->detalles[]=$a;     
+       $this->detalles_string=serialize($this->detalles);
        $this->resetImput();
 
    
