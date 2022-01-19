@@ -1,53 +1,71 @@
-
-   
-    <div>
-        <div>
-            
-           <div class="card">
-               <img class="card-img-top" src="holder.js/100x180/" alt="">
-               <div class="card-body">
-                   <h4 class="card-title">Nueva linea</h4>
-                   
-        <div class="form-group">
-            <label for="">Prducto</label>
-            <input type="text" wire:model="producto" id="" class="form-control" placeholder="" aria-describedby="helpId">
-            <small id="helpId" class="text-muted">Help text</small>
-          </div>
-          <div class="form-group">
-              <label for="">Cantidad</label>
-              <input type="text" wire:model="cantidad" id="" class="form-control" placeholder="" aria-describedby="helpId">
-              <small id="helpId" class="text-muted">Help text</small>
-            </div>
-            <div class="form-group">
-              <label for="">Precio</label>
-              <input type="text" wire:model="precio" id="" class="form-control" placeholder="" aria-describedby="helpId">
-              <small id="helpId" class="text-muted">Help text</small>
-            </div>
-            <div class="form-group">
-              <label for="">Total</label>
-              <input type="text" wire:model="total_linea" id="" class="form-control" placeholder="" aria-describedby="helpId">
-              <small id="helpId" class="text-muted">Help text</small>
-            </div>
-            <div class="form-group">
-              <label for="">Prducto</label>
-              <input type="text" wire:model="producto" id="" class="form-control" placeholder="" aria-describedby="helpId">
-              <small id="helpId" class="text-muted">Help text</small>
-            </div>
-             <button type="button" wire:click='addDetalles' class="btn btn-primary">Agregar</button>
-               </div>
-           </div>
-            
-
-
-         @php
-         var_dump($detalles);
-            foreach ($detalles as $key => $value) {
-                echo $value['producto'];
-             }
-         @endphp
-
-
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-title">Nuevo item</h3>
+    <div class="row">
+     
+        <div class="form-group col">
+          <label for="">Prducto</label>
+          <input type="text" wire:model="producto" id="" class="form-control" placeholder="" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Help text</small>
         </div>
-    
+
+        <div class="form-group col">
+          <label for="">Cantidad</label>
+          <input type="text" wire:model="cantidad" id="" class="form-control" placeholder="" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Help text</small>
+        </div>
+
+        <div class="form-group col">
+          <label for="">Precio</label>
+          <input type="text" wire:model="precio" id="" class="form-control" placeholder="" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Help text</small>
+        </div>
+
+
+    </div>
+    <div class="row ">
+      <div class="col-md-4  ">
+        <button type="button  " wire:click='addDetalles' class="btn btn-primary">Agregar</button>
+      </div>
     </div>
 
+    <table class="table">
+      <thead>
+        <tr>
+          <th>producto</th>
+          <th>cantidad  </th>
+          <th>precio</th>
+          <th>detalle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td scope="row">papa</td>
+          <td>2</td>
+          <td>3</td>
+          <td>6</td>
+        </tr>
+       @foreach ($detalles as $item)
+        <tr>
+          <td scope="row">{{$item['producto']}}</td>
+          <td>{{$item['cantidad']}}</td>
+          <td>{{$item['precio']}}</td>
+          <td>{{$item['total-linea']}}</td>
+        </tr>  
+       @endforeach
+       
+        <tr>
+          <td scope="row"></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+
+
+
+  
