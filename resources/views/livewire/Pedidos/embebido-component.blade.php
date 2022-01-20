@@ -5,6 +5,7 @@
      
         <div class="form-group col">
           <label for="">Prducto</label>
+         
           <input type="text" wire:model="producto" id="" class="form-control" placeholder="" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Help text</small>
         </div>
@@ -40,12 +41,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td scope="row">papa</td>
-          <td>2</td>
-          <td>3</td>
-          <td>6</td>
-        </tr>
+        
        @foreach ($detalles as $item)
         <tr>
           <td scope="row">{{$item['producto']}}</td>
@@ -66,6 +62,8 @@
       
   </div>
 </div>
+
+
 
 
 

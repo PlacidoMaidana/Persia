@@ -25,7 +25,13 @@ Route::get('/embebido2', function () {
 });
 
 Route::get('/cli-component','App\Http\livewire\cliente');
-Route::get('/embebido','App\Http\livewire\embebidocomponent');
+
+Route::get('/vista', function () {
+    return view('vista_suelta');
+});
+Route::get('/productos', function () {
+    return view('Livewire.productos.seleccionar-component');
+});
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Pedidos;
 
 use Livewire\Component;
 
@@ -19,7 +19,7 @@ class EmbebidoComponent extends Component
     public function render()
     {
        
-        return view('livewire.embebido-component',['detalles'=>$this->detalles])
+        return view('livewire.pedidos.embebido-component',['detalles'=>$this->detalles])
         ->extends('layouts.app')
         ->section('content');
         
