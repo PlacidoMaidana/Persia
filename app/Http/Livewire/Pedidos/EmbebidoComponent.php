@@ -48,5 +48,11 @@ class EmbebidoComponent extends Component
    
     }
 
+    public function mostrar($value)
+     {
+         dd('llego '.$value);
+         $this->producto=$value;
+        //$this->show = $value;
+     }
    
 }

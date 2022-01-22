@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,6 +26,23 @@ Route::get('/embebido2', function () {
 });
 
 Route::get('/cli-component','App\Http\livewire\cliente');
+Route::get('/embebido/{id}','App\Http\livewire\pedidos\embebidocomponent@mostrar');
+
+Route::get('/tabla_productos_elegir', function () {
+    return view('vendor.voyager.nota-pedidos.tabla_productos_elegir');
+});
+Route::get('/productos_elegir', function () {
+     
+    return datatables()->of(DB::table('productos')
+    ->join('rubros as r','productos.rubro_id','=','r.id')
+    ->join('subrubros as s','productos.subrubro_id','=','s.id')
+    ->select(['productos.id', 'descripcion', 'r.rubro', 's.descripcion_subrubro', 'preciovta']))
+    ->addColumn('seleccionar','vendor\voyager\nota-pedidos\boton_seleccionar')
+    ->rawColumns(['seleccionar'])   
+    ->toJson();    
+ 
+ });
+
 
 Route::get('/vista', function () {
     return view('vista_suelta');

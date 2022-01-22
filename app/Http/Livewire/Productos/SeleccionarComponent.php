@@ -39,14 +39,17 @@ class SeleccionarComponent extends DataTableComponent
         return Producto::query();
     }
 
-    public function getTableRowUrl($row) :  ?string
+    public function getTableRowUrl($row) : ? string
     {
         if ($row->type === 'this') {
             return '_blank';
         }
        
+        // $this->emit('producto',$row['id']); //emitiendo un evento
+        //return null;
         //return view('livewire.pedidos.embebido-component',['id' => $row['id'],'detalles'=>[]]);
-        return "/vista?id=".$row['id'];
+        return "/embebido/".$row['id'];
+        
       
     }
 
