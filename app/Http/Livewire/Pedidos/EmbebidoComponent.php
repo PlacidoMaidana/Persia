@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class EmbebidoComponent extends Component
 {
-    
+    public $id_producto;
     public $producto;
     public $cantidad;
     public $precio;
@@ -27,6 +27,7 @@ class EmbebidoComponent extends Component
     
     public function resetImput()
     {
+        $this->id_producto =null;
         $this->producto ="";
         $this->cantidad=null;
         $this->precio =null;
@@ -37,7 +38,8 @@ class EmbebidoComponent extends Component
     {
        $this->total_linea= floatval($this->cantidad) * floatval($this->precio);
         
-       $a=array('producto'=> $this->producto,   
+       $a=array('id_producto'=> $this->id_producto,
+       'producto'=> $this->producto,   
        'cantidad'=> $this->cantidad,
        'precio'=>  $this->precio,
        'total-linea' =>$this->total_linea);

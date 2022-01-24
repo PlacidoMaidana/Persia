@@ -62,10 +62,10 @@
      </script> 
 
     <script>
-        function elejir(id,nombre) {
-           alert(nombre);
-           //asignarinterno(id,nombre,apellido,pabellon);
-        }
+        // function elegir(id,nombre) {
+          
+        //    //asignarinterno(id,nombre,apellido,pabellon);
+        // }
     </script>
 
 </body>

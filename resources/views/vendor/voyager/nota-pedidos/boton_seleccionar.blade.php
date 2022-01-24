@@ -1,3 +1,3 @@
-<a href="#" onclick="elejir({{$id}},'{{$descripcion}}')">
-    <i class="voyager-check"></i> Seleccionar</a>
+<a href="#" onclick="elegir({{$id}},'{{$descripcion}}','{{$preciovta}}')">
+    <i class="voyager-check"></i> Seleccionar {{$id}}</a>
    
