@@ -26,17 +26,25 @@ Route::get('/embebido2', function () {
 });
 
 Route::get('/cli-component','App\Http\livewire\cliente');
+Route::get('/embebido','App\Http\livewire\pedidos\embebidocomponent');
+
+
 Route::get('/embebido/{id}','App\Http\livewire\pedidos\embebidocomponent@mostrar');
 
 Route::get('/tabla_productos_elegir', function () {
     return view('vendor.voyager.nota-pedidos.tabla_productos_elegir');
 });
+
+Route::get('/pato', function () {
+    return view('pruebas.vistaPato');
+});
+
 Route::get('/productos_elegir', function () {
      
     return datatables()->of(DB::table('productos')
     ->join('rubros as r','productos.rubro_id','=','r.id')
     ->join('subrubros as s','productos.subrubro_id','=','s.id')
-    ->select(['productos.id', 'descripcion', 'r.rubro', 's.descripcion_subrubro', 'preciovta']))
+    ->select(['productos.id as id', 'descripcion', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'preciovta']))
     ->addColumn('seleccionar','vendor\voyager\nota-pedidos\boton_seleccionar')
     ->rawColumns(['seleccionar'])   
     ->toJson();    

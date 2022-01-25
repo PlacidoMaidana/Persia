@@ -3,12 +3,18 @@
     $add  = is_null($dataTypeContent->getKey());
 @endphp
 
-@extends('voyager::master')
+{{-- @extends('voyager::master') --}}
+@extends('layouts.voyager2')
 {{-- @extends('layouts.app') --}}
+
 
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css"> --}}
+
+   
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -98,41 +104,119 @@
                             <div class="col-md-8">
                                 <div class="col-md-8">
                                     <!-- Button trigger modal -->
-                                                
-                                   
-                                    
-                                    <!-- Modal --> 
-                                    <div class="modal fade" id="productos" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                     aria-hidden="true">
-                                        <div class="modal-dialog" style="min-width: 90%">
+                                          
+                                    @section('modal_elejir')
+                                     
+                                <!-- Modal --> 
+                                <div class="modal fade modal-warning" id="productos" v-if="allowCrop">
+                                    <div class="modal-dialog"  style="min-width: 90%">
                                         <div class="modal-content">
+                                        
                                             <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Seleccione un producto</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title">Seleccione un producto</h4>
                                             </div>
-                                            <div id="ventanaProductos" class="modal-body">
-                                                <div id="x34"></div>
+                                        
+                                            <div id="x34" class="modal-body">
+                                                <div class="card" style="min-width: 70%">
+                                                    <img class="card-img-top" src="holder.js/100x180/" alt="">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Productos</h4>
+                                                        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                                                            <thead>
+                                                              <tr>
+                                                                  <th>id</th>
+                                                                  <th>descripcion</th>
+                                                                  <th>rubro</th>
+                                                                  <th>subrubro</th>
+                                                                  <th>preciovta</th>
+                                                                  <th>seleccionar</th>
+                                                                
+                                                              </tr>
+                                                             </thead>
+                                                        
+                                                            </table>
+                                                        
+                                                        
+                                                    </div>
+                                                </div>
+
+
                                             </div>
+                                        
                                             <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
                                             </div>
-                                        </div>
                                         </div>
                                     </div>
+                                  </div>	
+                                  @stop  
+                                 
+                                  {{-- FORMULARIO EMBEBIDO --}}
+                                 
+                                                                    
+                                    <livewire:pedidos.embebido-component />   
+                               {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
+
+                                    {{-- <div class="card">
+                                        <img class="card-img-top" src="holder.js/100x180/" alt="">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Detalles</h4>
+                                            
+                                           
+                                            
+                                            <div class="row">
+                                                <div class="col-auto">
+                                                    <div class="form-group">
+                                                      <label for="">Producto</label>
+                                                      <input type="text" name="" id="producto" class="form-control" placeholder="" aria-describedby="helpId">
+                                                      <input type="hidden" name="id_producto" id="id_producto" >
+                                                      <small id="helpId" class="text-muted">producto</small>
+                                                    </div>                                                
+                                                </div>
+                                                <div class="col-auto">
+                                                    <button type="button" class="btn btn-primary" id="productos_buscar"
+                                                    data-bs-toggle="modal" data-bs-target="#productos">
+                                                    productos..
+                                                    </button>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="form-group">
+                                                      <label for="">Cantidad</label>
+                                                      <input type="text" name="" id="cantidad" class="form-control" placeholder="" aria-describedby="helpId">
+                                                      <small id="helpId" class="text-muted">cantidad</small>
+                                                    </div>                                                
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="form-group">
+                                                      <label for="">Precio</label>
+                                                      <input type="text" name="" id="precio" class="form-control" placeholder="" aria-describedby="helpId">
+                                                      <small id="helpId" class="text-muted">precio</small>
+                                                    </div>                                                
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <button type="button" id="addLinea">+ linea</button>
+                                            </div>
 
 
-          {{-- <<<<<<<<<<<<<<<<<<<<<<<           <<<<<             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-               <<<<<<<<<<<<<<<<<<<<<<<           <<<<<             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-               <<<<<<<<<<<<<<<<<<<<<<<           <<<<<             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-               <<<<<<<<<<<<<<<<<<<<<<<           <<<<<             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-               <<<<<<<<<<<<<<<<<<<<<<<                             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-               <<<<<<<<<<<<<<<<<<<<<<<           <<<<<             >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
+
+                                        </div>
+                                    </div> --}}
+
+
                                    
-
-
-                                    <livewire:pedidos.embebido-component />
                                     
                                 </div>
                                
@@ -147,6 +231,9 @@
                             @yield('submit-buttons')
                         </div>
                     </form>
+
+                     
+                                   
 
                     <iframe id="form_target" name="form_target" style="display:none"></iframe>
                     <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
@@ -185,10 +272,22 @@
         </div>
     </div>
     <!-- End Delete File Modal -->
-    @livewireScripts
+   
 @stop
 
 @section('javascript')
+ 
+    {{-- <!-- jQuery -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- DataTables -->
+    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- App scripts --> --}}
+{{--
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script> --}}
+  
     <script>
         var params = {};
         var $file;
@@ -264,24 +363,38 @@
 
    
 
-   <script>
+    <script>
     $('#productos_buscar').on('click',function(){
-       $('#x34').load('http://127.0.0.1/persia/public/tabla_productos_elegir',function(){
-           $('#productos').modal('show');
-       });
-       });
+        $('#productos').modal({show:true});
+    //   $('#x34').load("{{url('/tabla_productos_elegir')}}",function(){
+    //        $('#productos').modal('show');
+    //       });
+    });
    </script> 
+  
 
-   <script>
-       function elegir(id,nom,precio)
-       {     
-        $("#nombre_producto").val(nom);
-        $("#id_producto").val(id);
-        $("#precio").val(precio);
-        $('#productos').modal('hide');
-       
-        }
-   </script>
+  
+
+   
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable( {
+                 "serverSide": true,
+                 "ajax":"{{url('/productos_elegir')}}",                
+                 "columns":[
+                         {data: 'id', name: 'productos.id', width: '50px'},
+                         {data: 'descripcion', name: 'productos.descripcion', width: '205px'},
+                         {data: 'rubro', name: 'r.rubro', width: '30px'},
+                         {data: 'subrubro', name: 's.descripcion_subrubro', width: '205px'},
+                         {data: 'preciovta', name: 'productos.preciovta', width: '205px'},
+                         {data: 'seleccionar', name: 'seleccionar', width: '150px'},
+                                                  
+                          ]           
+            } );
+        } );
+    
+    
+     </script> 
 
 
 @stop

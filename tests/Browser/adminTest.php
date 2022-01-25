@@ -13,12 +13,13 @@ class adminTest extends DuskTestCase
      * A Dusk test example.
      *
      * @return void
+     * @group pedidos
      */
     public function testExample()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin')
-                    ->screenshot('PantallaPato')
+                    ->screenshot('PantallaInicio')
                     ->assertSee('Laravel');
         });
     }
@@ -27,6 +28,7 @@ class adminTest extends DuskTestCase
      * A Dusk test example.
      *
      * @return void
+     * @group pedidos
      */
     public function testPostLogin()
     {
@@ -35,13 +37,13 @@ class adminTest extends DuskTestCase
                     ->visit('/admin')
                     ->clickLink('Nota Pedidos')
                     ->pause(1000)
-                    ->screenshot('BrowsNotaPedidos')
+                    ->screenshot('NotaPedidos_brows')
                     ->clickLink('Edit')
                     ->pause(1000)
-                    ->screenshot('fichaNotaPedidos')
+                    ->screenshot('NotaPedidos_ficha')
                     ->press('productos')
                     ->pause(1000)
-                    ->screenshot('productosElegir')
+                    ->screenshot('NotaPedidos_Modal')
                     ->assertSee('Piedra liston');
         });
     }
@@ -66,6 +68,7 @@ class adminTest extends DuskTestCase
      * A Dusk test example.
      *
      * @return void
+     * @group pedidos
      */
     public function testSeleccionarProducto()
     {
@@ -82,12 +85,51 @@ class adminTest extends DuskTestCase
             ->pause(1000)
             ->screenshot('productosElegir')
             ->assertSee('Piedra liston')
+            ->clickLink('Seleccionar 1')//Una vez seleccionado deberia cerrar el modal pero al cargar el datatable al modal no funciona
+            ->press('Cancel')
+            ->pause(1000)
+            ->screenshot('ProductoElegido');
+        });
+    }
+
+    /**
+     * A Dusk test example.
+     *
+     * @return void
+     * @group pedidos_modal
+     */
+    public function testProbandoModal()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->loginAs(User::find(1))
+            ->visit('/admin')
+            ->clickLink('Nota Pedidos')
+            ->pause(1000)
+            ->screenshot('BrowsNotaPedidos')
+            ->clickLink('Edit')
+            ->pause(1000)
+            ->screenshot('fichaNotaPedidos')
+            ->press('productos')
+            ->pause(1000)
+            ->screenshot('productosElegir')
+            ->press('Cancel')
+            ->pause(200)
+            ->press('productos')
+            ->pause(1000)
+            ->screenshot('productosElegir abrir de nuevo')
+            ->assertSee('Piedra liston')
             ->clickLink('Seleccionar 1')
             ->pause(1000)
             ->screenshot('ProductoElegido');
         });
     }
 
+    /**
+     * A Dusk test example.
+     *
+     * @return void
+     * @group pedidos
+     */
     public function testRutaDeLaTabla()
     {
         $this->browse(function (Browser $browser) {
@@ -98,6 +140,8 @@ class adminTest extends DuskTestCase
                     ->assertSee('Piedra liston');
         });
     }
+
+    
 
 
 }

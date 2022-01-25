@@ -332,7 +332,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-        //dd(unserialize($request['detalles_string']));
+        dd(unserialize($request['detalles_string']));
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
