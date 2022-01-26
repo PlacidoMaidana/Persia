@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Voyager;
 
 use Exception;
+use App\Models\renglones_notapedido;
+use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -440,6 +442,8 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
      */
     public function store(Request $request)
     {
+
+       
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -448,10 +452,20 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $this->authorize('add', app($dataType->model_name));
 
         // Validate fields with ajax
+        
+        
+
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
 
+        $data->id_vendedor=auth()->id();
+        $data->monto_iva=0;
+        $data->total=222222; //total gral
+        $data->total_gravado=222222; //total gral
+        
         event(new BreadDataAdded($dataType, $data));
+
+        
 
         if (!$request->has('_tagging')) {
             if (auth()->user()->can('browse', $data)) {
@@ -460,7 +474,25 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $redirect = redirect()->back();
             }
 
-            return $redirect->with([
+            $tabla_detalles=unserialize($request['detalles_string']);
+           
+            foreach ($tabla_detalles as $r) {
+
+             
+                $renglon_np=new renglones_notapedido();
+                $renglon_np->pedido_id=$data->id;
+                $renglon_np->cantidad=$r['cantidad'];
+                $renglon_np->producto_id=$r['id_producto'];
+                $renglon_np->total_linea=$r['total-linea'];
+                $renglon_np->iva=21;
+                $renglon_np->save();              
+
+            }
+            die;
+
+           
+
+            return  $redirect->with([
                 'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
                 'alert-type' => 'success',
             ]);

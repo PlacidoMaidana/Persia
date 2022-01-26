@@ -71,7 +71,7 @@
        
       </tbody>
     </table>
-        
+        total general {{$total_general}}
       
   </div>
 </div>
