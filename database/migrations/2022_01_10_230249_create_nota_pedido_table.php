@@ -13,19 +13,18 @@ class CreateNotaPedidoTable extends Migration
      */
     public function up()
     {
-        Schema::create('nota_pedido', function (Blueprint $table) {
+        Schema::create('nota_pedidos', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->smallInteger('sucursal');
             $table->integer('nro_pedido');
             $table->dateTime('fecha')->nullable();
             $table->integer('id_cliente')->nullable()->index('FK_Nota_Pedido_Clientes');
-            $table->dateTime('fecha_venc')->nullable();
             $table->string('cond_venta', 34)->nullable();
-            $table->decimal('porc_dto', 5, 2)->nullable();
             $table->decimal('totalgravado', 12, 2)->nullable();
             $table->decimal('total', 19, 2)->nullable();
             $table->decimal('monto_iva', 9, 2)->nullable();
             $table->integer('id_vendedor')->nullable();
+            $table->integer('id_vendedor')->nullable()->index('FK_vendedor');
             $table->char('aprobado', 2)->nullable();
             $table->integer('id_factura')->nullable();
             $table->char('despachado', 2)->nullable();

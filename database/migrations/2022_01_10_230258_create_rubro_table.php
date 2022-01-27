@@ -13,7 +13,7 @@ class CreateRubroTable extends Migration
      */
     public function up()
     {
-        Schema::create('rubro', function (Blueprint $table) {
+        Schema::create('rubros', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->char('rubro', 50)->nullable();
         });

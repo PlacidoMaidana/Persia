@@ -13,7 +13,7 @@ class CreateMatprimaTable extends Migration
      */
     public function up()
     {
-        Schema::create('matprima', function (Blueprint $table) {
+        Schema::create('matprimas', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->integer('cod_proveedor');
             $table->char('cod_matprima', 40);
