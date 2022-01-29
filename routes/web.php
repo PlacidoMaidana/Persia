@@ -35,6 +35,11 @@ Route::get('/tabla_productos_elegir', function () {
     return view('vendor.voyager.nota-pedidos.tabla_productos_elegir');
 });
 
+Route::get('/clientes_create_modal', function () {
+    return view('vendor.voyager.clientes.ficha_extra');
+});
+
+
 Route::get('/pato', function () {
     return view('pruebas.vistaPato');
 });

@@ -68,7 +68,7 @@ class adminTest extends DuskTestCase
      * A Dusk test example.
      *
      * @return void
-     * @group pedidos
+     * @group pedidos_nuevo
      */
     public function testSeleccionarProducto()
     {
@@ -78,17 +78,30 @@ class adminTest extends DuskTestCase
             ->clickLink('Nota Pedidos')
             ->pause(1000)
             ->screenshot('BrowsNotaPedidos')
-            ->clickLink('Edit')
+            //->clickLink('Edit')
+            ->clickLink('Add New')
             ->pause(1000)
-            ->screenshot('fichaNotaPedidos')
-            ->press('productos')
+            ->screenshot('fichaNotaPedidos')            
+            ->pause(1000)
+            ->press('Productos')
             ->pause(1000)
             ->screenshot('productosElegir')
             ->assertSee('Piedra liston')
             ->clickLink('Seleccionar 1')//Una vez seleccionado deberia cerrar el modal pero al cargar el datatable al modal no funciona
-            ->press('Cancel')
+             //->type('fecha', 'id_cliente','cantidad','observaciones')
+             //->append('12/02/2022', 'Pablo',4,'Comprando piso para el baño')
+             ->type('fecha','10/02/2018')
+             ->select('id_cliente', 'Pablo')
+             ->type('#cantidad','5')
+             ->waitFor('#richtextobservaciones_ifr')
+             ->driver->executeScript('tinyMCE.get(\'#tinymce\').setContent(\'<h1>Hola viejo Lobo</h1>\')')
+             //->type('observaciones','este pedido es para el piso del patio')
+            ->press('Agregar')
             ->pause(1000)
-            ->screenshot('ProductoElegido');
+            ->screenshot('NuevoRegistro')
+            ->press('Save')
+            ->pause(1000)
+            ->screenshot('Termino_insercion');
         });
     }
 

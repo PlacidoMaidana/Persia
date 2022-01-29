@@ -59,6 +59,8 @@
 
     @yield('head')
     @livewireStyles
+     {{-- <wireui:scripts /> --}}
+        {{-- <script src="//unpkg.com/alpinejs"></script> --}}
 </head>
 
 <body class="voyager @if(isset($dataType) && isset($dataType->slug)){{ $dataType->slug }}@endif">
