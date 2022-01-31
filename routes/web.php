@@ -31,6 +31,8 @@ Route::get('/embebido','App\Http\livewire\pedidos\embebidocomponent');
 
 Route::get('/embebido/{id}','App\Http\livewire\pedidos\embebidocomponent@mostrar');
 
+
+
 Route::get('/tabla_productos_elegir', function () {
     return view('vendor.voyager.nota-pedidos.tabla_productos_elegir');
 });

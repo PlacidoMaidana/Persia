@@ -3,8 +3,7 @@
     $add  = is_null($dataTypeContent->getKey());
 @endphp
 
-@extends('layouts.app')
-{{-- @extends('voyager::master') --}}
+@extends('voyager::master')
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -38,6 +37,11 @@
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
+
+
+                        {{-- @if ($NP_Create==url('admin/nota-pedidos/create'))
+                            <input type="hidden" name="NP_Create" value='admin/nota-pedidos/create'>
+                        @endif --}}
 
                         <div class="panel-body">
 
