@@ -14,7 +14,7 @@ class CreateDetalleOrdenFabricacionTable extends Migration
     public function up()
     {
         Schema::create('detalle_orden_fabricacion', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('id_orden_fabricacion')->index('FK_Detalle_Orden_Fabricacion_Ordenes_Fabricacion');
             $table->integer('id_producto')->index('FK_Detalle_Orden_Fabricacion_Productos');
             $table->decimal('cantidad', 20, 2)->nullable();

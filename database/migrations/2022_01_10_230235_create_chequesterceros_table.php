@@ -14,7 +14,7 @@ class CreateChequestercerosTable extends Migration
     public function up()
     {
         Schema::create('chequesterceros', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->char('tipo', 1)->nullable();
             $table->integer('id_cuenta_banco')->nullable();
             $table->integer('id_caja')->nullable()->index('FK_ChequesTerceros_Caja_Diaria');

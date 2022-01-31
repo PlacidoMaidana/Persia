@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFacturaCompraTable extends Migration
+class CreateFacturasComprasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateFacturaCompraTable extends Migration
      */
     public function up()
     {
-        Schema::create('factura_compra', function (Blueprint $table) {
-            $table->integer('id')->primary();
+        Schema::create('facturas_compras', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->char('tipo_factura', 3);
             $table->integer('pto_venta');
             $table->integer('nro_factura');
-            $table->integer('id_proveedor')->index('FK_Factura_Compra_Proveedores');
+            $table->unsignedBigInteger('id_proveedor')->index();
+            
             $table->dateTime('fecha')->nullable();
             $table->char('observaciones', 200)->nullable();
             $table->integer('id_tipo_gasto')->nullable()->index('FK_Factura_Compra_Tipos_Gastos');
@@ -46,6 +47,8 @@ class CreateFacturaCompraTable extends Migration
             $table->integer('nro_factura_ref')->nullable();
             $table->char('tipo_debito', 25)->nullable();
             $table->tinyInteger('codusuario')->nullable();
+            $table->timestamps();
+            
         });
     }
 
@@ -56,6 +59,6 @@ class CreateFacturaCompraTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('factura_compra');
+        Schema::dropIfExists('facturas_compras');
     }
 }

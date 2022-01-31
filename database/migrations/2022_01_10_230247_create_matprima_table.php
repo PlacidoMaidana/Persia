@@ -14,7 +14,7 @@ class CreateMatprimaTable extends Migration
     public function up()
     {
         Schema::create('matprimas', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->integer('cod_proveedor');
             $table->char('cod_matprima', 40);
             $table->char('descripcion', 100)->nullable();
@@ -27,6 +27,7 @@ class CreateMatprimaTable extends Migration
             $table->decimal('preciounit', 15, 8)->nullable();
             $table->decimal('preciounit_dolar', 12, 5)->nullable();
             $table->decimal('porc_iva', 7, 2)->nullable();
+            $table->timestamps();
         });
     }
 
@@ -37,6 +38,6 @@ class CreateMatprimaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('matprima');
+        Schema::dropIfExists('matprimas');
     }
 }

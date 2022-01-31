@@ -14,7 +14,7 @@ class CreateCobranzasTable extends Migration
     public function up()
     {
         Schema::create('cobranzas', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('id_recibo')->index('FK_Cobranzas_Recibos_cobranzas');
             $table->smallInteger('pto_vta');
             $table->integer('nro_recibo');

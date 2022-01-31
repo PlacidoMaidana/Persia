@@ -14,7 +14,7 @@ class CreateCuentasBancoTable extends Migration
     public function up()
     {
         Schema::create('cuentas_banco', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->char('banco', 50)->nullable();
             $table->char('sucursal', 50)->nullable();
             $table->char('tipo_cta', 20)->nullable();
