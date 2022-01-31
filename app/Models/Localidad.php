@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Localidad extends Model
 {
+<<<<<<< HEAD
     protected $table = 'localidades';
     protected $fillable = [
         'localidad',
@@ -14,5 +15,7 @@ class Localidad extends Model
       
     ];
 
+=======
+>>>>>>> dec2ec52e74c5767d3f106bd151b1c71a6758a1b
     use HasFactory;
 }
