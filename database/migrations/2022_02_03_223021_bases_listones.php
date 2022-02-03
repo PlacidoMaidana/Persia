@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubrubrompTable extends Migration
+class BasesListones extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateSubrubrompTable extends Migration
      */
     public function up()
     {
-        Schema::create('subrubromp', function (Blueprint $table) {
+        Schema::create('Bases_listones', function (Blueprint $table) {
             $table->integer('id')->primary();
-            $table->integer('id_rubromp')->index('FK_SubRubroMP_SubRubroMP');
-            $table->char('descrip_subrubromp', 50);
+            $table->char('desc_formula_base' , 50)->nullable(); 
+            $table->integer('id_producto')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -27,6 +28,6 @@ class CreateSubrubrompTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subrubromp');
+        Schema::dropIfExists('Bases_listones');
     }
 }

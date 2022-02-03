@@ -17,6 +17,7 @@ class CreateTiposGastosTable extends Migration
             $table->integer('id')->primary();
             $table->char('tipo1', 20)->nullable();
             $table->char('tipo2', 20)->nullable();
+            $table->timestamps();
         });
     }
 

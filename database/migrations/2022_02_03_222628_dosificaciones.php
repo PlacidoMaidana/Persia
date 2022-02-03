@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRubrompTable extends Migration
+class Dosificaciones extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateRubrompTable extends Migration
      */
     public function up()
     {
-        Schema::create('rubromp', function (Blueprint $table) {
+        Schema::create('Dosificaciones', function (Blueprint $table) {
             $table->integer('id')->primary();
-            $table->char('rubro_mp', 50);
+            $table->integer('id_base')->nullable();
+            $table->integer('id_producto_componente')->nullable();
+            $table->decimal('cant_unid_produc', 12, 5)->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,6 +29,6 @@ class CreateRubrompTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rubromp');
+        Schema::dropIfExists('Dosificaciones');
     }
 }

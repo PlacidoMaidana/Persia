@@ -19,13 +19,13 @@ class CreateClientesTable extends Migration
             $table->string('cuit', 15)->nullable();
             $table->dateTime('fecha_alta')->nullable();
             $table->string('direccion', 100)->nullable();
-            $table->char('cp', 20)->nullable();
             $table->string('tel', 50)->nullable();
             $table->integer('id_localidad')->nullable()->index('FK_Clientes_localidad');
             $table->string('e_mail', 50)->nullable();
             $table->char('observaciones', 255)->nullable();
             $table->char('cond_iva', 20)->nullable();
             $table->char('registro_fce', 2)->nullable();
+            $table->timestamps();
         });
     }
 

@@ -14,10 +14,7 @@ class RenglonesNotapedidos extends Migration
     public function up()
     {
          //Agregando integridad referencial a los renglones de notas de pedido
-         Schema::table('renglones_notapedidos', function (Blueprint $table) {
-           
-            $table->foreign('pedido_id')->references('id')->on('nota_pedidos')->onDelete('cascade')->onUpdate('cascade');
-        });
+        
     }
 
     /**

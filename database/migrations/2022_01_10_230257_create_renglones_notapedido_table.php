@@ -21,6 +21,11 @@ class CreateRenglonesNotapedidoTable extends Migration
             $table->decimal('total_linea', 19, 3)->nullable();
             $table->decimal('iva', 5, 2)->nullable();
             $table->integer('id_factura')->nullable()->index('FK_Renglones_NotaPedido_Factura_Venta');
+            $table->timestamps();
+        });
+        Schema::table('renglones_notapedidos', function (Blueprint $table) {
+           
+            $table->foreign('id_pedido')->references('id')->on('nota_pedidos')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -31,6 +36,6 @@ class CreateRenglonesNotapedidoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('renglones_notapedido');
+        Schema::dropIfExists('renglones_notapedidos');
     }
 }

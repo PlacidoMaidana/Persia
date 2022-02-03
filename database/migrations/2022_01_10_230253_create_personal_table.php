@@ -26,6 +26,7 @@ class CreatePersonalTable extends Migration
             $table->string('domicilio', 100)->nullable();
             $table->string('telefonos', 50)->nullable();
             $table->string('observaciones', 249)->nullable();
+            $table->timestamps();
         });
     }
 

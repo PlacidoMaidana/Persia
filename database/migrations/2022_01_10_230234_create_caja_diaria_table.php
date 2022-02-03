@@ -13,20 +13,15 @@ class CreateCajaDiariaTable extends Migration
      */
     public function up()
     {
-        Schema::create('caja_diaria', function (Blueprint $table) {
+        Schema::create('cajas_diarias', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->dateTime('fecha_apertura')->nullable();
             $table->decimal('inicio_efectivo', 19, 2)->nullable();
-            $table->decimal('inicio_cheque', 19, 2)->nullable();
-            $table->decimal('inicio_tarjetas', 19, 2)->nullable();
-            $table->decimal('Inicio_otros', 19, 2)->nullable();
             $table->string('cerrado', 2)->nullable();
             $table->integer('id_operador')->nullable();
             $table->decimal('total_efectivo', 11, 2)->nullable();
-            $table->decimal('total_cheque', 11, 2)->nullable();
-            $table->decimal('total_tarjetas', 11, 2)->nullable();
-            $table->decimal('total_otros', 11, 2)->nullable();
             $table->char('observaciones', 200)->nullable();
+            $table->timestamps();
         });
     }
 
@@ -37,6 +32,6 @@ class CreateCajaDiariaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('caja_diaria');
+        Schema::dropIfExists('cajas_diarias');
     }
 }

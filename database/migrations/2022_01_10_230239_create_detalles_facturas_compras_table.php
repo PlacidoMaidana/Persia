@@ -16,9 +16,7 @@ class CreateDetallesFacturasComprasTable extends Migration
         Schema::create('detalles_facturas_compras', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('id_factura_compra')->index();
-           
-            $table->unsignedBigInteger('id_articulo')->index();
-            
+            $table->unsignedBigInteger('id_producto')->index();
             $table->decimal('cantidad', 12, 2)->nullable();
             $table->decimal('precio_c', 15, 8)->nullable();
             $table->decimal('descuento', 11, 2)->nullable();

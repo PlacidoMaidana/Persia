@@ -16,7 +16,10 @@ class CreateRubroTable extends Migration
         Schema::create('rubros', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->char('rubro', 50)->nullable();
+            $table->timestamps();
+            
         });
+        
     }
 
     /**
@@ -26,6 +29,6 @@ class CreateRubroTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rubro');
+        Schema::dropIfExists('rubros');
     }
 }

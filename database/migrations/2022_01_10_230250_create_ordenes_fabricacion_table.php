@@ -20,6 +20,10 @@ class CreateOrdenesFabricacionTable extends Migration
             $table->char('estado', 10)->nullable();
             $table->dateTime('fecha_entrada_proceso')->nullable();
             $table->dateTime('fecha_salida_proceso')->nullable();
+            $table->integer('id_prodcuto')->nullable();
+            $table->decimal('cantidad' , 18, 2)->nullable();
+            $table->integer('id_renglon_pedido')->nullable();
+            $table->timestamps();
         });
     }
 
