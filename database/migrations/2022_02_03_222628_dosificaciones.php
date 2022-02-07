@@ -14,12 +14,13 @@ class Dosificaciones extends Migration
     public function up()
     {
         Schema::create('Dosificaciones', function (Blueprint $table) {
-            $table->integer('id')->primary();
-            $table->integer('id_base')->nullable();
-            $table->integer('id_producto_componente')->nullable();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('id_base')->nullable();
+            $table->unsignedBigInteger('id_producto_componente')->nullable();
             $table->decimal('cant_unid_produc', 12, 5)->nullable();
             $table->timestamps();
         });
+    
     }
 
     /**

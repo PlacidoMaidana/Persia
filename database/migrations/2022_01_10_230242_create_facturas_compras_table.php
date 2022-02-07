@@ -18,10 +18,10 @@ class CreateFacturasComprasTable extends Migration
             $table->char('tipo_factura', 3);
             $table->integer('pto_venta');
             $table->integer('nro_factura');
-            $table->unsignedBigInteger('id_proveedor')->index();
+            $table->unsignedBigInteger('id_proveedor');
             $table->dateTime('fecha')->nullable();
             $table->char('observaciones', 200)->nullable();
-            $table->integer('id_tipo_gasto')->nullable()->index('FK_Factura_Compra_Tipos_Gastos');
+            $table->unsignedBigInteger('id_tipo_gasto')->nullable();
             $table->dateTime('fecha_carga')->nullable();
             $table->decimal('subtotal', 13, 3)->nullable();
             $table->decimal('exento', 9, 3)->nullable();
@@ -38,11 +38,12 @@ class CreateFacturasComprasTable extends Migration
             $table->dateTime('fecha_vencimiento')->nullable();
             $table->smallInteger('remito_pto_vta')->nullable();
             $table->integer('remito_nro')->nullable();
-            $table->smallInteger('id_jurisdiccion')->nullable();
+            $table->unsignedBigInteger('id_jurisdiccion')->nullable();
             $table->integer('nro_factura_ref')->nullable();
             $table->timestamps();
             
         });
+       
     }
 
     /**

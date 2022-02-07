@@ -14,7 +14,7 @@ class CreateJurisdiccionesTable extends Migration
     public function up()
     {
         Schema::create('jurisdicciones', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->integer('codigo');
             $table->char('provincia', 30)->nullable();
             $table->timestamps();

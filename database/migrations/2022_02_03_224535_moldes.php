@@ -14,7 +14,7 @@ class Moldes extends Migration
     public function up()
     {
         Schema::create('Moldes', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->char('descripcion', 100)->nullable();
             $table->integer('cant_moldes')->nullable();
             $table->decimal('mt2_por_molde', 12 ,3)->nullable();

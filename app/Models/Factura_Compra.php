@@ -9,9 +9,9 @@ class Factura_Compra extends Model
 {
     protected $table = 'facturas_compras';
     use HasFactory;
-    public function matprima() {
+    public function producto() {
         
-        return $this->belongsToMany('App\Models\matprima','detalle_factura_compra', 'id_factura_compra','id_articulo')->withPivot('id','cantidad','precio_c');
+        return $this->belongsToMany('App\Models\Producto','detalle_factura_compra', 'id_factura_compra','id_producto')->withPivot('id','cantidad','precio_c');
     }
     public function detalle_factura_compra() {
         return $this -> hasMany(Detalle_Factura_Compra::class);

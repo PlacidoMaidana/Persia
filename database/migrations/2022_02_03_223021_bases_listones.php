@@ -14,11 +14,12 @@ class BasesListones extends Migration
     public function up()
     {
         Schema::create('Bases_listones', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->char('desc_formula_base' , 50)->nullable(); 
-            $table->integer('id_producto')->nullable();
+            $table->unsignedBigInteger('id_producto')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**

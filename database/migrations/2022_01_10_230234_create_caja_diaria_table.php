@@ -14,7 +14,7 @@ class CreateCajaDiariaTable extends Migration
     public function up()
     {
         Schema::create('cajas_diarias', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->dateTime('fecha_apertura')->nullable();
             $table->decimal('inicio_efectivo', 19, 2)->nullable();
             $table->string('cerrado', 2)->nullable();

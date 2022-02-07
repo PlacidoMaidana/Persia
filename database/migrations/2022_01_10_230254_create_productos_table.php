@@ -14,16 +14,15 @@ class CreateProductosTable extends Migration
     public function up()
     {
         Schema::create('productos', function (Blueprint $table) {
-            $table->integer('id')->primary();
-            $table->char('cod_producto', 15);
+            $table->bigIncrements('id');
             $table->char('descripcion', 50)->nullable();
-            $table->integer('id_rubro')->index('FK_Productos_Rubro');
-            $table->integer('id_subrubro')->index('FK_Productos_SubRubro');
+            $table->unsignedBigInteger('rubro_id')->index('FK_Productos_Rubro');
+            $table->unsignedBigInteger('subrubro_id')->index('FK_Productos_SubRubro');
             $table->decimal('preciovta', 19, 3)->nullable();
             $table->decimal('tasa_iva', 5, 2)->nullable();
             $table->char('unidad', 100)->nullable();
             $table->char('activo', 2)->nullable();
-            $table->integer('id_molde')->nullable()->index('FK_Productos_Moldes');
+            $table->unsignedBigInteger('id_molde')->nullable()->index('FK_Productos_Moldes');
             $table->char('manual_procedimiento', 255)->nullable();
             $table->char('unidad_consumo_produccion', 255)->nullable();
             $table->decimal('factor_conversion_unidades', 10,2)->nullable();
@@ -31,6 +30,7 @@ class CreateProductosTable extends Migration
             $table->integer('paquetes_mt2')->nullable();
             $table->timestamps();
         });
+  
     }
 
     /**

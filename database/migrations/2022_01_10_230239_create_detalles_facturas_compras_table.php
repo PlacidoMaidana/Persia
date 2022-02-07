@@ -25,6 +25,7 @@ class CreateDetallesFacturasComprasTable extends Migration
             $table->timestamps();
     
         });
+     
     }
 
     /**
