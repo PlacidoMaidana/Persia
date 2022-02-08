@@ -77,31 +77,31 @@ class adminTest extends DuskTestCase
             ->visit('/admin')
             ->clickLink('Nota Pedidos')
             ->pause(1000)
-            ->screenshot('BrowsNotaPedidos')
+            ->screenshot('a')
             //->clickLink('Edit')
             ->clickLink('Add New')
             ->pause(1000)
-            ->screenshot('fichaNotaPedidos')            
+            ->screenshot('b')            
             ->pause(1000)
             ->press('Productos')
             ->pause(1000)
-            ->screenshot('productosElegir')
+            ->screenshot('c')
             ->assertSee('Piedra liston')
             ->clickLink('Seleccionar 1')//Una vez seleccionado deberia cerrar el modal pero al cargar el datatable al modal no funciona
              //->type('fecha', 'id_cliente','cantidad','observaciones')
              //->append('12/02/2022', 'Pablo',4,'Comprando piso para el baño')
-             ->type('fecha','10/02/2018')
+             ->type('fecha','7/02/2018')
              ->select('id_cliente', 'Pablo')
              ->type('#cantidad','5')
              ->waitFor('#richtextobservaciones_ifr')
-             ->driver->executeScript('tinyMCE.get(\'#tinymce\').setContent(\'<h1>Hola viejo Lobo</h1>\')')
+             //->driver->executeScript('tinyMCE.get(\'#tinymce\').setContent(\'<h1>Hola viejo Lobo</h1>\')')
              //->type('observaciones','este pedido es para el piso del patio')
             ->press('Agregar')
             ->pause(1000)
-            ->screenshot('NuevoRegistro')
+            ->screenshot('d')
             ->press('Save')
             ->pause(1000)
-            ->screenshot('Termino_insercion');
+            ->screenshot('e');
         });
     }
 
@@ -151,6 +151,47 @@ class adminTest extends DuskTestCase
                     ->pause(1000)
                     ->screenshot('Datos de la tabla')
                     ->assertSee('Piedra liston');
+        });
+    }
+
+     /**
+     * A Dusk test example.
+     *
+     * @return void
+     * @group pedidos_nuevo_cliente
+     */
+    public function testNuevoCliente()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->loginAs(User::find(1))
+            ->visit('/admin')
+            ->clickLink('Nota Pedidos')
+            ->pause(1000)
+            ->screenshot('a')
+            //->clickLink('Edit')
+            ->clickLink('Add New')
+            ->pause(1000)
+            ->screenshot('b')            
+            ->pause(1000)
+            ->press('Productos')
+            ->pause(1000)
+            ->screenshot('c')
+            ->assertSee('Piedra liston')
+            ->clickLink('Seleccionar 1')//Una vez seleccionado deberia cerrar el modal pero al cargar el datatable al modal no funciona
+             //->type('fecha', 'id_cliente','cantidad','observaciones')
+             //->append('12/02/2022', 'Pablo',4,'Comprando piso para el baño')
+             ->type('fecha','7/02/2018')
+             ->select('id_cliente', 'Pablo')
+             ->type('#cantidad','5')
+             ->waitFor('#richtextobservaciones_ifr')
+             //->driver->executeScript('tinyMCE.get(\'#tinymce\').setContent(\'<h1>Hola viejo Lobo</h1>\')')
+             //->type('observaciones','este pedido es para el piso del patio')
+            ->press('Agregar')
+            ->pause(1000)
+            ->screenshot('d')
+            ->press('Save')
+            ->pause(1000)
+            ->screenshot('e');
         });
     }
 

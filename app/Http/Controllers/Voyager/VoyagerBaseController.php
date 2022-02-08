@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Voyager;
+namespace TCG\Voyager\Http\Controllers;
 
 use Exception;
-use App\Models\Cliente;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +16,7 @@ use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 
-class ClienteController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
+class VoyagerBaseController extends Controller
 {
     use BreadRelationshipParser;
 
@@ -393,7 +392,7 @@ class ClienteController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     //
     //****************************************
 
-    public function create(Request $request)
+    public function create(Request $request,$v)
     {
         $slug = $this->getSlug($request);
 
@@ -425,30 +424,7 @@ class ClienteController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $view = "voyager::$slug.edit-add";
         }
 
-        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        // <<<<<<<<<<<<<<<        Si viene desde una nota de pedido volvere a ella           <<<<<<<<<<<
-        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-        // $NP_Create=url('admin/nota-pedidos/create');
-        dd($request->session()->previousUrl());
-        // if (isset($request['NP_Create'])) {
-        //     return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','NP_Create'));
-        //      }else {
-           
-                return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
-                
-            // }
-    
-
-        
-
-        if (isset($request['NP_ID_Edit'])) {
-            dd('Desde nota de pedido editar'.$request['NP_ID_Edit']);   
-            return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','NP_ID_Edit'));
-        }       // return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
 
     /**
@@ -475,16 +451,7 @@ class ClienteController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
         if (!$request->has('_tagging')) {
             if (auth()->user()->can('browse', $data)) {
-                if(isset($request['NP_Create']))
-                {
-                    $redirect = redirect()->route(url('admin/nota-pedidos/create'));
-                }
-               
-                else {
-                    # code...
-                    $redirect = redirect()->route("voyager.{$dataType->slug}.index");
-                  
-                }
+                $redirect = redirect()->route("voyager.{$dataType->slug}.index");
             } else {
                 $redirect = redirect()->back();
             }

@@ -86,12 +86,47 @@
                                              @endif
                                              
                                              @if ($row->getTranslatedAttribute('display_name')=='cliente')
-                                                
+                                                {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Boton + cliente          <<<<<<<<<<<<<<<<<<<<<<<<<
+                                                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<                              <<<<<<<<<<<<<<<<<<<<<<<<
+                                                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
+                                                    
+
+                                                          <!-- Modal -->
+                                                        
+                                                            <div class="modal fade modal-warning" id="modal_cliente" v-if="allowCrop">
+                                                               <div class="modal-dialog"  style="min-width: 50%">
+                                                                   <div class="modal-content">
+                                                                
+                                                                       <div class="modal-header">
+                                                                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                           <h4 class="modal-title">Nuevo cliente</h4>
+                                                                       </div>
+                                                                   
+                                                                       <div id="x34" class="modal-body">
+
+                                                                           <livewire:ficha-cliente /> 
+
+
+                                                                       </div>
+                                                                   
+                                                                       <div class="modal-footer">
+                                                                           <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                                                                       </div>
+                                                                   </div>
+                                                               </div>
+                                                             </div>	
+                                    
 
                                                  <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                                     {{ $row->slugify }}
                                                     <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}
-                                                        <a href="{{url('admin/clientes/create')}}" class="btn btn-light">+ Cliente</a>
+                                                          <!-- Button trigger modal -->
+                                                          <button type="button" id="cliente" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_cliente">
+                                                            + Cliente
+                                                          </button>
+                                                        {{-- <a href="{{url('admin/clientes/create2/si')}}" class="btn btn-light">+ Cliente</a> --}}
                                                     
                                                     
                                                     </label>
@@ -421,6 +456,17 @@
     //   $('#x34').load("{{url('/tabla_productos_elegir')}}",function(){
     //        $('#productos').modal('show');
     //       });
+    });
+   </script> 
+
+   <script>
+    $('#cliente').on('click',function(){
+        $('#modal_cliente').modal({show:true});
+    
+    });
+    $('#guardar_cliente').on('click',function(){
+        $('#modal_cliente').modal('hide');
+    
     });
    </script> 
   
