@@ -39,9 +39,9 @@
                         {{ csrf_field() }}
 
 
-                        {{-- @if ($NP_Create==url('admin/nota-pedidos/create'))
+                        @if ($NP_Create==url('admin/nota-pedidos/create/'))
                             <input type="hidden" name="NP_Create" value='admin/nota-pedidos/create'>
-                        @endif --}}
+                        @endif 
 
                         <div class="panel-body">
 
