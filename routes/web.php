@@ -58,6 +58,16 @@ Route::get('/productos_elegir', function () {
  
  });
 
+ Route::get('/localidades_elegir', function () {
+     
+    return datatables()->of(DB::table('localidades')
+    ->select(['id', 'provincia', 'localidad']))
+    ->addColumn('seleccionar','vendor\voyager\localidad\boton_seleccionar')
+    ->rawColumns(['seleccionar'])   
+    ->toJson();    
+ 
+ });
+
 
 Route::get('/vista', function () {
     return view('vista_suelta');

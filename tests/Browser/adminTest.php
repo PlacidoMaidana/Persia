@@ -173,25 +173,25 @@ class adminTest extends DuskTestCase
             ->pause(1000)
             ->screenshot('b')            
             ->pause(1000)
-            ->press('Productos')
+            ->press(' + Cliente')
             ->pause(1000)
-            ->screenshot('c')
-            ->assertSee('Piedra liston')
-            ->clickLink('Seleccionar 1')//Una vez seleccionado deberia cerrar el modal pero al cargar el datatable al modal no funciona
-             //->type('fecha', 'id_cliente','cantidad','observaciones')
-             //->append('12/02/2022', 'Pablo',4,'Comprando piso para el baño')
-             ->type('fecha','7/02/2018')
-             ->select('id_cliente', 'Pablo')
-             ->type('#cantidad','5')
-             ->waitFor('#richtextobservaciones_ifr')
+            ->screenshot('c');
+            // ->assertSee('Piedra liston')
+            // ->clickLink('Seleccionar 1')//Una vez seleccionado deberia cerrar el modal pero al cargar el datatable al modal no funciona
+            //  //->type('fecha', 'id_cliente','cantidad','observaciones')
+            //  //->append('12/02/2022', 'Pablo',4,'Comprando piso para el baño')
+            //  ->type('fecha','7/02/2018')
+            //  ->select('id_cliente', 'Pablo')
+            //  ->type('#cantidad','5')
+            //  ->waitFor('#richtextobservaciones_ifr')
              //->driver->executeScript('tinyMCE.get(\'#tinymce\').setContent(\'<h1>Hola viejo Lobo</h1>\')')
              //->type('observaciones','este pedido es para el piso del patio')
-            ->press('Agregar')
-            ->pause(1000)
-            ->screenshot('d')
-            ->press('Save')
-            ->pause(1000)
-            ->screenshot('e');
+            // ->press('cliente')
+            // ->pause(1000)
+            // ->screenshot('d');
+            // ->press('Save')
+            // ->pause(1000)
+            // ->screenshot('e');
         });
     }
 

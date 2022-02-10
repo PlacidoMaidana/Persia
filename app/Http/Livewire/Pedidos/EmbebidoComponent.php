@@ -30,13 +30,13 @@ class EmbebidoComponent extends Component
             if (!is_null($renglones)) {
                $this->total_general=0;
                 foreach ($renglones as $key => $value) {
-                   $prod=Producto::find($value->producto_id);
+                   $prod=Producto::find($value->id_producto);
 
                    $a=array(
-                   'id_producto'=> $value->producto_id,
+                   'id_producto'=> $value->id_producto,
                    'producto'=> $value->descripcion,   
                    'cantidad'=> $value->cantidad,
-                   'precio'=> $prod['preciocosto'], //$renglones->precio,
+                   'precio'=> $prod['preciovta'], //$renglones->precio,
                    'total-linea'=>$value->total_linea);
                    $this->detalles[]=$a;
 
@@ -64,11 +64,12 @@ class EmbebidoComponent extends Component
       
       
       $this->total_general=0;
+     
       foreach ($renglones as $key => $value) {
-         $prod=Producto::find($value['producto_id']);
+         $prod=Producto::find($value['id_producto']);
        
          $a=array(
-           'id_producto'=> $value['producto_id'],
+           'id_producto'=> $value['id_producto'],
            'producto'=> $value['descripcion'],   
            'cantidad'=> $value['cantidad'],
            'precio'=> $prod['preciocosto'], //$renglones->precio,

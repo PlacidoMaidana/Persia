@@ -320,8 +320,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
         $renglones=$this->obtener_lineas($id);
          
-
-
+        
         foreach ($dataType->editRows as $key => $row) {
             $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
         }
@@ -365,10 +364,12 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
        
 
         return $renglones=   DB::table('nota_pedidos')
-        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.pedido_id')
-        ->join('productos as p','r.producto_id','=','p.id')
-        ->select('r.id', 'producto_id','descripcion','cantidad','p.preciovta' ,'r.total_linea', 'iva', 'nota_pedidos.id_factura as factura')
+        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.id_pedido')
+        ->join('productos as p','r.id_producto','=','p.id')
+        ->select('r.id', 'id_producto','descripcion','cantidad','p.preciovta' ,'r.total_linea', 'iva', 'nota_pedidos.id_factura as factura')
         ->where('nota_pedidos.id',$id_pedido)->get();
+
+        
     }
 
     public function obtener_totales_lineas($id_pedido)
@@ -595,7 +596,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function eliminar_renglones_de_pedido($id_pedido)
     {
-        DB::table('renglones_notapedidos')->where('pedido_id', '=', $id_pedido)->delete();
+        DB::table('renglones_notapedidos')->where('id_pedido', '=', $id_pedido)->delete();
     }
 
     public function cargar_renglones_de_pedido($tabla_detalles,$id_pedido)
@@ -604,9 +605,11 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             
              
             $renglon_np=new renglones_notapedido();
-            $renglon_np->pedido_id=$id_pedido;
+            //$renglon_np->pedido_id=$id_pedido;
+            $renglon_np->id_pedido=$id_pedido; 
             $renglon_np->cantidad=$r['cantidad'];
-            $renglon_np->producto_id=$r['id_producto'];
+            //$renglon_np->producto_id=$r['id_producto'];
+            $renglon_np->id_producto=$r['id_producto'];
             $renglon_np->total_linea=$r['total-linea'];
             $renglon_np->iva=21;
             $renglon_np->save();              

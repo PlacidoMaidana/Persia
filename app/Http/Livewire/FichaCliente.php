@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Cliente;
+use App\Models\Localidad;
 use TCG\Voyager\Facades\Voyager;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ class FichaCliente extends Component
        // public updated_at;
        // public cliente_hasone_localidad_relationship;
 
+       protected $listeners = ['localidad_elegida' => 'seleccion_localidad'];
+
     public function render()
     {
 
@@ -49,7 +52,9 @@ class FichaCliente extends Component
         $dataTypeContent = DB::table('data_rows')
         ->select('field', 'type', 'display_name', 'required')
         ->where('data_type_id','=',13)->get();
-     
+        
+        // $localidades = Localidad::all();
+        // dd($localidades);
 
         //dd($dataTypeContent);
         
@@ -69,9 +74,16 @@ class FichaCliente extends Component
         $cliente->tel=$this->tel;
         $cliente->e_mail=$this->e_mail;
         $cliente->observaciones=$this->observaciones;
+        $cliente->id_localidad=$this->id_localidad;
         
         $cliente->save();
     }
 
+    public function seleccion_localidad($id_localidad)
+    {
+      
+      $this->id_localidad =$id_localidad;
+      
+    }
 
 }

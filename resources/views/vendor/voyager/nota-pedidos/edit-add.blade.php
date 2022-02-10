@@ -153,8 +153,6 @@
                                                 @endphp
                                              @endif
 
-
-
                                              <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                                  {{ $row->slugify }}
                                                  <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
@@ -177,50 +175,14 @@
                                                  @endif
                                              </div>
                                     @endfor
-
-
-                                    {{-- @foreach($dataTypeRows as $row)
-                                        <!-- GET THE DISPLAY OPTIONS -->
-                                        @php
-                                            $display_options = $row->details->display ?? NULL;
-                                            if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
-                                                $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
-                                            }
-                                        @endphp
-                                        @if (isset($row->details->legend) && isset($row->details->legend->text))
-                                            <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
-                                        @endif
-        
-                                        <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
-                                            {{ $row->slugify }}
-                                            <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
-                                            @include('voyager::multilingual.input-hidden-bread-edit-add')
-                                            @if (isset($row->details->view))
-                                                @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
-                                            @elseif ($row->type == 'relationship')
-                                                @include('voyager::formfields.relationship', ['options' => $row->details])
-                                            @else
-                                                {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
-                                            @endif
-        
-                                            @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
-                                                {!! $after->handle($row, $dataType, $dataTypeContent) !!}
-                                            @endforeach
-                                            @if ($errors->has($row->field))
-                                                @foreach ($errors->get($row->field) as $error)
-                                                    <span class="help-block">{{ $error }}</span>
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                    @endforeach --}}
-        
+    
                                 </div><!-- panel-body -->
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6"><!-- panel-detalles -->
                                 <div class="col">
                                     <!-- Button trigger modal -->
                                         
-                                    @section('modal_elejir')
+                                    @section('modal_elejir') <!-- Modal seleccionar producto -->
                                      
                                      <!-- Modal --> 
                                      <div class="modal fade modal-warning" id="productos" v-if="allowCrop">
@@ -268,49 +230,26 @@
                                        </div>	
                                        @stop  
                                    
-                                       {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
+                                    {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
                                         <input type="hidden" name="id_vendedor">
                                         <input type="hidden" name="monto_iva">
                                         <input type="hidden" name="total">
                                         <input type="hidden" name="totalgravado">
                                          
 
-                                       {{-- FORMULARIO EMBEBIDO --}}
-                                 
-                                                                    
-                                  
-                                    
+                                    {{-- FORMULARIO EMBEBIDO --}}
+                                                                     
                                     @if (isset($renglones))
                                         @livewire('pedidos.embebido-component', ['renglones' => $renglones])
                                     @else
                                         @livewire('pedidos.embebido-component',['renglones' => null])
                                     @endif
-                                   
-
-                                   
-                                   
-                                   
-                               {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-
-                                    
-
-                                   
                                     
                                 </div>
                                
                             </div>
                         </div>
-                        
-
+                     
                         <div class="panel-footer">
                             @section('submit-buttons')
                                 <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
@@ -359,6 +298,56 @@
         </div>
     </div>
     <!-- End Delete File Modal -->
+
+    {{-- >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        >>>>>>>>>><<<<<<    MODALES   LOCALIDADES      <<<<<<<<<
+        >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
+
+        <!-- Modal --> 
+        <div class="modal fade modal-warning" id="modal_localidad" v-if="allowCrop">
+            <div class="modal-dialog"  style="min-width: 30%">
+                <div class="modal-content">
+                     <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Seleccione la localidad</h4>
+                     </div>
+                 
+                     <div id="x34" class="modal-body">
+                    <div class="card" style="min-width: 40%">
+                        <img class="card-img-top" src="holder.js/100x180/" alt="">
+                        <div class="card-body">
+                        
+                            <table id="localidades_elegir" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                                <thead>
+                                  <tr>
+                                      <th>id</th>
+                                      <th>Provincia</th>
+                                      <th>Localidad</th>
+                                      <th>seleccionar</th>
+                                
+                                  </tr>
+                                 </thead>
+                             
+                                </table>
+                            
+                            
+                        </div>
+                    </div>
+                
+                     </div>
+                 
+                     <div class="modal-footer">
+                    <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>                
+                     </div>
+                </div>
+            </div>
+        </div>  
+
+    {{-- <<<<<<<<<<<<<<<<<<<<<<<    FIN MODAL LOCALIDADES    >>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
+
+
+
    
 @stop
 
@@ -470,8 +459,46 @@
     });
    </script> 
   
+  {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+       <<<<<<<<<<<<<<<< script localidades  <<<<<<<<<<<<<<<<<<
+       <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
+       <script>
+    $('#localidad').on('click',function(){
+        $('#modal_localidad').modal({show:true});
+       
+    });
+    
+ </script> 
+ 
+<script>
+    $(document).ready(function() {
+        $('#localidades_elegir').dataTable( {
+             "serverSide": true,
+             "ajax":"{{url('/localidades_elegir')}}",
+             "columns":[
+                     {data:'id' } ,
+                     {data:'provincia' },
+                     {data:'localidad' } ,
+                     {data:'seleccionar' }                             
+                      ]           
+        } );
+    } );
 
-  
+</script> 
+
+
+<script>
+    function elegir_localidad(id,provincia,localidad) {     
+        $('#descripcion_localidad').html(localidad+'('+provincia+')');
+        $('#modal_localidad').modal('hide');
+        Livewire.emit('localidad_elegida',id);  
+      }
+</script>
+
+
+ 
+
+{{-- <<<<<<<<<<<<<<<<<<<<<<<< fin localidades script <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
 
    
     <script>
