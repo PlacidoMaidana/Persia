@@ -14,21 +14,22 @@ class CreateClientesTable extends Migration
     public function up()
     {
         Schema::create('clientes', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->char('nombre', 50)->nullable();
             $table->string('cuit', 15)->nullable();
             $table->dateTime('fecha_alta')->nullable();
             $table->string('direccion', 100)->nullable();
-            $table->char('cp', 20)->nullable();
             $table->string('tel', 50)->nullable();
-            $table->integer('id_localidad')->nullable()->index('FK_Clientes_localidad');
+            $table->biginteger('id_localidad')->unsigned();
             $table->string('e_mail', 50)->nullable();
             $table->char('observaciones', 255)->nullable();
             $table->char('cond_iva', 20)->nullable();
             $table->char('registro_fce', 2)->nullable();
+            $table->timestamps();
         });
-    }
 
+    }
+    
     /**
      * Reverse the migrations.
      *

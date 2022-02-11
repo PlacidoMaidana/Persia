@@ -24,6 +24,11 @@
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
+
+    <a href="{{url('admin/factura-ventas/create')}}" class="btn btn-primary">Facturar</a>
+
+
+
     @include('voyager::multilingual.language-selector')
 @stop
 
@@ -41,12 +46,15 @@
                         <!-- PUT Method if we are editing -->
                         @if($edit)
                             {{ method_field("PUT") }}
+                           
+                            
+                           
                         @endif
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="panel-body">
 
                                     @if (count($errors) > 0)
@@ -64,7 +72,114 @@
                                         $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                                     @endphp
         
-                                    @foreach($dataTypeRows as $row)
+                                    @for ($i = 0; $i < count($dataTypeRows); $i++)
+                                    
+                                             @php
+                                             $row=$dataTypeRows[$i];
+                                                 $display_options = $row->details->display ?? NULL;
+                                                 if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
+                                                     $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
+                                                 }
+                                             @endphp
+                                             @if (isset($row->details->legend) && isset($row->details->legend->text))
+                                                 <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
+                                             @endif
+                                             
+                                             @if ($row->getTranslatedAttribute('display_name')=='cliente')
+                                                {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Boton + cliente          <<<<<<<<<<<<<<<<<<<<<<<<<
+                                                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<                              <<<<<<<<<<<<<<<<<<<<<<<<
+                                                <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
+                                                    
+
+                                                          <!-- Modal -->
+                                                        
+                                                            <div class="modal fade modal-warning" id="modal_cliente" v-if="allowCrop">
+                                                               <div class="modal-dialog"  style="min-width: 50%">
+                                                                   <div class="modal-content">
+                                                                
+                                                                       <div class="modal-header">
+                                                                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                           <h4 class="modal-title">Nuevo cliente</h4>
+                                                                       </div>
+                                                                   
+                                                                       <div id="x34" class="modal-body">
+
+                                                                           <livewire:ficha-cliente /> 
+
+
+                                                                       </div>
+                                                                   
+                                                                       <div class="modal-footer">
+                                                                           <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                                                                       </div>
+                                                                   </div>
+                                                               </div>
+                                                             </div>	
+                                    
+
+                                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                                    {{ $row->slugify }}
+                                                    <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}
+                                                          <!-- Button trigger modal -->
+                                                          <button type="button" id="cliente" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_cliente">
+                                                            + Cliente
+                                                          </button>
+                                                        {{-- <a href="{{url('admin/clientes/create2/si')}}" class="btn btn-light">+ Cliente</a> --}}
+                                                    
+                                                    
+                                                    </label>
+                                                    @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                                    @if (isset($row->details->view))
+                                                        @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
+                                                    @elseif ($row->type == 'relationship')
+                                                        @include('voyager::formfields.relationship', ['options' => $row->details])
+                                                    @else
+                                                        {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                                                    @endif
+
+                                                    @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                                        {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                                    @endforeach
+                                                    @if ($errors->has($row->field))
+                                                        @foreach ($errors->get($row->field) as $error)
+                                                            <span class="help-block">{{ $error }}</span>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                                @php
+                                                    continue;
+                                                @endphp
+                                             @endif
+
+
+
+                                             <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                                 {{ $row->slugify }}
+                                                 <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
+                                                 @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                                 @if (isset($row->details->view))
+                                                     @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
+                                                 @elseif ($row->type == 'relationship')
+                                                     @include('voyager::formfields.relationship', ['options' => $row->details])
+                                                 @else
+                                                     {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                                                 @endif
+
+                                                 @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                                     {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                                 @endforeach
+                                                 @if ($errors->has($row->field))
+                                                     @foreach ($errors->get($row->field) as $error)
+                                                         <span class="help-block">{{ $error }}</span>
+                                                     @endforeach
+                                                 @endif
+                                             </div>
+                                    @endfor
+
+
+                                    {{-- @foreach($dataTypeRows as $row)
                                         <!-- GET THE DISPLAY OPTIONS -->
                                         @php
                                             $display_options = $row->details->display ?? NULL;
@@ -97,124 +212,96 @@
                                                 @endforeach
                                             @endif
                                         </div>
-                                    @endforeach
+                                    @endforeach --}}
         
                                 </div><!-- panel-body -->
                             </div>
-                            <div class="col-md-8">
-                                <div class="col-md-8">
+                            <div class="col-md-6">
+                                <div class="col">
                                     <!-- Button trigger modal -->
-                                          
+                                        
                                     @section('modal_elejir')
                                      
-                                <!-- Modal --> 
-                                <div class="modal fade modal-warning" id="productos" v-if="allowCrop">
-                                    <div class="modal-dialog"  style="min-width: 90%">
-                                        <div class="modal-content">
-                                        
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                <h4 class="modal-title">Seleccione un producto</h4>
-                                            </div>
-                                        
-                                            <div id="x34" class="modal-body">
-                                                <div class="card" style="min-width: 70%">
-                                                    <img class="card-img-top" src="holder.js/100x180/" alt="">
-                                                    <div class="card-body">
-                                                        <h4 class="card-title">Productos</h4>
-                                                        <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
-                                                            <thead>
-                                                              <tr>
-                                                                  <th>id</th>
-                                                                  <th>descripcion</th>
-                                                                  <th>rubro</th>
-                                                                  <th>subrubro</th>
-                                                                  <th>preciovta</th>
-                                                                  <th>seleccionar</th>
-                                                                
-                                                              </tr>
-                                                             </thead>
-                                                        
-                                                            </table>
-                                                        
-                                                        
-                                                    </div>
-                                                </div>
+                                     <!-- Modal --> 
+                                     <div class="modal fade modal-warning" id="productos" v-if="allowCrop">
+                                         <div class="modal-dialog"  style="min-width: 90%">
+                                             <div class="modal-content">
+                                            
+                                                 <div class="modal-header">
+                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                     <h4 class="modal-title">Seleccione un producto</h4>
+                                                 </div>
+                                             
+                                                 <div id="x34" class="modal-body">
+                                                     <div class="card" style="min-width: 70%">
+                                                         <img class="card-img-top" src="holder.js/100x180/" alt="">
+                                                         <div class="card-body">
+                                                             <h4 class="card-title">Productos</h4>
+                                                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                                                                 <thead>
+                                                                   <tr>
+                                                                       <th>id</th>
+                                                                       <th>descripcion</th>
+                                                                       <th>rubro</th>
+                                                                       <th>subrubro</th>
+                                                                       <th>preciovta</th>
+                                                                       <th>seleccionar</th>
+
+                                                                   </tr>
+                                                                  </thead>
+                                                              
+                                                                 </table>
+                                                             
+                                                             
+                                                         </div>
+                                                     </div>
 
 
-                                            </div>
-                                        
-                                            <div class="modal-footer">
-                                                <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                 </div>
+                                             
+                                                 <div class="modal-footer">
+                                                     <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                  </div>	
-                                  @stop  
-                                 
-                                  {{-- FORMULARIO EMBEBIDO --}}
+                                                 </div>
+                                             </div>
+                                         </div>
+                                       </div>	
+                                       @stop  
+                                   
+                                       {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
+                                        <input type="hidden" name="id_vendedor">
+                                        <input type="hidden" name="monto_iva">
+                                        <input type="hidden" name="total">
+                                        <input type="hidden" name="totalgravado">
+                                         
+
+                                       {{-- FORMULARIO EMBEBIDO --}}
                                  
                                                                     
-                                    <livewire:pedidos.embebido-component />   
-                               {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                  
+                                    
+                                    @if (isset($renglones))
+                                        @livewire('pedidos.embebido-component', ['renglones' => $renglones])
+                                    @else
+                                        @livewire('pedidos.embebido-component',['renglones' => null])
+                                    @endif
+                                   
+
+                                   
+                                   
+                                   
+                               {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
+                                    <<<<<<<<<<<<<<<<<<<<<<<                <<<<<<<<<<<<<<<<<<<<<<<<<<<
                                     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
 
-                                    {{-- <div class="card">
-                                        <img class="card-img-top" src="holder.js/100x180/" alt="">
-                                        <div class="card-body">
-                                            <h4 class="card-title">Detalles</h4>
-                                            
-                                           
-                                            
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <div class="form-group">
-                                                      <label for="">Producto</label>
-                                                      <input type="text" name="" id="producto" class="form-control" placeholder="" aria-describedby="helpId">
-                                                      <input type="hidden" name="id_producto" id="id_producto" >
-                                                      <small id="helpId" class="text-muted">producto</small>
-                                                    </div>                                                
-                                                </div>
-                                                <div class="col-auto">
-                                                    <button type="button" class="btn btn-primary" id="productos_buscar"
-                                                    data-bs-toggle="modal" data-bs-target="#productos">
-                                                    productos..
-                                                    </button>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <div class="form-group">
-                                                      <label for="">Cantidad</label>
-                                                      <input type="text" name="" id="cantidad" class="form-control" placeholder="" aria-describedby="helpId">
-                                                      <small id="helpId" class="text-muted">cantidad</small>
-                                                    </div>                                                
-                                                </div>
-                                                <div class="col-auto">
-                                                    <div class="form-group">
-                                                      <label for="">Precio</label>
-                                                      <input type="text" name="" id="precio" class="form-control" placeholder="" aria-describedby="helpId">
-                                                      <small id="helpId" class="text-muted">precio</small>
-                                                    </div>                                                
-                                                </div>
-                                                
-                                            </div>
-                                            <div class="row">
-                                                <button type="button" id="addLinea">+ linea</button>
-                                            </div>
-
-
-
-                                        </div>
-                                    </div> --}}
-
+                                    
 
                                    
                                     
@@ -371,6 +458,17 @@
     //       });
     });
    </script> 
+
+   <script>
+    $('#cliente').on('click',function(){
+        $('#modal_cliente').modal({show:true});
+    
+    });
+    $('#guardar_cliente').on('click',function(){
+        $('#modal_cliente').modal('hide');
+    
+    });
+   </script> 
   
 
   
@@ -395,6 +493,16 @@
     
     
      </script> 
+     <script>
+        // Cambiar el tamaño de la caja de edicion de texto
+        $(document).ready(function(){
+        
+        $('#richtextobservaciones').height(50);
+
+        });
+     </script>
+
+
 
 
 @stop

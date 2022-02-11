@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Voyager;
 
+use App\Models\nota_pedido;
 use Exception;
 use App\Models\renglones_notapedido;
 use App\Models\User;
@@ -221,6 +222,8 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function show(Request $request, $id)
     {
+
+       // dd('esto es mostrar el pedido');
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -246,6 +249,15 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             // If Model doest exist, get data from table name
             $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
         }
+        //<<<<<<<<<<<<<<        <<<<<<<<          <<<<<<<                 <<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<  <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<<   <<<<<          <<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        $renglones=$this->obtener_lineas($id);
+        $totales=$this->obtener_totales_lineas($id);
 
         // Replace relationships' keys for labels and create READ links if a slug is provided.
         $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
@@ -268,7 +280,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $view = "voyager::$slug.read";
         }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones','totales'));
     }
 
     //***************************************
@@ -306,6 +318,10 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
         }
 
+        $renglones=$this->obtener_lineas($id);
+         
+
+
         foreach ($dataType->editRows as $key => $row) {
             $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
         }
@@ -327,14 +343,47 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
+         
+        
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones'));
+    }
+
+    public function obtener_lineas($id_pedido)
+    {
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<                 <<<<<<<<<           <<<<<<       <<<<<<<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<         <<<<<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<   <<<<<<<<<<     <<<<<<<<<<<<     <<    <<<<    <<<<<<<<<<<<<<<<
+        //<<<<             <<<<<<<<<<<<<           <<<<<<     <<<    <<    <<<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<     <<<<<<<<<<     <<<<<<<<<<<<     <<<<   <<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<     <<<<<  <<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<<   <<<<<<<<<           <<<<<<     <<<<<         <<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        
+       
+
+        return $renglones=   DB::table('nota_pedidos')
+        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.pedido_id')
+        ->join('productos as p','r.producto_id','=','p.id')
+        ->select('r.id', 'producto_id','descripcion','cantidad','p.preciovta' ,'r.total_linea', 'iva', 'nota_pedidos.id_factura as factura')
+        ->where('nota_pedidos.id',$id_pedido)->get();
+    }
+
+    public function obtener_totales_lineas($id_pedido)
+    {
+
+        return $total=   DB::table('nota_pedidos')
+        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.pedido_id')
+        ->join('productos as p','r.producto_id','=','p.id')        
+        ->where('nota_pedidos.id',$id_pedido)->sum('r.total_linea');
     }
 
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-        dd(unserialize($request['detalles_string']));
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -358,6 +407,32 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
+
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<       <>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    <<<<<>    >>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<               <<<<<>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+       
+
+        $data->id_vendedor=auth()->id();
+        $data->monto_iva=0;
+        $data->total=$request['total_general'];
+        $data->totalgravado=$request['total_general']; 
+        $data->save();
+        
+
+        $tabla_detalles=unserialize($request['detalles_string']);
+        $this->eliminar_renglones_de_pedido($data->id);
+        $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
+            
 
         // Get fields with images to remove before updating and make a copy of $data
         $to_remove = $dataType->editRows->where('type', 'image')
@@ -452,18 +527,33 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $this->authorize('add', app($dataType->model_name));
 
         // Validate fields with ajax
+      
+
+        $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
+       
+        $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
+        
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<    ACTUALIZANDO LOS TOTALES      >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        
         
         
 
-        $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
-        $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
 
         $data->id_vendedor=auth()->id();
         $data->monto_iva=0;
-        $data->total=222222; //total gral
-        $data->total_gravado=222222; //total gral
+        $data->total=$request['total_general'];
+        $data->totalgravado=$request['total_general']; 
+        $data->save();
         
-        event(new BreadDataAdded($dataType, $data));
+
+
+        event(new BreadDataAdded($dataType,  $data));
 
         
 
@@ -474,21 +564,23 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
                 $redirect = redirect()->back();
             }
 
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<          CARGANDO LAS LINEAS             <<<<<<<<<<<<<<<<<<<<<>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
             $tabla_detalles=unserialize($request['detalles_string']);
            
-            foreach ($tabla_detalles as $r) {
-
-             
-                $renglon_np=new renglones_notapedido();
-                $renglon_np->pedido_id=$data->id;
-                $renglon_np->cantidad=$r['cantidad'];
-                $renglon_np->producto_id=$r['id_producto'];
-                $renglon_np->total_linea=$r['total-linea'];
-                $renglon_np->iva=21;
-                $renglon_np->save();              
-
-            }
-            die;
+            $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
+            
+            
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
            
 
@@ -500,6 +592,28 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return response()->json(['success' => true, 'data' => $data]);
         }
     }
+
+    public function eliminar_renglones_de_pedido($id_pedido)
+    {
+        DB::table('renglones_notapedidos')->where('pedido_id', '=', $id_pedido)->delete();
+    }
+
+    public function cargar_renglones_de_pedido($tabla_detalles,$id_pedido)
+    {
+        foreach ($tabla_detalles as $r) {
+            
+             
+            $renglon_np=new renglones_notapedido();
+            $renglon_np->pedido_id=$id_pedido;
+            $renglon_np->cantidad=$r['cantidad'];
+            $renglon_np->producto_id=$r['id_producto'];
+            $renglon_np->total_linea=$r['total-linea'];
+            $renglon_np->iva=21;
+            $renglon_np->save();              
+
+        }
+    }
+
 
     //***************************************
     //                _____

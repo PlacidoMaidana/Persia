@@ -19,6 +19,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @livewireStyles
+    {{-- <wireui:scripts />
+    <script src="//unpkg.com/alpinejs"></script> --}}
 </head>
 <body>
     <div id="app">

@@ -14,14 +14,17 @@ class CreateRenglonesNotapedidoTable extends Migration
     public function up()
     {
         Schema::create('renglones_notapedidos', function (Blueprint $table) {
-            $table->integer('id')->primary();
-            $table->integer('id_pedido')->index('FK_Renglones_NotaPedido_Nota_Pedido');
-            $table->integer('id_producto')->index('FK_Renglones_NotaPedido_Productos');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('id_pedido')->index('FK_Renglones_NotaPedido_Nota_Pedido');
+            $table->unsignedBigInteger('id_producto')->index('FK_Renglones_NotaPedido_Productos');
             $table->decimal('cantidad', 19, 2)->nullable();
             $table->decimal('total_linea', 19, 3)->nullable();
             $table->decimal('iva', 5, 2)->nullable();
-            $table->integer('id_factura')->nullable()->index('FK_Renglones_NotaPedido_Factura_Venta');
+            $table->unsignedBigInteger('id_factura')->nullable()->index('FK_Renglones_NotaPedido_Factura_Venta');
+            $table->timestamps();
         });
+
+
     }
 
     /**
@@ -31,6 +34,6 @@ class CreateRenglonesNotapedidoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('renglones_notapedido');
+        Schema::dropIfExists('renglones_notapedidos');
     }
 }

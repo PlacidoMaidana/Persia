@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsosDestinoTable extends Migration
+class Dosificaciones extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateUsosDestinoTable extends Migration
      */
     public function up()
     {
-        Schema::create('usos_destino', function (Blueprint $table) {
-            $table->integer('id')->primary();
-            $table->integer('id_formula')->index('FK_Usos_Destino_Formulas');
-            $table->integer('id_matprima')->index('FK_Usos_Destino_MatPrima');
+        Schema::create('Dosificaciones', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('id_base')->nullable();
+            $table->unsignedBigInteger('id_producto_componente')->nullable();
             $table->decimal('cant_unid_produc', 12, 5)->nullable();
+            $table->timestamps();
         });
+    
     }
 
     /**
@@ -28,6 +30,6 @@ class CreateUsosDestinoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usos_destino');
+        Schema::dropIfExists('Dosificaciones');
     }
 }

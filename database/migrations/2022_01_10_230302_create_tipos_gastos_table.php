@@ -14,9 +14,10 @@ class CreateTiposGastosTable extends Migration
     public function up()
     {
         Schema::create('tipos_gastos', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->char('tipo1', 20)->nullable();
-            $table->char('tipo2', 20)->nullable();
+            $table->char('tipo2', 50)->nullable();
+            $table->timestamps();
         });
     }
 

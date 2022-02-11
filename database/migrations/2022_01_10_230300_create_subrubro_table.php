@@ -13,13 +13,15 @@ class CreateSubrubroTable extends Migration
      */
     public function up()
     {
-        Schema::create('subrubro', function (Blueprint $table) {
-            $table->integer('id')->primary();
-            $table->integer('id_rubro')->index('FK_SubRubro_Rubro');
+        Schema::create('subrubros', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('rubro_id')->index('FK_SubRubro_Rubro');
             $table->char('descripcion_subrubro', 50)->nullable();
+            $table->timestamps();
         });
+   
     }
-
+   
     /**
      * Reverse the migrations.
      *
@@ -27,6 +29,6 @@ class CreateSubrubroTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subrubro');
+        Schema::dropIfExists('subrubros');
     }
 }

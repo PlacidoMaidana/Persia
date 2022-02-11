@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRubrompTable extends Migration
+class CreateLocalidadesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateRubrompTable extends Migration
      */
     public function up()
     {
-        Schema::create('rubromp', function (Blueprint $table) {
-            $table->integer('id')->primary();
-            $table->char('rubro_mp', 50);
+        Schema::create('Localidades', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->char('provincia', 50);
+            $table->char('localidad', 50);
+            $table->timestamps();
+
+
         });
     }
 
@@ -26,6 +30,6 @@ class CreateRubrompTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rubromp');
+        Schema::dropIfExists('Localidades');
     }
 }

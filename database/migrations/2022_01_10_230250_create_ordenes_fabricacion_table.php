@@ -14,13 +14,18 @@ class CreateOrdenesFabricacionTable extends Migration
     public function up()
     {
         Schema::create('ordenes_fabricacion', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->bigIncrements('id');
             $table->dateTime('fecha_orden')->nullable();
             $table->char('observaciones', 200)->nullable();
             $table->char('estado', 10)->nullable();
             $table->dateTime('fecha_entrada_proceso')->nullable();
             $table->dateTime('fecha_salida_proceso')->nullable();
+            $table->unsignedBigInteger('id_producto')->nullable();
+            $table->decimal('cantidad' , 18, 2)->nullable();
+            $table->unsignedBigInteger('id_renglon_pedido')->nullable();
+            $table->timestamps();
         });
+      
     }
 
     /**
