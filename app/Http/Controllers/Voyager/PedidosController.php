@@ -343,6 +343,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $view = "voyager::$slug.edit-add";
         }
          
+       
         
 
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones'));
@@ -429,7 +430,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         $data->totalgravado=$request['total_general']; 
         $data->save();
         
-
+        
         $tabla_detalles=unserialize($request['detalles_string']);
         $this->eliminar_renglones_de_pedido($data->id);
         $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
@@ -573,7 +574,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-
+            
             $tabla_detalles=unserialize($request['detalles_string']);
            
             $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
@@ -601,6 +602,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function cargar_renglones_de_pedido($tabla_detalles,$id_pedido)
     {
+        
         foreach ($tabla_detalles as $r) {
             
              

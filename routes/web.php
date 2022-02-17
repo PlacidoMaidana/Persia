@@ -68,6 +68,23 @@ Route::get('/productos_elegir', function () {
  
  });
 
+ Route::get('/subrubro_elegir', function () {     
+    //  $d =DB::table('subrubros as s')
+    //  ->join('rubros','rubros.id','=','s.rubro_id')
+    //  ->select(['rubros.id as id_rubro', 'rubros.rubro','s.id as id_subrubro','s.descripcion_subrubro'])->get();
+
+    return datatables()->of(DB::table('rubros')
+    ->join('subrubros as s','rubros.id','=','s.rubro_id')
+    ->select(['rubros.id as id_rubro', 'rubros.rubro','s.id as id_subrubro','s.descripcion_subrubro']))
+    ->addColumn('seleccionar','vendor\voyager\rubros\boton_seleccionar')
+    ->rawColumns(['seleccionar'])   
+    ->toJson();   
+
+   
+    // dd($d);
+ 
+ });
+
 
 Route::get('/vista', function () {
     return view('vista_suelta');

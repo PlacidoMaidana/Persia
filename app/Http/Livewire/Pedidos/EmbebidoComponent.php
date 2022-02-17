@@ -39,7 +39,7 @@ class EmbebidoComponent extends Component
                    'precio'=> $prod['preciovta'], //$renglones->precio,
                    'total-linea'=>$value->total_linea);
                    $this->detalles[]=$a;
-
+                   $this->detalles_string=serialize($this->detalles);
                    $this->total_general+=$value->total_linea;
                 }
             }
