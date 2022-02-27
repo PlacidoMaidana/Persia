@@ -49,6 +49,17 @@
         .voyager .breadcrumb a{
             color:{{ config('voyager.primary_color','#22A7F0') }};
         }
+
+        /* tab panel */
+        .panel-heading-nav {
+          border-bottom: 0;
+          padding: 10px 0 0;
+        }
+
+        .panel-heading-nav .nav {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
     </style>
 
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
@@ -60,8 +71,8 @@
     @livewireStyles
      {{-- <wireui:scripts /> --}}
         {{-- <script src="//unpkg.com/alpinejs"></script> --}}
-</head>
-
+    </head>
+    
 <body class="voyager @if(isset($dataType) && isset($dataType->slug)){{ $dataType->slug }}@endif">
 
 <div id="voyager-loader">

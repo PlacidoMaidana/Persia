@@ -143,7 +143,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2022-01-11 20:35:14',
-                'updated_at' => '2022-01-11 21:00:04',
+                'updated_at' => '2022-02-07 21:24:05',
             ),
             7 => 
             array (
@@ -161,7 +161,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2022-01-12 22:34:43',
-                'updated_at' => '2022-01-27 00:55:42',
+                'updated_at' => '2022-02-26 15:57:07',
             ),
             8 => 
             array (
@@ -179,7 +179,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2022-01-12 22:40:47',
-                'updated_at' => '2022-01-12 22:48:03',
+                'updated_at' => '2022-02-10 22:56:57',
             ),
             9 => 
             array (
@@ -233,7 +233,43 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2022-01-18 11:30:46',
-                'updated_at' => '2022-01-18 12:38:56',
+                'updated_at' => '2022-02-12 19:45:18',
+            ),
+            12 => 
+            array (
+                'id' => 23,
+                'name' => 'localidades',
+                'slug' => 'localidades',
+                'display_name_singular' => 'Localidade',
+                'display_name_plural' => 'Localidades',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\Localidad',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'created_at' => '2022-02-07 21:20:36',
+                'updated_at' => '2022-02-07 21:20:36',
+            ),
+            13 => 
+            array (
+                'id' => 24,
+                'name' => 'tipos_gastos',
+                'slug' => 'tipos-gastos',
+                'display_name_singular' => 'Tipos Gasto',
+                'display_name_plural' => 'Tipos Gastos',
+                'icon' => NULL,
+                'model_name' => 'App\\Models\\tipo_gasto',
+                'policy_name' => NULL,
+                'controller' => NULL,
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2022-02-07 21:36:04',
+                'updated_at' => '2022-02-07 22:01:46',
             ),
         ));
         

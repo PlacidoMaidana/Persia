@@ -84,6 +84,51 @@ Route::get('/productos_elegir', function () {
     // dd($d);
  
  });
+ Route::get('/pedidos_pendientes', function () {     
+    return datatables()->of(DB::table('nota_pedidos')
+    ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+    ->select([  'nota_pedidos.id as id_pedido',
+                'nota_pedidos.fecha',
+                'clientes.nombre',
+                'nota_pedidos.totalgravado',
+                'nota_pedidos.total',
+                'nota_pedidos.monto_iva',
+                'nota_pedidos.aprobado',
+                'nota_pedidos.id_factura',
+                'nota_pedidos.observaciones',
+                'nota_pedidos.descuento',
+                'nota_pedidos.estado'
+              ]))
+    ->addColumn('check','vendor\voyager\nota-pedidos\check_pedido')
+    ->addColumn('accion','vendor\voyager\nota-pedidos\acciones_NPedidos')
+    ->rawColumns(['check','accion'])     
+    ->toJson();   
+ 
+ });
+ Route::get('/pedidos_terminados', function () {     
+    return datatables()->of(DB::table('nota_pedidos')
+    ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+    ->where('nota_pedidos.estado','=', 'Entregado')
+    ->select([  'nota_pedidos.id as id_pedido',
+                'nota_pedidos.fecha',
+                'clientes.nombre',
+                'nota_pedidos.totalgravado',
+                'nota_pedidos.total',
+                'nota_pedidos.monto_iva',
+                'nota_pedidos.aprobado',
+                'nota_pedidos.id_factura',
+                'nota_pedidos.observaciones',
+                'nota_pedidos.descuento',
+                'nota_pedidos.estado'
+              ]))          
+    ->addColumn('check','vendor\voyager\nota-pedidos\check_pedido')
+    ->addColumn('accion','vendor\voyager\nota-pedidos\acciones_NPedidos')
+    ->rawColumns(['check','accion'])   
+    ->toJson();   
+ 
+ });
+
+
 
 
 Route::get('/vista', function () {

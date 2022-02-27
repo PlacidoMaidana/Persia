@@ -323,6 +323,38 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.productos.index',
                 'parameters' => NULL,
             ),
+            19 => 
+            array (
+                'id' => 24,
+                'menu_id' => 1,
+                'title' => 'Localidades',
+                'url' => '',
+                'target' => '_self',
+                'icon_class' => NULL,
+                'color' => NULL,
+                'parent_id' => NULL,
+                'order' => 21,
+                'created_at' => '2022-02-07 21:20:36',
+                'updated_at' => '2022-02-07 21:20:36',
+                'route' => 'voyager.localidades.index',
+                'parameters' => NULL,
+            ),
+            20 => 
+            array (
+                'id' => 25,
+                'menu_id' => 1,
+                'title' => 'Tipos Gastos',
+                'url' => '',
+                'target' => '_self',
+                'icon_class' => NULL,
+                'color' => NULL,
+                'parent_id' => NULL,
+                'order' => 22,
+                'created_at' => '2022-02-07 21:36:04',
+                'updated_at' => '2022-02-07 21:36:04',
+                'route' => 'voyager.tipos-gastos.index',
+                'parameters' => NULL,
+            ),
         ));
         
         

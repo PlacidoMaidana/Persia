@@ -579,6 +579,86 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2022-01-18 11:30:46',
                 'updated_at' => '2022-01-18 11:30:46',
             ),
+            70 => 
+            array (
+                'id' => 91,
+                'key' => 'browse_localidades',
+                'table_name' => 'localidades',
+                'created_at' => '2022-02-07 21:20:36',
+                'updated_at' => '2022-02-07 21:20:36',
+            ),
+            71 => 
+            array (
+                'id' => 92,
+                'key' => 'read_localidades',
+                'table_name' => 'localidades',
+                'created_at' => '2022-02-07 21:20:36',
+                'updated_at' => '2022-02-07 21:20:36',
+            ),
+            72 => 
+            array (
+                'id' => 93,
+                'key' => 'edit_localidades',
+                'table_name' => 'localidades',
+                'created_at' => '2022-02-07 21:20:36',
+                'updated_at' => '2022-02-07 21:20:36',
+            ),
+            73 => 
+            array (
+                'id' => 94,
+                'key' => 'add_localidades',
+                'table_name' => 'localidades',
+                'created_at' => '2022-02-07 21:20:36',
+                'updated_at' => '2022-02-07 21:20:36',
+            ),
+            74 => 
+            array (
+                'id' => 95,
+                'key' => 'delete_localidades',
+                'table_name' => 'localidades',
+                'created_at' => '2022-02-07 21:20:36',
+                'updated_at' => '2022-02-07 21:20:36',
+            ),
+            75 => 
+            array (
+                'id' => 96,
+                'key' => 'browse_tipos_gastos',
+                'table_name' => 'tipos_gastos',
+                'created_at' => '2022-02-07 21:36:04',
+                'updated_at' => '2022-02-07 21:36:04',
+            ),
+            76 => 
+            array (
+                'id' => 97,
+                'key' => 'read_tipos_gastos',
+                'table_name' => 'tipos_gastos',
+                'created_at' => '2022-02-07 21:36:04',
+                'updated_at' => '2022-02-07 21:36:04',
+            ),
+            77 => 
+            array (
+                'id' => 98,
+                'key' => 'edit_tipos_gastos',
+                'table_name' => 'tipos_gastos',
+                'created_at' => '2022-02-07 21:36:04',
+                'updated_at' => '2022-02-07 21:36:04',
+            ),
+            78 => 
+            array (
+                'id' => 99,
+                'key' => 'add_tipos_gastos',
+                'table_name' => 'tipos_gastos',
+                'created_at' => '2022-02-07 21:36:04',
+                'updated_at' => '2022-02-07 21:36:04',
+            ),
+            79 => 
+            array (
+                'id' => 100,
+                'key' => 'delete_tipos_gastos',
+                'table_name' => 'tipos_gastos',
+                'created_at' => '2022-02-07 21:36:04',
+                'updated_at' => '2022-02-07 21:36:04',
+            ),
         ));
         
         

@@ -1,4 +1,5 @@
-@extends('voyager::master')
+{{-- @extends('voyager::master') --}}
+@extends('layouts.voyager2')
 
 @section('page_title', __('voyager::generic.viewing').' '.$dataType->getTranslatedAttribute('display_name_plural'))
 
@@ -11,9 +12,11 @@
             <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
                 <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
             </a>
+           
         @endcan
         @can('delete', app($dataType->model_name))
-            @include('voyager::partials.bulk-delete')
+            {{-- @include('voyager::partials.bulk-delete') --}}
+            <a id="operar" href="javascript:;" class="btn btn-danger delete"> Borrar seleccionados</a>
         @endcan
         @can('edit', app($dataType->model_name))
             @if(!empty($dataType->order_column) && !empty($dataType->order_display_column))
@@ -74,7 +77,8 @@
                                 @endif
                             </form>
                         @endif
-                        <div class="table-responsive">
+                        {{-- brows original de boyager --}}
+                        {{-- <div class="table-responsive">
                             <table id="dataTable" class="table table-hover">
                                 <thead>
                                     <tr>
@@ -263,7 +267,108 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
+                        </div>   --}}
+
+                    {{-- tabla de pedidos pendientes --}}
+
+                    {{-- <div class="container"> --}}
+                        
+                        <div class="panel panel-default" style="width: 100%">
+                          <div class="panel-heading panel-heading-nav">
+                            <ul class="nav nav-tabs">
+                              <li role="presentation" class="active">
+                                <a href="#one" aria-controls="one" role="tab" data-toggle="tab">Pedidos pendientes</a>
+                              </li>
+                              <li role="presentation">
+                                <a href="#two" aria-controls="two" role="tab" data-toggle="tab">Pedidos terminados</a>
+                              </li>
+                              <li role="presentation">
+                                <a href="#three" aria-controls="three" role="tab" data-toggle="tab">Otras cosas</a>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="panel-body" style="width: 100%">
+                            <div class="tab-content">
+                              <div role="tabpanel" class="tab-pane fade in active" id="one">
+                                <table id="pedidos" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                    <thead>
+                                      <tr >
+                                          <th class="dt-not-orderable">
+                                              <input type="checkbox" class="select_all">
+                                          </th>
+                                          <th>id_pedido</th>
+                                          <th>fecha</th>
+                                          <th>nombre</th>
+                                          <th>totalgravado</th>
+                                          <th>total</th>
+                                          <th>monto_iva</th>
+                                          <th>aprobado</th>
+                                          <th>id_factura</th>
+                                          <th>descuento</th>
+                                          <th>estado</th>
+                                          <th>accion</th>
+                                          
+                                          
+                                        </tr>
+                                    </thead>
+                                    
+                                </table>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="two">
+                                <table id="pedidos_terminados" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                    <thead>
+                                        <tr>
+                                            <th class="dt-not-orderable">
+                                                <input type="checkbox" class="select_all">
+                                            </th>
+                                            <th>id_pedido</th>
+                                            <th>fecha</th>
+                                            <th>nombre</th>
+                                            <th>totalgravado</th>
+                                            <th>total</th>
+                                          <th>monto_iva</th>
+                                          <th>aprobado</th>
+                                          <th>id_factura</th>
+                                          <th>descuento</th>
+                                          <th>estado</th>
+                                          <th>accion</th>
+                                          
+                                
+                                      </tr>
+                                     </thead>
+                                 
+                                    </table>
+                              </div>
+                                <div role="tabpanel" class="tab-pane fade" id="three">
+                                  <div class="progress">
+                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                      <span class="sr-only">40% Complete (success)</span>
+                                    </div>
+                                  </div>
+                                  <div class="progress">
+                                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                      <span class="sr-only">20% Complete</span>
+                                    </div>
+                                  </div>
+                                  <div class="progress">
+                                    <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                      <span class="sr-only">60% Complete (warning)</span>
+                                    </div>
+                                  </div>
+                                  <div class="progress">
+                                    <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                      <span class="sr-only">80% Complete (danger)</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        {{-- </div> --}}
+
+                  
+                    
+
 
 <div class="card">
     <div class="card-body">
@@ -401,4 +506,129 @@
             $('.selected_ids').val(ids);
         });
     </script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#pedidos').dataTable( {
+             "serverSide": true,
+             "ajax":"{{url('pedidos_pendientes')}}",                
+             "columns":[
+                     {data: 'check', width: '5%'},
+                     {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
+                     {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
+                     {data: 'nombre', name: 'clientes.nombre', width: '10%'},
+                     {data: 'totalgravado', name: 'nota_pedidos.totalgravado', width: '10%'},
+                     {data: 'total', name: 'nota_pedidos.total', width: '10%'},
+                     {data: 'monto_iva', name: 'nota_pedidos.monto_iva', width: '10%'},
+                     {data: 'aprobado', name: 'nota_pedidos.aprobado', width: '10%'},
+                     {data: 'id_factura', name: 'nota_pedidos.id_factura', width: '10%'},
+                     {data: 'descuento', name: 'nota_pedidos.descuento', width: '10%'},
+                     {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
+                     {data: 'accion', width: '10%'},
+                    
+                                              
+                      ]           
+        } );
+    } );
+
+
+ </script> 
+<script>
+    $(document).ready(function() {
+        $('#pedidos_terminados').dataTable( {
+             "serverSide": true,
+             "ajax":"{{url('pedidos_terminados')}}",                
+             "columns":[
+                     {data: 'check', width: '5%'},
+                     {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
+                     {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
+                     {data: 'nombre', name: 'clientes.nombre', width: '10%'},
+                     {data: 'totalgravado', name: 'nota_pedidos.totalgravado', width: '10%'},
+                     {data: 'total', name: 'nota_pedidos.total', width: '10%'},
+                     {data: 'monto_iva', name: 'nota_pedidos.monto_iva', width: '10%'},
+                     {data: 'aprobado', name: 'nota_pedidos.aprobado', width: '10%'},
+                     {data: 'id_factura', name: 'nota_pedidos.id_factura', width: '10%'},
+                     {data: 'descuento', name: 'nota_pedidos.descuento', width: '10%'},
+                     {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
+                     {data: 'accion', width: '10%'},
+                    
+                                              
+                      ]           
+        } );
+    } );
+
+
+ </script> 
+
+ <script>
+        // $(document).ready(function(){
+        // $("input[type=checkbox]:checked").each(function(){
+        //     //cada elemento seleccionado
+        //     alert($(this).val());
+        // });
+        // });
+
+
+        // $('#operar').on('click', function(){
+        //     $("input[type=checkbox]:checked").each(function(){
+        //     //cada elemento seleccionado
+        //     alert($(this).val());
+        //       });
+        //     });
+
+         function borrar(id) {
+            // alert(id);
+            $('#delete_form')[0].action = '{{ route('voyager.'.$dataType->slug.'.destroy', '__id') }}'.replace('__id', id);
+            $('#delete_modal').modal('show');
+         }
+        
+      
+
+ </script>
+
+<script>
+    window.onload = function () {
+        // Bulk delete selectors
+        var $bulkDeleteBtn = $('#operar');
+        var $bulkDeleteModal = $('#bulk_delete_modal');
+        var $bulkDeleteCount = $('#bulk_delete_count');
+        var $bulkDeleteDisplayName = $('#bulk_delete_display_name');
+        var $bulkDeleteInput = $('#bulk_delete_input');
+        // Reposition modal to prevent z-index issues
+        // $bulkDeleteModal.appendTo('body');
+        // Bulk delete listener
+        $bulkDeleteBtn.click(function () {
+            var ids = [];
+            var $checkedBoxes = $('input[type=checkbox]:checked').not('.select_all');
+            
+            var count = $checkedBoxes.length;
+            alert(count);
+            if (count) {
+                // Reset input value
+                $bulkDeleteInput.val('');
+                // Deletion info
+                var displayName = count > 1 ? 'Nota Pedidos' : 'Nota Pedido';
+                displayName = displayName.toLowerCase();
+                $bulkDeleteCount.html(count);
+                $bulkDeleteDisplayName.html(displayName);
+                // Gather IDs
+                $.each($checkedBoxes, function () {
+                    var value = $(this).val();
+                    ids.push(value);
+                    alert(value);
+                })
+                // Set input value
+                $bulkDeleteInput.val(ids);
+                // Show modal
+                $bulkDeleteModal.modal('show');
+            } else {
+                // No row selected
+                toastr.warning('You haven&#039;t selected anything to delete');
+            }
+        });
+    }
+    </script>
+
+
 @stop
