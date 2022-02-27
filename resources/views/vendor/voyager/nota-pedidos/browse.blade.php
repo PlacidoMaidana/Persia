@@ -282,9 +282,7 @@
                               <li role="presentation">
                                 <a href="#two" aria-controls="two" role="tab" data-toggle="tab">Pedidos terminados</a>
                               </li>
-                              <li role="presentation">
-                                <a href="#three" aria-controls="three" role="tab" data-toggle="tab">Otras cosas</a>
-                              </li>
+                              
                             </ul>
                           </div>
                           <div class="panel-body" style="width: 100%">
@@ -339,28 +337,7 @@
                                  
                                     </table>
                               </div>
-                                <div role="tabpanel" class="tab-pane fade" id="three">
-                                  <div class="progress">
-                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                      <span class="sr-only">40% Complete (success)</span>
-                                    </div>
-                                  </div>
-                                  <div class="progress">
-                                    <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                      <span class="sr-only">20% Complete</span>
-                                    </div>
-                                  </div>
-                                  <div class="progress">
-                                    <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                      <span class="sr-only">60% Complete (warning)</span>
-                                    </div>
-                                  </div>
-                                  <div class="progress">
-                                    <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                      <span class="sr-only">80% Complete (danger)</span>
-                                    </div>
-                                  </div>
-                                </div>
+                               
                               </div>
                             </div>
                           </div>
@@ -577,17 +554,18 @@
         //       });
         //     });
 
-         function borrar(id) {
-            // alert(id);
-            $('#delete_form')[0].action = '{{ route('voyager.'.$dataType->slug.'.destroy', '__id') }}'.replace('__id', id);
-            $('#delete_modal').modal('show');
-         }
+        
         
       
 
  </script>
 
 <script>
+     function borrar(id) {
+            // alert(id);
+            $('#delete_form')[0].action = '{{ route('voyager.'.$dataType->slug.'.destroy', '__id') }}'.replace('__id', id);
+            $('#delete_modal').modal('show');
+         }
     window.onload = function () {
         // Bulk delete selectors
         var $bulkDeleteBtn = $('#operar');
