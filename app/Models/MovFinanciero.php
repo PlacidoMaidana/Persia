@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tipo_gasto extends Model
+class MovFinanciero extends Model
 {
-    protected $table = 'tipos_gastos';
     use HasFactory;
-    
 }
