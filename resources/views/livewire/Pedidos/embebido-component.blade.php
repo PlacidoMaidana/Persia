@@ -4,13 +4,13 @@
 
 <div class="card">
   <div class="card-body">
-    <h3 class="card-title"Items</h3>
+    <h3 class="card-title"> Items</h3>
     <div class="row">
      
         <form class="row g-2">
           <div class="col-auto">
             <label for="">Producto</label>
-            <input type="text" wire:model="producto" id="nombre_producto" class="form-control" placeholder="" aria-describedby="helpId">
+            <input type="text" wire:model="producto" id="nombre_producto" class="form-control" placeholder="" aria-describedby="helpId" readonly>
             <small id="helpId" class="text-muted">Seleccione el producto de la lista</small>
        
           </div>

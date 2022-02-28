@@ -2,6 +2,9 @@
 
 
 namespace App\Http\Controllers\Voyager;
+use App\Models\Factura_Compra;
+use App\Models\RengFact_Compra;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -14,8 +17,8 @@ use TCG\Voyager\Events\BreadDataRestored;
 use TCG\Voyager\Events\BreadDataUpdated;
 use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
-use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
-use App\Models\matprima;
+use \Traits\BreadRelationshipParser;
+
 
 class facturas_comprasController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController 
 
@@ -245,6 +248,17 @@ public function show(Request $request, $id)
      $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
  }
 
+        //<<<<<<<<<<<<<<        <<<<<<<<          <<<<<<<                 <<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<  <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<<   <<<<<          <<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        $renglones=$this->obtener_lineas($id);
+        $totales=$this->obtener_totales_lineas($id);
+      
+
  // Replace relationships' keys for labels and create READ links if a slug is provided.
  $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
 
@@ -266,7 +280,7 @@ public function show(Request $request, $id)
      $view = "voyager::$slug.read";
  }
 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones','totales'));
 }
 
 //***************************************
@@ -304,6 +318,10 @@ public function edit(Request $request, $id)
      $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
  }
 
+ $renglones=$this->obtener_lineas($id);
+ $totales=$this->obtener_totales_lineas($id);
+ 
+
  foreach ($dataType->editRows as $key => $row) {
      $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
  }
@@ -326,9 +344,44 @@ public function edit(Request $request, $id)
      $view = "voyager::$slug.edit-add";
  }
 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','totales'));
+ // dd($request['total_general']);
 }
 
+public function obtener_lineas($id_factura)
+{
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    //<<<<                 <<<<<<<<<           <<<<<<       <<<<<<<<    <<<<<<<<<<<<<<<<
+    //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<         <<<<<<    <<<<<<<<<<<<<<<<
+    //<<<<     <<<<<<<<   <<<<<<<<<<     <<<<<<<<<<<<     <<    <<<<    <<<<<<<<<<<<<<<<
+    //<<<<             <<<<<<<<<<<<<           <<<<<<     <<<    <<    <<<<<<<<<<<<<<<<<
+    //<<<<     <<<<<<     <<<<<<<<<<     <<<<<<<<<<<<     <<<<   <<<    <<<<<<<<<<<<<<<<
+    //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<     <<<<<  <<<    <<<<<<<<<<<<<<<<
+    //<<<<     <<<<<<<<<   <<<<<<<<<           <<<<<<     <<<<<         <<<<<<<<<<<<<<<<
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    
+   
+
+
+
+    return $renglones=   DB::table('facturas_compras')
+    ->join('detalles_facturas_compras as r','facturas_compras.id','=','r.id_factura_compra')
+    ->join('productos as p','r.id_producto','=','p.id')
+    ->select('r.id', 'id_producto','descripcion','cantidad','p.preciovta' ,'r.total_linea', 'facturas_compras.nro_factura as factura')
+    ->where('facturas_compras.id',$id_factura)->get();
+
+
+}
+
+public function obtener_totales_lineas($id_factura)
+{
+
+    return $total_general=   DB::table('facturas_compras')
+    ->join('detalles_facturas_compras as r','facturas_compras.id','=','r.id_factura_compra')
+    ->join('productos as p','r.id_producto','=','p.id')        
+    ->where('facturas_compras.id',$id_factura)->sum('r.total_linea');
+}
 // POST BR(E)AD
 public function update(Request $request, $id)
 {
@@ -355,6 +408,35 @@ public function update(Request $request, $id)
 
  // Validate fields with ajax
  $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
+
+
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<       <>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    <<<<<>    >>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<               <<<<<>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+       
+
+        
+      
+        $data->total_factura=$request['total_general'];
+        $data->subtotal=$request['total_general']; 
+        $data->save();
+        
+
+        $tabla_detalles=unserialize($request['detalles_string']);
+        //dd($request['detalles_string']);
+        $this->eliminar_renglones_de_compra($data->id);
+        $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
+            
+
 
  // Get fields with images to remove before updating and make a copy of $data
  $to_remove = $dataType->editRows->where('type', 'image')
@@ -427,12 +509,8 @@ public function create(Request $request)
      $view = "voyager::$slug.edit-add";
  }
 
- $matprimas =matprima::where('id_rubro','=',1)
-        ->orderBy('descripcion','ASC')
-        ->get();
-       
 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','matprimas'));
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
 }
 
 /**
@@ -444,6 +522,8 @@ public function create(Request $request)
 */
 public function store(Request $request)
 {
+ ////  dd($request);
+ // dd($request['detalles_string']);
  $slug = $this->getSlug($request);
 
  $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -455,6 +535,25 @@ public function store(Request $request)
  $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
  $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
 
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<    ACTUALIZANDO LOS TOTALES      >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        
+        
+        
+
+
+   
+        $data->subtotal=$request['total_general'];
+        $data->total_factura=$request['total_general']; 
+        $data->save();
+
+
+
  event(new BreadDataAdded($dataType, $data));
 
  if (!$request->has('_tagging')) {
@@ -463,6 +562,28 @@ public function store(Request $request)
      } else {
          $redirect = redirect()->back();
      }
+
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<          CARGANDO LAS LINEAS             <<<<<<<<<<<<<<<<<<<<<>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+            $tabla_detalles=unserialize($request['detalles_string']);
+            // dd($request['detalles_string']);
+            $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
+            
+            
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+           
+
+
 
      return $redirect->with([
          'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
@@ -473,6 +594,27 @@ public function store(Request $request)
  }
 
 
+}
+
+public function eliminar_renglones_de_compra($id_factura)
+{
+    DB::table('detalles_facturas_compras')->where('id_factura_compra', '=', $id_factura)->delete();
+}
+
+public function cargar_renglones_de_compra($tabla_detalles,$id_factura)
+{
+    // dd($tabla_detalles);
+    foreach ($tabla_detalles as $r) {
+        
+         
+        $renglon_fac=new RengFact_Compra();
+        $renglon_fac->id_factura_compra=$id_factura; 
+        $renglon_fac->cantidad=$r['cantidad'];
+        $renglon_fac->id_producto=$r['id_producto'];
+        $renglon_fac->total_linea=$r['total-linea'];
+        $renglon_fac->save();              
+
+    }
 }
 
 //***************************************
