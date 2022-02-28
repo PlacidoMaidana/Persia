@@ -23,7 +23,7 @@ use \Traits\BreadRelationshipParser;
 class facturas_comprasController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController 
 
 {
-    use BreadRelationshipParser;
+    
 
     //***************************************
     //               ____
