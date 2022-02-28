@@ -1,7 +1,7 @@
 
  <td class="no-sort no-click bread-actions">
 <a href="{{url('admin/clientes/'.$id_pedido.'/edit')}}" > <i class="voyager-search"></i> {{$nombre}} </a>
-<a href="{{url('admin/mov-financieros/create')}}" > <i class="voyager-check"></i> Pagar {{$id_pedido}}</a>
+<a href="{{url('/pagar_pedidos/'.$id_pedido)}}" > <i class="voyager-check"></i> Pagar {{$id_pedido}}</a>
  {{-- aqui podriamos cargar la informacion requerida para la creacion del movimiento financiero a variables de session --}}
                                                                                         
 <a href="javascript:;" title="Delete" class="btn btn-sm btn-danger pull-right delete pato" onclick="borrar({{$id_pedido}})" data-id="{{$id_pedido}}" id="delete-{{$id_pedido}}">

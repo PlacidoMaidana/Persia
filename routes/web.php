@@ -128,8 +128,11 @@ Route::get('/productos_elegir', function () {
  
  });
 
-
-
+ 
+ Route::get('/pagar_pedidos/{id_pedido}', function ($id_pedido) {
+     Session()->flash('id_pedido', $id_pedido);
+     return redirect(url('admin/mov-financieros/create'));
+ });
 
 Route::get('/vista', function () {
     return view('vista_suelta');

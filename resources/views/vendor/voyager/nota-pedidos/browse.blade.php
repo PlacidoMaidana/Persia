@@ -15,7 +15,7 @@
            
         @endcan
         @can('delete', app($dataType->model_name))
-            {{-- @include('voyager::partials.bulk-delete') --}}
+            @include('voyager::partials.bulk-delete')
             <a id="operar" href="javascript:;" class="btn btn-danger delete"> Borrar seleccionados</a>
         @endcan
         @can('edit', app($dataType->model_name))
@@ -569,6 +569,7 @@
     window.onload = function () {
         // Bulk delete selectors
         var $bulkDeleteBtn = $('#operar');
+        $('#bulk_delete_btn').hide();
         var $bulkDeleteModal = $('#bulk_delete_modal');
         var $bulkDeleteCount = $('#bulk_delete_count');
         var $bulkDeleteDisplayName = $('#bulk_delete_display_name');
@@ -581,7 +582,7 @@
             var $checkedBoxes = $('input[type=checkbox]:checked').not('.select_all');
             
             var count = $checkedBoxes.length;
-            alert(count);
+            
             if (count) {
                 // Reset input value
                 $bulkDeleteInput.val('');
@@ -594,7 +595,7 @@
                 $.each($checkedBoxes, function () {
                     var value = $(this).val();
                     ids.push(value);
-                    alert(value);
+                   
                 })
                 // Set input value
                 $bulkDeleteInput.val(ids);
