@@ -32,15 +32,16 @@ class Compras extends Component
                $this->total_general=0;
                 foreach ($renglones as $key => $value) {
                    $prod=Producto::find($value->id_producto);
-
+                   /*var_dump($value);
+                   continue;*/
                    $a=array(
                    'id_producto'=> $value->id_producto,
                    'producto'=> $value->descripcion,   
                    'cantidad'=> $value->cantidad,
-                   'precio'=> $prod['preciovta'], //$renglones->precio,
+                   'precio'=> $value->precio_c,
                    'total-linea'=>$value->total_linea);
                    $this->detalles[]=$a;
-
+                   $this->detalles_string=serialize($this->detalles);
                    $this->total_general+=$value->total_linea;
                 }
             }
@@ -72,7 +73,7 @@ class Compras extends Component
            'id_producto'=> $value['id_producto'],
            'producto'=> $value['descripcion'],   
            'cantidad'=> $value['cantidad'],
-           'precio'=> $prod['preciocosto'], //$renglones->precio,
+           'precio'=> $value['preciovta'],
            'total-linea'=>$value['total_linea']);
          $this->detalles[]=$a; 
 
@@ -128,7 +129,7 @@ class Compras extends Component
             
       $this->id_producto =$id;
       $this->producto =$nombre;
-      $this->precio = $precio;
+     // $this->precio = $precio;
     }
     
    

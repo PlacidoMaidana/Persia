@@ -368,7 +368,7 @@ public function obtener_lineas($id_factura)
     return $renglones=   DB::table('facturas_compras')
     ->join('detalles_facturas_compras as r','facturas_compras.id','=','r.id_factura_compra')
     ->join('productos as p','r.id_producto','=','p.id')
-    ->select('r.id', 'id_producto','descripcion','cantidad','p.preciovta' ,'r.total_linea', 'facturas_compras.nro_factura as factura')
+    ->select('r.id', 'id_producto','descripcion','cantidad','r.precio_c' ,'r.total_linea', 'facturas_compras.nro_factura as factura')
     ->where('facturas_compras.id',$id_factura)->get();
 
 
@@ -603,13 +603,14 @@ public function eliminar_renglones_de_compra($id_factura)
 
 public function cargar_renglones_de_compra($tabla_detalles,$id_factura)
 {
-    // dd($tabla_detalles);
+    //dd($tabla_detalles);
     foreach ($tabla_detalles as $r) {
         
-         
+        
         $renglon_fac=new RengFact_Compra();
         $renglon_fac->id_factura_compra=$id_factura; 
         $renglon_fac->cantidad=$r['cantidad'];
+        $renglon_fac->precio_c=$r['precio'];
         $renglon_fac->id_producto=$r['id_producto'];
         $renglon_fac->total_linea=$r['total-linea'];
         $renglon_fac->save();              
