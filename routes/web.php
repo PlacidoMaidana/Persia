@@ -30,8 +30,10 @@ Route::get('/embebido','App\Http\livewire\pedidos\embebidocomponent');
 
 
 Route::get('/embebido/{id}','App\Http\livewire\pedidos\embebidocomponent@mostrar');
-
-
+Route::get('/informes_iva','App\Http\Controllers\informes_iva@index');
+Route::get('/IVAventas','App\Http\Controllers\iva_ventas@index');
+Route::get('/en_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_ventas@en_rango_de_fechas');//ruta que devuelve datos
+Route::resource('daterange', 'App\Http\Controllers\DateRangeController');
 
 Route::get('/tabla_productos_elegir', function () {
     return view('vendor.voyager.nota-pedidos.tabla_productos_elegir');
@@ -41,10 +43,6 @@ Route::get('/clientes_create_modal', function () {
     return view('vendor.voyager.clientes.ficha_extra');
 });
 
-
-Route::get('/pato', function () {
-    return view('pruebas.vistaPato');
-});
 
 Route::get('/productos_elegir', function () {
      
@@ -144,6 +142,29 @@ Route::get('/productos', function () {
 });
 
 Route::get('admin/clientes/create2/{np_create}','App\Http\Controllers\ClienteBrebeController@nuevo');
+
+Route::get('informes/iva_compras', function ()   {   
+    return datatables()->of(DB::table('facturas_compras')
+    ->join('proveedores as p', 'facturas_compras.id_proveedor','=','p.id')
+    ->select(['facturas_compras.tipo_factura',
+              'facturas_compras.pto_venta', 
+              'facturas_compras.nro_factura', 
+              'facturas_compras.fecha',
+              'p.cuit',
+              'facturas_compras.subtotal',
+              'facturas_compras.exento',
+              'facturas_compras.iva_10_5',
+              'facturas_compras.iva_21',
+              'facturas_compras.iva_27',
+              'facturas_compras.monto_perc_iibb',
+              'facturas_compras.monto_percepcion_iva',
+              'facturas_compras.monto_percep_ganancias',
+              'facturas_compras.otros_impuestos',
+              'facturas_compras.total_factura'  ]))
+    ->toJson();    
+    
+});
+
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();   

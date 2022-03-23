@@ -345,7 +345,7 @@ public function edit(Request $request, $id)
  }
 
  return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','totales'));
- // dd($request['total_general']);
+ 
 }
 
 public function obtener_lineas($id_factura)
@@ -385,6 +385,7 @@ public function obtener_totales_lineas($id_factura)
 // POST BR(E)AD
 public function update(Request $request, $id)
 {
+   // dd($request);
  $slug = $this->getSlug($request);
 
  $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -425,8 +426,10 @@ public function update(Request $request, $id)
        
 
         
-      
-        $data->total_factura=$request['total_general'];
+        $data->iva_10_5=$request['iva_10_5']; 
+        $data->iva_21=$request['iva_21']; 
+        $data->iva_27=$request['iva_27']; 
+        $data->total_factura=$request['total_general'] + $request['total_impuestos'];
         $data->subtotal=$request['total_general']; 
         $data->save();
         
@@ -509,8 +512,9 @@ public function create(Request $request)
      $view = "voyager::$slug.edit-add";
  }
 
-
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+ $totales=$request['total_general'] ; //$this->obtener_totales_lineas($id);
+ 
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','totales'));
 }
 
 /**

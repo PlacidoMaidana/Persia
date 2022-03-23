@@ -137,6 +137,10 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
 </div>
 @include('voyager::partials.app-footer')
 
+
+ @stack('scripts')
+<!-- hasta aqui los scrips de datatables -->
+
 <!-- Javascript Libs -->
 
  <!-- jQuery -->
@@ -146,11 +150,9 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
  <!-- Bootstrap JavaScript -->
  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
  <!-- App scripts -->
- @stack('scripts')
-<!-- hasta aqui los scrips de datatables -->
+
 
 <script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
-
 <script>
     @if(Session::has('alerts'))
         let alerts = {!! json_encode(Session::get('alerts')) !!};

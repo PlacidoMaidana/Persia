@@ -303,61 +303,74 @@
                                     {{-- FORMULARIO EMBEBIDO --}}
                                                
                                
-                                    
+                                                                      
 
                                     @if (isset($renglones))
-                                                                        
-                                        @livewire('compras.compras', ['renglones' => $renglones])
+                                        @livewire('compras.compras', ['renglones' => $renglones , 'id_factura'=>$dataTypeContent->getKey()])
+
                                     @else
                                         @livewire('compras.compras',['renglones' => null])
                                     @endif 
                                    
-                                     
+                                    {{--<div class="form-group col-md-8 ">
+                                    </div>
                                     
-                                     <div class="form-group col-md-3 ">
+                                    <div class="form-group col-md-2 ">
                                         <label class="control-label" for="name">Subtotal</label>
                                         <input type="text" class="form-control" name="subtotal" placeholder="Subtotal" value="{{$totales}}">
+                                    </div>
+                                    <div class="row">
+                                    </div>
+                                     
+                                     
+                                     <div class="form-group col-xs-2 ">
+                                        <label class="control-label" for="name">Iva 10.5 %</label>
+                                        <input type="text" class="form-control" name="iva_10_5" placeholder="Iva 10.5" value="">
                                      </div>
-                                     <div class="form-group col-md-3 ">
-                                        <label class="control-label" for="name">Iva 10 5</label>
-                                        <input type="text" class="form-control" name="iva_10_5" placeholder="Iva 10 5" value="">
-                                     </div>
-                                     <div class="form-group col-md-3 ">
-                                        <label class="control-label" for="name">Iva 21</label>
+                                     <div class="form-group col-xs-2 ">
+                                        <label class="control-label" for="name">Iva 21 %</label>
                                         <input type="text" class="form-control" name="iva_21" placeholder="Iva 21" value="">
                                      </div>
-                                     <div class="form-group col-md-3 ">
-                                        <label class="control-label" for="name">Iva 27</label>
+                                     <div class="form-group col-xs-2 ">
+                                        <label class="control-label" for="name">Iva 27 %</label>
                                         <input type="text" class="form-control" name="iva_27" placeholder="Iva 27" value="">
                                      </div>
-                                     <div class="form-group col-md-3 ">
-                                        <label class="control-label" for="name">Iva</label>
-                                        <input type="text" class="form-control" name="iva" placeholder="Iva" value="">
+                                     <div class="row">
+                                      </div>                                
+                                     <div class="form-group col-xs-2  ">
+                                        <label class="control-label" for="name">Percepcion IIBB</label>
+                                        <input type="text" class="form-control" name="monto_perc_iibb" placeholder="Percepcion IIBB" value="">
                                      </div>
-                                     <div class="form-group col-md-3 ">
-                                        <label class="control-label" for="name">Monto Perc Iibb</label>
-                                        <input type="text" class="form-control" name="monto_perc_iibb" placeholder="Monto Perc Iibb" value="">
+                                     <div class="form-group col-xs-2  ">
+                                        <label class="control-label" for="name">Percepcion Iva</label>
+                                        <input type="text" class="form-control" name="monto_percepcion_iva" placeholder="Percepcion Iva" value="">
                                      </div>
-                                     <div class="form-group col-md-3 ">
-                                        <label class="control-label" for="name">Monto Percepcion Iva</label>
-                                        <input type="text" class="form-control" name="monto_percepcion_iva" placeholder="Monto Percepcion Iva" value="">
+                                     <div class="form-group col-xs-2  ">
+                                        <label class="control-label" for="name">Perc. Ganancias</label>
+                                        <input type="text" class="form-control" name="monto_percep_ganancias" placeholder="Perc. Ganancias" value="">
                                      </div>
-                                     <div class="form-group col-md-3 ">
-                                        <label class="control-label" for="name">Monto Percep Ganancias</label>
-                                        <input type="text" class="form-control" name="monto_percep_ganancias" placeholder="Monto Percep Ganancias" value="">
-                                     </div>
-                                     <div class="form-group col-md-3  ">
+                                     <div class="row">
+                                      </div>
+                                                                         
+                                     <div class="form-group col-md-2   ">
                                         <label class="control-label" for="name">Otros Impuestos</label>
                                         <input type="text" class="form-control" name="otros_impuestos" placeholder="Otros Impuestos" value="">
                                      </div>
-                                     <div class="form-group col-md-3 ">
+                                     <div class="row">
+                                    </div> 
+
+                                     <div class="form-group col-md-8 ">
+                                    </div>
+                                     <div class="form-group col-md-2 ">
                                         <label class="control-label" for="name">Total Impuestos</label>
                                         <input type="text" class="form-control" name="total_impuestos" placeholder="Total Impuestos" value="">
                                      </div>
-                                     <div class="form-group  col-md-3   ">
+                                     <div class="form-group col-md-8 ">
+                                    </div>
+                                     <div class="form-group  col-md-2   ">
                                         <label class="control-label" for="name">Total Factura</label>
                                         <input type="text" class="form-control" name="total_factura" placeholder="Total Factura" value="">
-                                     </div>
+                                     </div>--}}
                                 </div>
                                
                             </div>
