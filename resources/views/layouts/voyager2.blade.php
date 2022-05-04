@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta name="assets-path" content="{{ route('voyager.voyager_assets') }}"/>
+    <link rel="stylesheet" href= "https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
+    <script src=" https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js">  </script>
+    <script src=" https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js">  </script>
+
+    <link rel="stylesheet"  href= https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css >
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="/vendor/datatables/buttons.server-side.js"></script>
+
+  
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">

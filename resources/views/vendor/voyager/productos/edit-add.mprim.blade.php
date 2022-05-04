@@ -118,41 +118,9 @@
                                 {{-- <<<<<<<<<<<<<<<<  RUBROS Y SUBRUBRO    >>>>>>>>>>>>>>>>>>>> --}}
 
 
-                            @for ($i = 0; $i < count($dataTypeRows); $i++)
-                             {{--@foreach($dataTypeRows as $row)--}}
+
+                            @foreach($dataTypeRows as $row)
                                 <!-- GET THE DISPLAY OPTIONS -->
-                                @php
-                                    $row=$dataTypeRows[$i];
-                                   
-                                    $display_options = $row->details->display ?? NULL;
-                                    if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
-                                        $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
-                                    }
-                                @endphp
-                                @if (isset($row->details->legend) && isset($row->details->legend->text))
-                                <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
-                                @endif
-                                
-                                @if ( $row->getTranslatedAttribute('display_name') =='Unidad')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                @endif   
-                                @if ( $row->getTranslatedAttribute('display_name') =='Manual Procedimiento')
-                                @php
-                                    continue;
-                                @endphp
-                                @endif
-                                @if ( $row->getTranslatedAttribute('display_name') =='Unidad Consumo Produccion')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                @endif   
-                                @if ( $row->getTranslatedAttribute('display_name') =='Factor Conversion Unidades')
-                                @php
-                                    continue;
-                                @endphp
-                                @endif
                                 @php
                                     $display_options = $row->details->display ?? NULL;
                                     if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
@@ -164,10 +132,13 @@
                                 @endif
 
                                 @if (($row->getTranslatedAttribute('display_name')=='Rubro Id')||($row->getTranslatedAttribute('display_name')=='Subrubro Id'))
+                                    
                                         @php
                                             continue;
                                         @endphp
-                               @endif
+
+
+                                @endif
 
                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                     {{ $row->slugify }}
@@ -190,7 +161,7 @@
                                         @endforeach
                                     @endif
                                 </div>
-                            @endfor
+                            @endforeach
 
                         </div><!-- panel-body -->
 

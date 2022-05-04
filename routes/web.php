@@ -30,10 +30,28 @@ Route::get('/embebido','App\Http\livewire\pedidos\embebidocomponent');
 
 
 Route::get('/embebido/{id}','App\Http\livewire\pedidos\embebidocomponent@mostrar');
-Route::get('/informes_iva','App\Http\Controllers\informes_iva@index');
+
+Route::get('/IVAcompras','App\Http\Controllers\iva_compras@index');
 Route::get('/IVAventas','App\Http\Controllers\iva_ventas@index');
-Route::get('/en_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_ventas@en_rango_de_fechas');//ruta que devuelve datos
-Route::resource('daterange', 'App\Http\Controllers\DateRangeController');
+Route::get('/Informeventas','App\Http\Controllers\informes_ventas@index');
+Route::get('/Informecompras','App\Http\Controllers\informes_compras@index');
+Route::get('/Informetesoreria','App\Http\Controllers\informes_tesoreria@index');
+Route::get('/informe_productos', 'App\Http\Controllers\informesProductos@index');
+
+Route::get('/ivavtas_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_ventas@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/ivacomprasen_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_compras@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/informevtas_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_ventas@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/informecompras_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_compras@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/informetesoreria_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_tesoreria@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/vtasproductos_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\informesProductos@en_rango_de_fechas');//ruta que devuelve datos
+
+Route::get('productos/export/{from}/{to}', 'App\Http\Controllers\informesProductos@export');
+Route::get('informes_compras/export/', 'App\Http\Controllers\informes_compras@export');
+Route::get('informes_ventas/export/', 'App\Http\Controllers\informes_ventas@export');
+Route::get('informes_tesoreria/export/', 'App\Http\Controllers\informes_tesoreria@export');
+Route::get('iva_compras/export/{from}/{to}', 'App\Http\Controllers\Iva_compras@export');
+Route::get('iva_ventas/export/{from}/{to}', 'App\Http\Controllers\iva_ventas@export');
+
 
 Route::get('/tabla_productos_elegir', function () {
     return view('vendor.voyager.nota-pedidos.tabla_productos_elegir');
@@ -127,11 +145,48 @@ Route::get('/productos_elegir', function () {
     ->toJson();   
  
  });
-
  
  Route::get('/pagar_pedidos/{id_pedido}', function ($id_pedido) {
      Session()->flash('id_pedido', $id_pedido);
      return redirect(url('admin/mov-financieros/create'));
+ });
+
+ Route::get('/productos_para_venta', function () {     
+    return datatables()->of(DB::table('productos')
+    ->join('rubros','productos.rubro_id','=','rubros.id')
+    ->join('subrubros','productos.subrubro_id','=','subrubros.id')
+    ->where('rubros.rubro','!=', 'Materia Prima')
+    ->select([  'productos.id as id_producto',
+                'productos.descripcion',
+                'rubros.rubro',
+                'subrubros.descripcion_subrubro',
+                'productos.preciovta',
+                'productos.unidad',
+                'productos.activo'
+              ]))
+    ->addColumn('check','vendor\voyager\productos\check_productos')
+    ->addColumn('accion','vendor\voyager\productos\acciones_productos')
+    ->rawColumns(['check','accion'])     
+    ->toJson();   
+  });
+  Route::get('/materia_prima', function () {     
+    return datatables()->of(DB::table('productos')
+    ->join ('rubros','productos.rubro_id','=','rubros.id')
+    ->join ('subrubros','productos.subrubro_id','=','subrubros.id')
+    ->where('rubros.rubro','=', 'Materia Prima')
+    ->select([  'productos.id as id_producto',
+                'productos.descripcion',
+                'rubros.rubro',
+                'subrubros.descripcion_subrubro',
+                'productos.preciovta',
+                'productos.unidad',
+                'productos.activo'
+              ]))
+    ->addColumn('check','vendor\voyager\productos\check_productos')
+    ->addColumn('accion','vendor\voyager\productos\acciones_productos')
+    ->rawColumns(['check','accion'])     
+    ->toJson();   
+ 
  });
 
 Route::get('/vista', function () {
@@ -143,40 +198,12 @@ Route::get('/productos', function () {
 
 Route::get('admin/clientes/create2/{np_create}','App\Http\Controllers\ClienteBrebeController@nuevo');
 
-Route::get('informes/iva_compras', function ()   {   
-    return datatables()->of(DB::table('facturas_compras')
-    ->join('proveedores as p', 'facturas_compras.id_proveedor','=','p.id')
-    ->select(['facturas_compras.tipo_factura',
-              'facturas_compras.pto_venta', 
-              'facturas_compras.nro_factura', 
-              'facturas_compras.fecha',
-              'p.cuit',
-              'facturas_compras.subtotal',
-              'facturas_compras.exento',
-              'facturas_compras.iva_10_5',
-              'facturas_compras.iva_21',
-              'facturas_compras.iva_27',
-              'facturas_compras.monto_perc_iibb',
-              'facturas_compras.monto_percepcion_iva',
-              'facturas_compras.monto_percep_ganancias',
-              'facturas_compras.otros_impuestos',
-              'facturas_compras.total_factura'  ]))
-    ->toJson();    
-    
-});
+
 
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();   
 
-   
-    // Route::get('clientes/', ['App\Http\Controllers\Voyager\VoyagerMediaController@index',   'as' => 'index']);
-    // Route::get('clientes/create2/{np_create}', ['App\Http\Controllers\Voyager\VoyagerBreadController@create2', 'as' => 'create2']);
-    // // Route::get('clientes/', function(){ //return 'abc';
-            
-    // });
-    //Route::get('clientes/', 'App\Http\Controllers\Voyager\VoyagerBreadController@index');
-   //Route::get('clientes/create/{v}', 'App\Http\Controllers\Voyager\ClienteController@create');
 });
 Auth::routes();
 
