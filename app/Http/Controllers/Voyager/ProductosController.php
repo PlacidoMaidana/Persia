@@ -338,8 +338,8 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
 
     public function editMP(Request $request, $id)
     {
-        $slug = $this->getSlug($request);
-
+        $slug = "productos";// $this->getSlug($request);
+        
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         if (strlen($dataType->model_name) != 0) {
@@ -383,10 +383,11 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
             // $view = "voyager::$slug.edit-add";
             // $view = "voyager::$slug.edit-add-fabric";
             // $view = "voyager::$slug.edit-add-revta";
-               $view = "voyager::$slug.edit-add-mprim";
+               $view = "vendor.voyager.productos.edit-add-mprim";
+              
         }
         
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
      
     // POST BR(E)AD

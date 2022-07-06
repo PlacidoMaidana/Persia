@@ -251,9 +251,7 @@ Route::get('/productos_elegir', function () {
  
  });
 
- Route::get('/admin/productos/{id_producto}/editMP', function () {
-  return view('vendor.voyager.productos.edit-add-mprim');
-});
+ Route::get('/admin/productos/{id_producto}/editMP', 'App\Http\Controllers\Voyager\ProductosController@editMP');
 
 
 
