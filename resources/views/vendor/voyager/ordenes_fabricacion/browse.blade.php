@@ -1,4 +1,4 @@
-{{-- @extends('voyager::master') --}}
+{{--@extends('voyager::master') --}}
 @extends('layouts.voyager2')
 
 @section('page_title', __('voyager::generic.viewing').' '.$dataType->getTranslatedAttribute('display_name_plural'))
@@ -12,11 +12,9 @@
             <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
                 <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
             </a>
-           
         @endcan
         @can('delete', app($dataType->model_name))
             @include('voyager::partials.bulk-delete')
-            <a id="operar" href="javascript:;" class="btn btn-danger delete"> Borrar seleccionados</a>
         @endcan
         @can('edit', app($dataType->model_name))
             @if(!empty($dataType->order_column) && !empty($dataType->order_display_column))
@@ -77,7 +75,7 @@
                                 @endif
                             </form>
                         @endif
-                        {{-- brows original de boyager --}}
+                         {{-- brows original de voyager --}}
                         {{-- <div class="table-responsive">
                             <table id="dataTable" class="table table-hover">
                                 <thead>
@@ -255,9 +253,7 @@
                                             </td>
                                         @endforeach
                                         <td class="no-sort no-click bread-actions">
-                                            
                                             @foreach($actions as $action)
-                                            
                                                 @if (!method_exists($action, 'massAction'))
                                                     @include('voyager::bread.partials.actions', ['action' => $action])
                                                 @endif
@@ -267,92 +263,80 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>   --}}
-
+                        </div>    --}}
                     {{-- tabla de pedidos pendientes --}}
 
                     {{-- <div class="container"> --}}
                         
                         <div class="panel panel-default" style="width: 100%">
-                          <div class="panel-heading panel-heading-nav">
-                            <ul class="nav nav-tabs">
-                              <li role="presentation" class="active">
-                                <a href="#one" aria-controls="one" role="tab" data-toggle="tab">Pedidos pendientes</a>
-                              </li>
-                              <li role="presentation">
-                                <a href="#two" aria-controls="two" role="tab" data-toggle="tab">Pedidos terminados</a>
-                              </li>
-                              
-                            </ul>
-                          </div>
-                          <div class="panel-body" style="width: 100%">
-                            <div class="tab-content">
-                              <div role="tabpanel" class="tab-pane fade in active" id="one">
-                                <table id="pedidos" class="table table-striped table-bordered dt-responsive nowrap"   >
-                                    <thead>
-                                      <tr >
-                                          <th class="dt-not-orderable">
-                                              <input type="checkbox" class="select_all">
-                                          </th>
-                                          <th>id_pedido</th>
-                                          <th>fecha</th>
-                                          <th>nombre</th>
-                                          <th>totalgravado</th>
-                                          <th>total</th>
-                                          <th>monto_iva</th>
-                                          <th>id_factura</th>
-                                          <th>descuento</th>
-                                          <th>estado</th>
-                                          <th>accion</th>
-                                          
-                                          
-                                        </tr>
-                                    </thead>
-                                    
-                                </table>
+                            <div class="panel-heading panel-heading-nav">
+                              <ul class="nav nav-tabs">
+                                <li role="presentation" class="active">
+                                  <a href="#one" aria-controls="one" role="tab" data-toggle="tab">ordenes_fabricacion_activas</a>
+                                </li>
+                                <li role="presentation">
+                                  <a href="#two" aria-controls="two" role="tab" data-toggle="tab">ordenes_fabricacion_cerradas</a>
+                                </li>
+                                
+                              </ul>
                             </div>
-                            <div role="tabpanel" class="tab-pane fade" id="two">
-                                <table id="pedidos_terminados" class="table table-striped table-bordered dt-responsive nowrap"   >
-                                    <thead>
-                                        <tr>
+                            <div class="panel-body" style="width: 100%">
+                              <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="one">
+                                  <table id="ordenes_fabricacion_activas" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                      <thead>
+                                        <tr >
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
                                             </th>
-                                            <th>id_pedido</th>
-                                            <th>fecha</th>
-                                            <th>nombre</th>
-                                            <th>totalgravado</th>
-                                            <th>total</th>
-                                          <th>monto_iva</th>
-                                          <th>id_factura</th>
-                                          <th>descuento</th>
-                                          <th>estado</th>
-                                          <th>accion</th>
-                                          
-                                
-                                      </tr>
-                                     </thead>
-                                 
-                                    </table>
+                                            <th>id</th>
+                                            <th>descripcion</th>
+                                            <th>rubro</th>
+                                            <th>subrubro</th>
+                                            <th>cantidad</th>
+                                            <th>unidad</th>
+                                            <th>fecha_orden</th>
+                                            <th>entrada_proceso</th>
+                                            <th>salida_proceso</th>
+                                            <th>estado</th>
+                                            <th>descripcion_molde</th>
+                                            <th>accion</th>
+                                          </tr>
+                                      </thead>
+                                      
+                                  </table>
                               </div>
-                               
+                              <div role="tabpanel" class="tab-pane fade" id="two">
+                                  <table id="ordenes_fabricacion_cerradas" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                      <thead>
+                                          <tr>
+                                              <th class="dt-not-orderable">
+                                                  <input type="checkbox" class="select_all">
+                                              </th>
+                                              <th>id</th>
+                                              <th>descripcion</th>
+                                              <th>rubro</th>
+                                              <th>subrubro</th>
+                                              <th>cantidad</th>
+                                              <th>unidad</th>
+                                              <th>fecha_orden</th>
+                                              <th>entrada_proceso</th>
+                                              <th>salida_proceso</th>
+                                              <th>estado</th>
+                                              <th>descripcion_molde</th>
+                                              <th>accion</th>
+                                        </tr>
+                                       </thead>
+                                   
+                                      </table>
+                                </div>
+                                 
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        {{-- </div> --}}
+                          {{-- </div> --}}
 
-                  
-                    
-
-
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Totales</h5>
-        <p class="card-text">el total de todo</p>
-    </div>
-</div>
-
-
+                          
                         @if ($isServerSide)
                             <div class="pull-left">
                                 <div role="status" class="show-res" aria-live="polite">{{ trans_choice(
@@ -483,25 +467,28 @@
     </script>
 
 
+{{-- ***ENVEBIDO ***--}}
+
 <script>
     $(document).ready(function() {
-        $('#pedidos').dataTable( {
+        $('#ordenes_fabricacion_activas').dataTable( {
              "serverSide": true,
-             "ajax":"{{url('pedidos_pendientes')}}",                
+             "ajax":"{{url('ordenes_fabricacion_activas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
-                     {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
-                     {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
-                     {data: 'nombre', name: 'clientes.nombre', width: '10%'},
-                     {data: 'totalgravado', name: 'nota_pedidos.totalgravado', width: '10%'},
-                     {data: 'total', name: 'nota_pedidos.total', width: '10%'},
-                     {data: 'monto_iva', name: 'nota_pedidos.monto_iva', width: '10%'},
-                     {data: 'id_factura', name: 'nota_pedidos.id_factura', width: '10%'},
-                     {data: 'descuento', name: 'nota_pedidos.descuento', width: '10%'},
-                     {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
-                     {data: 'accion', width: '10%'},
-                    
-                                              
+                     {data: 'id_orden_fabricacion', name: 'ordenes_fabricacion.id', width: '5%'},
+                     {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
+                     {data: 'rubro', name: 'rubros.rubro', width: '5%'},
+                     {data: 'descripcion_subrubro', name: 'subrubros.descripcion_subrubro', width: '5%'},
+                     {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '5%'},
+                     {data: 'unidad', name: 'productos.unidad', width: '5%'},
+                     {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
+                     {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
+                     {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
+                     {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
+                     {data: 'descripcion_molde', name: 'moldes.descripcion', width: '5%'},
+                     {data: 'accion', width: '5%'},
+        
                       ]           
         } );
     } );
@@ -510,23 +497,24 @@
  </script> 
 <script>
     $(document).ready(function() {
-        $('#pedidos_terminados').dataTable( {
+        $('#ordenes_fabricacion_cerradas').dataTable( {
              "serverSide": true,
-             "ajax":"{{url('pedidos_terminados')}}",                
+             "ajax":"{{url('ordenes_fabricacion_cerradas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
-                     {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
-                     {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
-                     {data: 'nombre', name: 'clientes.nombre', width: '10%'},
-                     {data: 'totalgravado', name: 'nota_pedidos.totalgravado', width: '10%'},
-                     {data: 'total', name: 'nota_pedidos.total', width: '10%'},
-                     {data: 'monto_iva', name: 'nota_pedidos.monto_iva', width: '10%'},
-                     {data: 'id_factura', name: 'nota_pedidos.id_factura', width: '10%'},
-                     {data: 'descuento', name: 'nota_pedidos.descuento', width: '10%'},
-                     {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
+                     {data: 'id_orden_fabricacion', name: 'ordenes_fabricacion.id', width: '5%'},
+                     {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
+                     {data: 'rubro', name: 'rubros.rubro', width: '5%'},
+                     {data: 'descripcion_subrubro', name: 'subrubros.descripcion_subrubro', width: '5%'},
+                     {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '5%'},
+                     {data: 'unidad', name: 'productos.unidad', width: '5%'},
+                     {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
+                     {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
+                     {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
+                     {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
+                     {data: 'descripcion_molde', name: 'moldes.descripcion', width: '5%'},
                      {data: 'accion', width: '10%'},
-                    
-                                              
+                
                       ]           
         } );
     } );
@@ -534,27 +522,6 @@
 
  </script> 
 
- <script>
-        // $(document).ready(function(){
-        // $("input[type=checkbox]:checked").each(function(){
-        //     //cada elemento seleccionado
-        //     alert($(this).val());
-        // });
-        // });
-
-
-        // $('#operar').on('click', function(){
-        //     $("input[type=checkbox]:checked").each(function(){
-        //     //cada elemento seleccionado
-        //     alert($(this).val());
-        //       });
-        //     });
-
-        
-        
-      
-
- </script>
 
 <script>
      function borrar(id) {
@@ -583,7 +550,7 @@
                 // Reset input value
                 $bulkDeleteInput.val('');
                 // Deletion info
-                var displayName = count > 1 ? 'Nota Pedidos' : 'Nota Pedido';
+                var displayName = count > 1 ? 'Productos' : 'Producto';
                 displayName = displayName.toLowerCase();
                 $bulkDeleteCount.html(count);
                 $bulkDeleteDisplayName.html(displayName);

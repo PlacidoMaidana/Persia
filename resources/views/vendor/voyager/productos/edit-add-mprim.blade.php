@@ -27,6 +27,7 @@
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
+                    <H1>  llegamos a materia prima </H1>
                     <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
@@ -111,7 +112,7 @@
                                           </div>
                                       </div>  
 
-                                    {{-- <<<<<<<<<<<<<<<<<<<<<<<    FIN MODAL RUBROS    >>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
+                                    {{-- <<<<<<<<<<<<<<<<<<<<<<<    FIN MODAL LOCALIDADES    >>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
 
 
                                 
@@ -121,18 +122,6 @@
 
                             @foreach($dataTypeRows as $row)
                                 <!-- GET THE DISPLAY OPTIONS -->
-
-                                @if ( $row->getTranslatedAttribute('display_name') =='unidad')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                @endif   
-                                @if ( $row->getTranslatedAttribute('display_name') =='unidad')
-                                             @php
-                                                 continue;
-                                             @endphp
-                                @endif   
-
                                 @php
                                     $display_options = $row->details->display ?? NULL;
                                     if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
@@ -298,7 +287,7 @@
     </script>
 
      {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-       <<<<<<<<<<<<<<<< script rubros  <<<<<<<<<<<<<<<<<<
+       <<<<<<<<<<<<<<<< script localidades  <<<<<<<<<<<<<<<<<<
        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
        <script>
         $('#boton_rubros').on('click',function(){
@@ -338,7 +327,7 @@
     
      
     
-    {{-- <<<<<<<<<<<<<<<<<<<<<<<< fin rubros script <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
+    {{-- <<<<<<<<<<<<<<<<<<<<<<<< fin localidades script <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
     
 
 

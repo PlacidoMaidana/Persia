@@ -62,6 +62,7 @@ Route::get('/clientes_create_modal', function () {
 });
 
 
+
 Route::get('/productos_elegir', function () {
      
     return datatables()->of(DB::table('productos')
@@ -151,43 +152,110 @@ Route::get('/productos_elegir', function () {
      return redirect(url('admin/mov-financieros/create'));
  });
 
+ 
+ Route::get('/ordenes_fabricacion_activas', function () {     
+    return datatables()->of(DB::table('ordenes_fabricacion')
+    ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+    ->join('rubros','productos.rubro_id','=','rubros.id')
+    ->join('subrubros','productos.subrubro_id','=','subrubros.id')
+    ->leftjoin('moldes','moldes.id','=','productos.id_molde')
+    ->where('ordenes_fabricacion.estado','!=', 'Entregado')
+    ->select([  'ordenes_fabricacion.id as id_orden_fabricacion',
+                'productos.descripcion',
+                'rubros.rubro',
+                'subrubros.descripcion_subrubro',
+                'ordenes_fabricacion.cantidad',
+                'productos.unidad',
+                'ordenes_fabricacion.fecha_orden',
+                'ordenes_fabricacion.fecha_entrada_proceso',
+                'ordenes_fabricacion.fecha_salida_proceso',
+                'ordenes_fabricacion.estado',
+                'moldes.descripcion as descripcion_molde',
+                'moldes.cant_moldes',
+                'moldes.mt2_por_molde'
+              
+              ]))
+    ->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
+    ->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')        
+    ->rawColumns(['check','accion'])     
+    ->toJson();   
+  });
+
+ Route::get('/ordenes_fabricacion_cerradas', function () {     
+    return datatables()->of(DB::table('ordenes_fabricacion')
+    ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+    ->join('rubros','productos.rubro_id','=','rubros.id')
+    ->join('subrubros','productos.subrubro_id','=','subrubros.id')
+    ->leftjoin('moldes','moldes.id','=','productos.id_molde')
+    ->where('ordenes_fabricacion.estado','=', 'Entregado')
+    ->select([  'ordenes_fabricacion.id as id_orden_fabricacion',
+                'productos.descripcion',
+                'rubros.rubro',
+                'subrubros.descripcion_subrubro',
+                'ordenes_fabricacion.cantidad',
+                'productos.unidad',
+                'ordenes_fabricacion.fecha_orden',
+                'ordenes_fabricacion.fecha_entrada_proceso',
+                'ordenes_fabricacion.fecha_salida_proceso',
+                'ordenes_fabricacion.estado',
+                'moldes.descripcion as descripcion_molde',
+                'moldes.cant_moldes',
+                'moldes.mt2_por_molde'
+                
+              ]))
+    ->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
+    ->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')
+    ->rawColumns(['check','accion'])     
+    ->toJson();   
+  });
+
  Route::get('/productos_para_venta', function () {     
     return datatables()->of(DB::table('productos')
     ->join('rubros','productos.rubro_id','=','rubros.id')
     ->join('subrubros','productos.subrubro_id','=','subrubros.id')
-    ->where('rubros.rubro','!=', 'Materia Prima')
+    ->where('rubros.categoria','!=', 'Materia Prima')
     ->select([  'productos.id as id_producto',
                 'productos.descripcion',
                 'rubros.rubro',
                 'subrubros.descripcion_subrubro',
                 'productos.preciovta',
                 'productos.unidad',
-                'productos.activo'
+                'productos.activo',
+                'rubros.categoria'
               ]))
     ->addColumn('check','vendor\voyager\productos\check_productos')
     ->addColumn('accion','vendor\voyager\productos\acciones_productos')
     ->rawColumns(['check','accion'])     
     ->toJson();   
   });
+
+
   Route::get('/materia_prima', function () {     
     return datatables()->of(DB::table('productos')
     ->join ('rubros','productos.rubro_id','=','rubros.id')
     ->join ('subrubros','productos.subrubro_id','=','subrubros.id')
-    ->where('rubros.rubro','=', 'Materia Prima')
+    ->where('rubros.categoria','=', 'Materia Prima')
     ->select([  'productos.id as id_producto',
                 'productos.descripcion',
                 'rubros.rubro',
                 'subrubros.descripcion_subrubro',
                 'productos.preciovta',
                 'productos.unidad',
-                'productos.activo'
+                'productos.activo', 
+                'rubros.categoria'
               ]))
     ->addColumn('check','vendor\voyager\productos\check_productos')
-    ->addColumn('accion','vendor\voyager\productos\acciones_productos')
+    ->addColumn('accion','vendor\voyager\productos\acciones_MP')
     ->rawColumns(['check','accion'])     
     ->toJson();   
  
  });
+
+ Route::get('/admin/productos/{id_producto}/editMP', function () {
+  return view('vendor.voyager.productos.edit-add-mprim');
+});
+
+
 
 Route::get('/vista', function () {
     return view('vista_suelta');

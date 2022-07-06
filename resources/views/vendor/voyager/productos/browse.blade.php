@@ -301,6 +301,7 @@
                                           <th>precio venta</th>
                                           <th>unidad</th>
                                           <th>activo</th>
+                                          <th>categoria</th>
                                           <th>accion</th>
                                         </tr>
                                     </thead>
@@ -321,6 +322,7 @@
                                             <th>precio venta</th>
                                             <th>unidad</th>
                                             <th>activo</th>
+                                            <th>categoria</th>
                                             <th>accion</th>
                                       </tr>
                                      </thead>
@@ -489,7 +491,9 @@
                      {data: 'preciovta', name: 'productos.preciovta', width: '10%'},
                      {data: 'unidad', name: 'productos.unidad', width: '10%'},
                      {data: 'activo', name: 'productos.activo', width: '10%'},
+                     {data: 'categoria', name: 'rubros.categoria', width: '10%'},
                      {data: 'accion', width: '10%'},
+                     
         
                       ]           
         } );
@@ -511,6 +515,7 @@
                      {data: 'preciovta', name: 'productos.preciovta', width: '10%'},
                      {data: 'unidad', name: 'productos.unidad', width: '10%'},
                      {data: 'activo', name: 'productos.activo', width: '10%'},
+                     {data: 'categoria', name: 'rubros.categoria', width: '10%'},
                      {data: 'accion', width: '10%'},
                 
                       ]           
@@ -520,23 +525,6 @@
 
  </script> 
 
- <script>
-        // $(document).ready(function(){
-        // $("input[type=checkbox]:checked").each(function(){
-        //     //cada elemento seleccionado
-        //     alert($(this).val());
-        // });
-        // });
-
-
-        // $('#operar').on('click', function(){
-        //     $("input[type=checkbox]:checked").each(function(){
-        //     //cada elemento seleccionado
-        //     alert($(this).val());
-        //       });
-        //     });
-
- </script>
 
 <script>
      function borrar(id) {
@@ -586,6 +574,7 @@
         });
     }
     </script>
+
 
 
 @stop

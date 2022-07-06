@@ -16,8 +16,10 @@
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
+     - PRODUCTOS DE FABRICACION PROPIA
     </h1>
     @include('voyager::multilingual.language-selector')
+   
 @stop
 
 @section('content')
@@ -55,69 +57,7 @@
                             @php
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                             @endphp
-
-                                {{-- <<<<<<<<<<<<<<<<  RUBROS Y SUBRUBRO    >>>>>>>>>>>>>>>>>>>> --}}
-                                <div class="form-group">
-                                    <label id="descripcion_rubro" for="my-input">Rubro:</label>
-                                    <button type="button" id="boton_rubros" class="btn btn-primary " style="width: 134px">
-                                        <div class="icon voyager-zoom-in">Rubro</div> 
-                                    </button>
-                                <input type="hidden" id="rubro_id" name="rubro_id">
-                                <input type="hidden" id="subrubro_id" name="subrubro_id">
-                                </div>
-                                
-                                   {{-- >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                      >>>>>>>>>><<<<<<    MODAL RUBRO              <<<<<<<<<
-                                      >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                      >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-
-                                      <!-- Modal --> 
-                                      <div class="modal fade modal-warning" id="modal_rubro" v-if="allowCrop">
-                                          <div class="modal-dialog"  style="min-width: 60%">
-                                              <div class="modal-content">
-                                                   <div class="modal-header">
-                                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                  <h4 class="modal-title">Seleccione el rubro</h4>
-                                                   </div>
-                                               
-                                                   <div id="x34" class="modal-body">
-                                                  <div class="card" >
-                                                      <img class="card-img-top" src="holder.js/100x180/" alt="">
-                                                      <div class="card-body">
-                                                    
-                                                          <table id="rubros_elegir" class="table table-striped table-bordered dt-responsive nowrap" >
-                                                              <thead>
-                                                                <tr>
-                                                                    <th>id_rubro</th>
-                                                                    <th>rubro</th>
-                                                                    <th>id_subrubro</th>
-                                                                    <th>descripcion_subrubro</th>
-                                                                    <th>seleccionar</th>                                                                
-                                                                </tr>
-                                                               </thead>
-                                                           
-                                                              </table>
-                                                          
-                                                          
-                                                      </div>
-                                                  </div>
-                                              
-                                                   </div>
-                                               
-                                                   <div class="modal-footer">
-                                                  <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>                
-                                                   </div>
-                                              </div>
-                                          </div>
-                                      </div>  
-
-                                    {{-- <<<<<<<<<<<<<<<<<<<<<<<    FIN MODAL LOCALIDADES    >>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
-
-
-                                
-                                {{-- <<<<<<<<<<<<<<<<  RUBROS Y SUBRUBRO    >>>>>>>>>>>>>>>>>>>> --}}
-
-
+                               
 
                             @foreach($dataTypeRows as $row)
                                 <!-- GET THE DISPLAY OPTIONS -->
@@ -296,22 +236,6 @@
         
      </script> 
      
-    <script>
-        $(document).ready(function() {
-            $('#rubros_elegir').dataTable( {
-                 "serverSide": true,
-                 "ajax":"{{url('/subrubro_elegir')}}",
-                 "columns":[
-                         {data:'id_rubro',name: 'rubros.id', width: '20px' },
-                         {data:'rubro',name: 'rubros.rubro', width: '80px' },
-                         {data:'id_subrubro',name: 's.id', width: '20px' },
-                         {data:'descripcion_subrubro',name: 's.descripcion_subrubro', width: '80px' },
-                         {data:'seleccionar', width: '80px'}                             
-                          ]           
-            } );
-        } );
-    
-    </script> 
     
     
     <script>
@@ -320,6 +244,7 @@
             $('#modal_rubro').modal('hide');
             $('#rubro_id').val(id_rubro);
             $('#subrubro_id').val(id_subrubro);
+            $ where id_rubro = 1
           }
     </script>
     

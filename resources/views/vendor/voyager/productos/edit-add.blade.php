@@ -139,9 +139,9 @@
                                                @endphp
                                 @endif   
                                 @if ( $row->getTranslatedAttribute('display_name') =='Manual Procedimiento')
-                                @php
-                                    continue;
-                                @endphp
+                                                @php
+                                                    continue;
+                                                @endphp
                                 @endif
                                 @if ( $row->getTranslatedAttribute('display_name') =='Unidad Consumo Produccion')
                                                @php
@@ -149,9 +149,9 @@
                                                @endphp
                                 @endif   
                                 @if ( $row->getTranslatedAttribute('display_name') =='Factor Conversion Unidades')
-                                @php
-                                    continue;
-                                @endphp
+                                                @php
+                                                    continue;
+                                                @endphp
                                 @endif
                                 @php
                                     $display_options = $row->details->display ?? NULL;
