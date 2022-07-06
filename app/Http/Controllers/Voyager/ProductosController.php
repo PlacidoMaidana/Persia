@@ -338,7 +338,7 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
 
     public function editMP(Request $request, $id)
     {
-        $slug = "productos";// $this->getSlug($request);
+        $slug = "productos"; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
         
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
