@@ -27,7 +27,7 @@
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
-                    <H1>  llegamos a materia prima </H1>
+                 
                     <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
@@ -57,67 +57,6 @@
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                             @endphp
 
-                                {{-- <<<<<<<<<<<<<<<<  RUBROS Y SUBRUBRO    >>>>>>>>>>>>>>>>>>>> --}}
-                                <div class="form-group">
-                                    <label id="descripcion_rubro" for="my-input">Rubro:</label>
-                                    <button type="button" id="boton_rubros" class="btn btn-primary " style="width: 134px">
-                                        <div class="icon voyager-zoom-in">Rubro</div> 
-                                    </button>
-                                <input type="hidden" id="rubro_id" name="rubro_id">
-                                <input type="hidden" id="subrubro_id" name="subrubro_id">
-                                </div>
-                                
-                                   {{-- >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                      >>>>>>>>>><<<<<<    MODAL RUBRO              <<<<<<<<<
-                                      >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                      >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-
-                                      <!-- Modal --> 
-                                      <div class="modal fade modal-warning" id="modal_rubro" v-if="allowCrop">
-                                          <div class="modal-dialog"  style="min-width: 60%">
-                                              <div class="modal-content">
-                                                   <div class="modal-header">
-                                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                  <h4 class="modal-title">Seleccione el rubro</h4>
-                                                   </div>
-                                               
-                                                   <div id="x34" class="modal-body">
-                                                  <div class="card" >
-                                                      <img class="card-img-top" src="holder.js/100x180/" alt="">
-                                                      <div class="card-body">
-                                                    
-                                                          <table id="rubros_elegir" class="table table-striped table-bordered dt-responsive nowrap" >
-                                                              <thead>
-                                                                <tr>
-                                                                    <th>id_rubro</th>
-                                                                    <th>rubro</th>
-                                                                    <th>id_subrubro</th>
-                                                                    <th>descripcion_subrubro</th>
-                                                                    <th>seleccionar</th>                                                                
-                                                                </tr>
-                                                               </thead>
-                                                           
-                                                              </table>
-                                                          
-                                                          
-                                                      </div>
-                                                  </div>
-                                              
-                                                   </div>
-                                               
-                                                   <div class="modal-footer">
-                                                  <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>                
-                                                   </div>
-                                              </div>
-                                          </div>
-                                      </div>  
-
-                                    {{-- <<<<<<<<<<<<<<<<<<<<<<<    FIN MODAL LOCALIDADES    >>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
-
-
-                                
-                                {{-- <<<<<<<<<<<<<<<<  RUBROS Y SUBRUBRO    >>>>>>>>>>>>>>>>>>>> --}}
-
 
 
                             @foreach($dataTypeRows as $row)
@@ -132,8 +71,20 @@
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
 
-                                @if (($row->getTranslatedAttribute('display_name')=='Rubro Id')||($row->getTranslatedAttribute('display_name')=='Subrubro Id'))
-                                    
+                                @if (($row->getTranslatedAttribute('display_name')=='Factor Vta Produccion'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion '      )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '          )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'            )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Factor Conversion Unidades'   )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Produccion'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'         )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'                )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion'   )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad'                )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Id Molde'                )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Preciovta'                )
+                                     )
                                         @php
                                             continue;
                                         @endphp
@@ -141,7 +92,7 @@
 
                                 @endif
 
-                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                     {{ $row->slugify }}
                                     <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
                                     @include('voyager::multilingual.input-hidden-bread-edit-add')
@@ -286,49 +237,6 @@
         });
     </script>
 
-     {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-       <<<<<<<<<<<<<<<< script localidades  <<<<<<<<<<<<<<<<<<
-       <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-       <script>
-        $('#boton_rubros').on('click',function(){
-            $('#modal_rubro').modal({show:true});
-           
-        });
-        
-     </script> 
-     
-    <script>
-        $(document).ready(function() {
-            $('#rubros_elegir').dataTable( {
-                 "serverSide": true,
-                 "ajax":"{{url('/subrubro_elegir')}}",
-                 "columns":[
-                         {data:'id_rubro',name: 'rubros.id', width: '20px' },
-                         {data:'rubro',name: 'rubros.rubro', width: '80px' },
-                         {data:'id_subrubro',name: 's.id', width: '20px' },
-                         {data:'descripcion_subrubro',name: 's.descripcion_subrubro', width: '80px' },
-                         {data:'seleccionar', width: '80px'}                             
-                          ]           
-            } );
-        } );
-    
-    </script> 
-    
-    
-    <script>
-        function elegir_rubro(id_rubro,rubro,id_subrubro,descripcion_subrubro) {     
-            $('#descripcion_rubro').html("Rubro:"+rubro+'/'+descripcion_subrubro);
-            $('#modal_rubro').modal('hide');
-            $('#rubro_id').val(id_rubro);
-            $('#subrubro_id').val(id_subrubro);
-          }
-    </script>
-    
-    
-     
-    
-    {{-- <<<<<<<<<<<<<<<<<<<<<<<< fin localidades script <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-    
 
 
 
