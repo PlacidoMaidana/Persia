@@ -304,6 +304,7 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
             // If Model doest exist, get data from table name
             $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
         }
+       
 
         foreach ($dataType->editRows as $key => $row) {
             $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
@@ -379,17 +380,139 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         $categoria = DB::table($dataType->name)->where('id', $id)->first();
 ////******************* 
         if (view()->exists("voyager::$slug.edit-add")) {
-             //$view = "voyager::productos.edit-add-fabric";
-            // $view = "voyager::$slug.edit-add";
             // $view = "voyager::$slug.edit-add-fabric";
             // $view = "voyager::$slug.edit-add-revta";
                $view = "vendor.voyager.productos.edit-add-mprim";
-              
         }
         
         return view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
-     
+   // 
+   public function editFP(Request $request, $id)
+   {
+       $slug = "productos"; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+       
+       $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+       if (strlen($dataType->model_name) != 0) {
+           $model = app($dataType->model_name);
+           $query = $model->query();
+
+           // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+           if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+               $query = $query->withTrashed();
+           }
+           if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+               $query = $query->{$dataType->scope}();
+           }
+           $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+       } else {
+           // If Model doest exist, get data from table name
+           $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+       }
+       $renglones=$this->obtener_lineas($id);
+
+       foreach ($dataType->editRows as $key => $row) {
+           $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+       }
+
+       // If a column has a relationship associated with it, we do not want to show that field
+       $this->removeRelationshipField($dataType, 'edit');
+
+       // Check permission
+       $this->authorize('edit', $dataTypeContent);
+
+       // Check if BREAD is Translatable
+       $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+       // Eagerload Relations
+       $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+////******************* 
+       $view = 'voyager::bread.edit-add';
+       $categoria = DB::table($dataType->name)->where('id', $id)->first();
+////******************* 
+       if (view()->exists("voyager::$slug.edit-add")) {
+            $view = "voyager::$slug.edit-add-fabric";
+           // $view = "voyager::$slug.edit-add-revta";
+           // $view = "vendor.voyager.productos.edit-add-mprim";
+       }
+       
+       return view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones'));
+   }
+   public function obtener_lineas($id_producto)
+    {
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<                 <<<<<<<<<           <<<<<<       <<<<<<<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<         <<<<<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<   <<<<<<<<<<     <<<<<<<<<<<<     <<    <<<<    <<<<<<<<<<<<<<<<
+        //<<<<             <<<<<<<<<<<<<           <<<<<<     <<<    <<    <<<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<     <<<<<<<<<<     <<<<<<<<<<<<     <<<<   <<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<     <<<<<  <<<    <<<<<<<<<<<<<<<<
+        //<<<<     <<<<<<<<<   <<<<<<<<<           <<<<<<     <<<<<         <<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        
+       
+
+        return $renglones=   DB::table('productos')
+        ->join('dosificaciones as d','productos.id','=','d.id_producto')
+        ->join('productos as p','p.id','=','d.id_insumo_producto')
+        ->select( 'd.id', 'd.id_insumo_producto','p.descripcion','d.cant_unid_produc', 'p.unidad')
+        ->where('productos.id',$id_producto)->get();
+
+        
+    }
+   // 
+   public function editrevta(Request $request, $id)
+   {
+       $slug = "productos"; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+       
+       $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+       if (strlen($dataType->model_name) != 0) {
+           $model = app($dataType->model_name);
+           $query = $model->query();
+
+           // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+           if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+               $query = $query->withTrashed();
+           }
+           if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+               $query = $query->{$dataType->scope}();
+           }
+           $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+       } else {
+           // If Model doest exist, get data from table name
+           $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+       }
+
+       foreach ($dataType->editRows as $key => $row) {
+           $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+       }
+
+       // If a column has a relationship associated with it, we do not want to show that field
+       $this->removeRelationshipField($dataType, 'edit');
+
+       // Check permission
+       $this->authorize('edit', $dataTypeContent);
+
+       // Check if BREAD is Translatable
+       $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+       // Eagerload Relations
+       $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+////******************* 
+       $view = 'voyager::bread.edit-add';
+       $categoria = DB::table($dataType->name)->where('id', $id)->first();
+////******************* 
+       if (view()->exists("voyager::$slug.edit-add")) {
+           // $view = "voyager::$slug.edit-add-fabric";
+              $view = "voyager::$slug.edit-add-revta";
+           // $view = "vendor.voyager.productos.edit-add-mprim";
+       }
+       
+       return view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+   }    
     // POST BR(E)AD
     public function update(Request $request, $id)
     {

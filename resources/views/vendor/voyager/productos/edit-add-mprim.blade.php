@@ -16,6 +16,7 @@
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
+        - MATERIA PRIMA
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -78,12 +79,13 @@
                                      ( $row->getTranslatedAttribute('display_name')=='Factor Conversion Unidades'   )||
                                      ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Produccion'    )||
                                      ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'         )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'                )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'   )||
                                      ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion'   )||
                                      ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2'    )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidad'                )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Id Molde'                )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Preciovta'                )
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Id Molde'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Preciovta' )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Created At'  )
                                      )
                                         @php
                                             continue;
@@ -236,11 +238,6 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-
-
-
-
-
 
 
 @stop

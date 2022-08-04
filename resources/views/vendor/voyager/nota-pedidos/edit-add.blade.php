@@ -177,7 +177,7 @@
                                     @endfor
     
                                 </div><!-- panel-body -->
-                            </div>
+                        </div>
                             <div class="col-md-6"><!-- panel-detalles -->
                                 <div class="col">
                                     <!-- Button trigger modal -->

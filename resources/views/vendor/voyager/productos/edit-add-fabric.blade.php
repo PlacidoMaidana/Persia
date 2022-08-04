@@ -40,7 +40,8 @@
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
-
+                        <div class="row">
+                        <div class="col-md-6">
                         <div class="panel-body">
 
                             @if (count($errors) > 0)
@@ -71,8 +72,25 @@
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
 
-                                @if (($row->getTranslatedAttribute('display_name')=='Rubro Id')||($row->getTranslatedAttribute('display_name')=='Subrubro Id'))
-                                    
+                                @if (( $row->getTranslatedAttribute('display_name')=='Factor Conversion Unidades'   )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Produccion'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'         )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Base'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Liston'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Factor Compra Consumo Base'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Factor Compra Consumo Liston'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Precio Compra'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Compra'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Created At'  )
+                                    // ( $row->getTranslatedAttribute('display_name')=='Preciovta'    )||
+                                    // ( $row->getTranslatedAttribute('display_name')=='Id Molde'  )||
+                                    // ($row->getTranslatedAttribute('display_name')=='Factor Vta Produccion'    )||
+                                    // ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion '      )||
+                                    // ( $row->getTranslatedAttribute('display_name')=='Unidad'   )||
+                                    // ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'    )||
+                                    // ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '          )||
+                                    // ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'            )||
+                                     )
                                         @php
                                             continue;
                                         @endphp
@@ -80,7 +98,7 @@
 
                                 @endif
 
-                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                     {{ $row->slugify }}
                                     <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
                                     @include('voyager::multilingual.input-hidden-bread-edit-add')
@@ -104,7 +122,81 @@
                             @endforeach
 
                         </div><!-- panel-body -->
+                        </div>
+                   
+                        {{--   ********************************************
+                            --}}
 
+
+                            
+
+                            <div class="col-md-6"><!-- panel-detalles -->
+                                <div class="col">
+                                    <!-- Button trigger modal -->
+                                    @section('modal_elejir') <!-- Modal seleccionar producto -->                                     
+                                     <!-- Modal --> 
+                                     <div class="modal fade modal-warning" id="productos_modal"  v-if="allowCrop">
+                                         <div class="modal-dialog"  style="min-width: 90%">
+                                             <div class="modal-content">
+                                            
+                                                 <div class="modal-header">
+                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                     <h4 class="modal-title">Seleccione un insumo</h4>
+                                                 </div>
+                                             
+                                                 <div id="x34" class="modal-body">
+                                                     <div class="card" style="min-width: 70%">
+                                                         <img class="card-img-top" src="holder.js/100x180/" alt="">
+                                                         <div class="card-body">
+                                                             <h4 class="card-title">Insumos</h4>
+                                                            
+                                                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                                                                <thead>
+                                                                  <tr>
+                                                                      <th>id</th>
+                                                                      <th>descripcion</th>
+                                                                      <th>subrubro</th>
+                                                                      <th>unidad</th>
+                                                                      <th>seleccionar</th>
+                                                                  </tr>
+                                                                 </thead>
+                                                                 </table>
+
+
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             
+                                                 <div class="modal-footer">
+                                                     <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                                                 </div>
+                                             </div>
+                                         </div>
+                                       </div>   
+                                       @stop  
+                                   
+                                    {{-- Campos que no se cargan en la vista pero se modificaran en el controlador 
+                                        <input type="hidden" name="total_impuestos">
+                                        <input type="hidden" name="fecha_vencimiento">
+                                        <input type="hidden" name="remito_pto_vta">
+                                        <input type="hidden" name="remito_nro"> 
+                                        <input type="hidden" name="nro_factura_ref">  
+                                    --}}
+
+                                    {{-- FORMULARIO EMBEBIDO --}}
+
+                                    @if (isset($renglones))
+                                          @livewire('productos.embebidofabpropia', ['renglones' => $renglones]) 
+                                       @else
+                                          @livewire('productos.embebidofabpropia',['renglones' => null])
+                                    @endif
+   
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="panel-footer">
                             @section('submit-buttons')
                                 <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
@@ -112,6 +204,11 @@
                             @yield('submit-buttons')
                         </div>
                     </form>
+
+
+{{--   ********************************************
+                          ******************* --}}
+                        
 
                     <iframe id="form_target" name="form_target" style="display:none"></iframe>
                     <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
@@ -225,38 +322,35 @@
         });
     </script>
 
-     {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-       <<<<<<<<<<<<<<<< script localidades  <<<<<<<<<<<<<<<<<<
-       <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-       <script>
-        $('#boton_rubros').on('click',function(){
-            $('#modal_rubro').modal({show:true});
-           
-        });
-        
-     </script> 
-     
-    
-    
+
+   {{-- despliega la ventana modal --}}
     <script>
-        function elegir_rubro(id_rubro,rubro,id_subrubro,descripcion_subrubro) {     
-            $('#descripcion_rubro').html("Rubro:"+rubro+'/'+descripcion_subrubro);
-            $('#modal_rubro').modal('hide');
-            $('#rubro_id').val(id_rubro);
-            $('#subrubro_id').val(id_subrubro);
-            $ where id_rubro = 1
-          }
-    </script>
+        $('#productos_buscar').on('click',function(){
+            
+          $('#productos_modal').modal({show:true});
+        //   $('#x34').load("{{url('/tabla_productos_elegir')}}",function(){
+        //        $('#productos').modal('show');
+        //       });
+        });
+       </script> 
+ 
+    {{-- script del datatable --}}
+    <script>
+        $(document).ready(function() {
+            $('#example').dataTable( {
+                 "serverSide": true,
+                 "ajax":"{{url('/insumos_elegir')}}",                
+                 "columns":[
+                         {data: 'id', name: 'productos.id', width: '50px'},
+                         {data: 'descripcion', name: 'productos.descripcion', width: '205px'},
+                         {data: 'subrubro', name: 's.descripcion_subrubro', width: '205px'},
+                         {data: 'unidad', name: 'productos.unidad_consumo_produccion', width: '30px'},
+                         {data: 'seleccionar', name: 'seleccionar', width: '150px'},
+                                                  
+                          ]           
+            } );
+        } );
     
     
-     
-    
-    {{-- <<<<<<<<<<<<<<<<<<<<<<<< fin localidades script <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-    
-
-
-
-
-
-
+     </script> 
 @stop

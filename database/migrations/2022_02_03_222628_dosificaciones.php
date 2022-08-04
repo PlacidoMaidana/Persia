@@ -15,8 +15,9 @@ class Dosificaciones extends Migration
     {
         Schema::create('Dosificaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('id_base')->nullable();
-            $table->unsignedBigInteger('id_producto_componente')->nullable();
+            $table->unsignedBigInteger('id_producto')->nullable();
+            $table->char('color' , 50)->nullable();
+            $table->unsignedBigInteger('id_insumo_producto')->nullable();
             $table->decimal('cant_unid_produc', 12, 5)->nullable();
             $table->timestamps();
         });

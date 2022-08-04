@@ -1,43 +1,32 @@
 
 <div class="card">
   <div class="card-body">
-    <h3 class="card-title"> Items</h3>
+    <h3 class="card-title">  Composicion del producto</h3>
     <div class="row">
      
         <form class="row g-2">
-          <div class="col-auto">
-            <label for="">Producto</label>
+          <div class="form-group col-md-4">
+            <label for="">Insumo</label>
             <input type="text" wire:model="producto" id="nombre_producto" class="form-control" placeholder="" aria-describedby="helpId" readonly>
-            <small id="helpId" class="text-muted">Seleccione el producto de la lista</small>
+            <small id="helpId" class="text-muted">Seleccione el insumo de la lista</small>
        
           </div>
-          <div class="col-auto">
+          <div class="form-group col-md-4">
             <button type="button" class="btn btn-primary" id="productos_buscar"
             data-bs-toggle="modal" data-bs-target="#productos">
-            Productos
+            Insumos
             </button>
           </div>
          </div>
 
-        <div class="form-group col">
+        <div class="form-group col-md-4">
           <label for="">Cantidad</label>
           <input type="text" wire:model="cantidad" id="cantidad" class="form-control" placeholder="" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Cantidad</small>
-        </div>
-
-        <div class="form-group col">
-          <label for="">Precio</label>
-          <input type="text" wire:model="precio" id="precio" class="form-control " 
-          aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Precio</small>
-        </div>
-
-       
+        </div>   
 
 
-        <input type="hidden" wire:model="id_producto" id="id_producto" name="id_producto" >
-        <input type="hidden" wire:model="total_general" id="total_general" name="total_general" >
-
+        <input type="hidden" wire:model="id_insumo_producto" id="id_insumo_producto" name="id_insumo_producto" >
         <input type="hidden" name="detalles_string" wire:model="detalles_string">
       
     </div>
@@ -53,10 +42,9 @@
       <thead>
         <tr>
           <th>id</th>
-          <th>producto</th>
-          <th>cantidad  </th>
-          <th>precio</th>
-          <th>detalle</th>
+          <th>insumo</th>
+          <th>subrubro  </th>
+          <th>unidad</th>
           <th>acciones</th>
         </tr>
       </thead>
@@ -67,8 +55,7 @@
           <td scope="row">{{$item['id_producto']}}</td>
           <td scope="row">{{$item['producto']}}</td>
           <td>{{$item['cantidad']}}</td>
-          <td>{{number_format($item['precio'], 2, '.', ',')}}</td>
-          <td>{{number_format($item['total-linea'], 2, '.', ',')}}</td>
+          <td scope="row">{{$item['unidad']}}</td>
           <td><a wire:click.prevent="quitar({{$index}})"> Quitar</a></td>
         </tr>  
        @endforeach
@@ -76,18 +63,15 @@
        
       </tbody>
     </table>
-        total general: {{number_format($total_general, 2, '.', ',')}}
-      
+              
   </div>
 </div>
 
-
-
 <script>
-  function elegir(id,nom,precio)
+  function elegir(id,nom,unidad)
   { 
    $('#productos').modal('hide');   
-   Livewire.emit('actualiza', id, nom,precio);    
+   Livewire.emit('actualiza', id, nom,unidad);    
   
    }
 </script>
@@ -102,9 +86,6 @@
       });
   });
 </script>
-
-
- 
 
 {{-- FORMULARIO EMBEBIDO --}}
 

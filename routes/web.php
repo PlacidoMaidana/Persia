@@ -61,8 +61,18 @@ Route::get('/clientes_create_modal', function () {
     return view('vendor.voyager.clientes.ficha_extra');
 });
 
+Route::get('/insumos_elegir', function () {
+     
+  return datatables()->of(DB::table('productos')
+  ->join('rubros as r','productos.rubro_id','=','r.id')
+  ->join('subrubros as s','productos.subrubro_id','=','s.id')
+  ->where('r.rubro','=', 'Materia Prima')
+  ->select(['productos.id as id', 'descripcion', 's.descripcion_subrubro as subrubro', 'unidad_consumo_produccion as unidad']))
+  ->addColumn('seleccionar','vendor\voyager\productos\boton_seleccionar')
+  ->rawColumns(['seleccionar'])   
+  ->toJson();    
 
-
+});
 Route::get('/productos_elegir', function () {
      
     return datatables()->of(DB::table('productos')
@@ -213,7 +223,7 @@ Route::get('/productos_elegir', function () {
     return datatables()->of(DB::table('productos')
     ->join('rubros','productos.rubro_id','=','rubros.id')
     ->join('subrubros','productos.subrubro_id','=','subrubros.id')
-    ->where('rubros.categoria','!=', 'Materia Prima')
+    ->where('rubros.categoria','=', 'Productos Reventa')
     ->select([  'productos.id as id_producto',
                 'productos.descripcion',
                 'rubros.rubro',
@@ -224,11 +234,35 @@ Route::get('/productos_elegir', function () {
                 'rubros.categoria'
               ]))
     ->addColumn('check','vendor\voyager\productos\check_productos')
-    ->addColumn('accion','vendor\voyager\productos\acciones_productos')
+    ->addColumn('accion','vendor\voyager\productos\acciones_productosrevta')
     ->rawColumns(['check','accion'])     
     ->toJson();   
   });
 
+  Route::get('/admin/productos/{id_producto}/editrevta', 'App\Http\Controllers\Voyager\ProductosController@editrevta');
+
+  Route::get('/fabricacion_propia', function () {     
+    return datatables()->of(DB::table('productos')
+    ->join ('rubros','productos.rubro_id','=','rubros.id')
+    ->join ('subrubros','productos.subrubro_id','=','subrubros.id')
+    ->where('rubros.categoria','=', 'Elaboración Propia')
+    ->select([  'productos.id as id_producto',
+                'productos.descripcion',
+                'rubros.rubro',
+                'subrubros.descripcion_subrubro',
+                'productos.preciovta',
+                'productos.unidad',
+                'productos.activo', 
+                'rubros.categoria'
+              ]))
+    ->addColumn('check','vendor\voyager\productos\check_productos')
+    ->addColumn('accion','vendor\voyager\productos\acciones_FP')
+    ->rawColumns(['check','accion'])     
+    ->toJson();   
+
+ });
+
+  Route::get('/admin/productos/{id_producto}/editFP', 'App\Http\Controllers\Voyager\ProductosController@editFP');
 
   Route::get('/materia_prima', function () {     
     return datatables()->of(DB::table('productos')
@@ -248,7 +282,7 @@ Route::get('/productos_elegir', function () {
     ->addColumn('accion','vendor\voyager\productos\acciones_MP')
     ->rawColumns(['check','accion'])     
     ->toJson();   
- 
+
  });
 
  Route::get('/admin/productos/{id_producto}/editMP', 'App\Http\Controllers\Voyager\ProductosController@editMP');
