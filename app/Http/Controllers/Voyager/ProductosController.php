@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Voyager;
 use App\Models\Producto;
 use App\Models\Rubro;
 use App\Models\Subrubro;
+use App\Models\Dosificacion;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -282,59 +283,6 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
     //
     //****************************************
 
-    public function edit(Request $request, $id)
-    {
-        $slug = $this->getSlug($request);
-
-        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-
-        if (strlen($dataType->model_name) != 0) {
-            $model = app($dataType->model_name);
-            $query = $model->query();
-
-            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
-            if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                $query = $query->withTrashed();
-            }
-            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
-                $query = $query->{$dataType->scope}();
-            }
-            $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
-        } else {
-            // If Model doest exist, get data from table name
-            $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
-        }
-       
-
-        foreach ($dataType->editRows as $key => $row) {
-            $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
-        }
-
-        // If a column has a relationship associated with it, we do not want to show that field
-        $this->removeRelationshipField($dataType, 'edit');
-
-        // Check permission
-        $this->authorize('edit', $dataTypeContent);
-
-        // Check if BREAD is Translatable
-        $isModelTranslatable = is_bread_translatable($dataTypeContent);
-
-        // Eagerload Relations
-        $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
-////******************* 
-        $view = 'voyager::bread.edit-add';
-        $categoria = DB::table($dataType->name)->where('id', $id)->first();
-////******************* 
-        if (view()->exists("voyager::$slug.edit-add")) {
-             $view = "voyager::productos.edit-add-fabric";
-            // $view = "voyager::$slug.edit-add";
-            // $view = "voyager::$slug.edit-add-fabric";
-            // $view = "voyager::$slug.edit-add-revta";
-            // $view = "voyager::$slug.edit-add-mprim";
-        }
-        
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
-    }
 
 
     public function editMP(Request $request, $id)
@@ -375,10 +323,10 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
 
         // Eagerload Relations
         $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
-////******************* 
+
         $view = 'voyager::bread.edit-add';
         $categoria = DB::table($dataType->name)->where('id', $id)->first();
-////******************* 
+ 
         if (view()->exists("voyager::$slug.edit-add")) {
             // $view = "voyager::$slug.edit-add-fabric";
             // $view = "voyager::$slug.edit-add-revta";
@@ -411,11 +359,14 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
            $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
        }
        $renglones=$this->obtener_lineas($id);
-
+     
+       
        foreach ($dataType->editRows as $key => $row) {
            $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
        }
 
+      
+      
        // If a column has a relationship associated with it, we do not want to show that field
        $this->removeRelationshipField($dataType, 'edit');
 
@@ -427,10 +378,12 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
 
        // Eagerload Relations
        $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
-////******************* 
+
        $view = 'voyager::bread.edit-add';
        $categoria = DB::table($dataType->name)->where('id', $id)->first();
-////******************* 
+       
+       
+
        if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add-fabric";
            // $view = "voyager::$slug.edit-add-revta";
@@ -457,12 +410,12 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         return $renglones=   DB::table('productos')
         ->join('dosificaciones as d','productos.id','=','d.id_producto')
         ->join('productos as p','p.id','=','d.id_insumo_producto')
-        ->select( 'd.id', 'd.id_insumo_producto','p.descripcion','d.cant_unid_produc', 'p.unidad')
+        ->select( 'd.id', 'd.id_insumo_producto','p.descripcion','d.color','d.cant_unid_produc', 'd.unidad_consumo_produccion')
         ->where('productos.id',$id_producto)->get();
-
+        dd($renglones);
         
     }
-   // 
+   
    public function editrevta(Request $request, $id)
    {
        $slug = "productos"; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
@@ -501,10 +454,10 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
 
        // Eagerload Relations
        $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
-////******************* 
+
        $view = 'voyager::bread.edit-add';
        $categoria = DB::table($dataType->name)->where('id', $id)->first();
-////******************* 
+
        if (view()->exists("voyager::$slug.edit-add")) {
            // $view = "voyager::$slug.edit-add-fabric";
               $view = "voyager::$slug.edit-add-revta";
@@ -514,8 +467,10 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
        return view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
    }    
     // POST BR(E)AD
-    public function update(Request $request, $id)
+
+   public function update(Request $request, $id)
     {
+    
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -539,6 +494,33 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
 
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
+         ////***********************
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<       <>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    <<<<<>    >>>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<               <<<<<>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+       
+
+       // $data->id_vendedor=auth()->id();
+       // $data->monto_iva=0;
+       // $data->total=$request['total_general'];
+       // $data->totalgravado=$request['total_general']; 
+          $data->save();
+        
+        $tabla_detalles=unserialize($request['detalles_string']);
+        //dd($tabla_detalles); die();
+        $this->eliminar_renglones_de_producto($data->id);
+        $this->cargar_renglones_de_producto( $tabla_detalles,$data->id);
+            
+
 
         // Get fields with images to remove before updating and make a copy of $data
         $to_remove = $dataType->editRows->where('type', 'image')
@@ -565,6 +547,27 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
             'alert-type' => 'success',
         ]);
     }
+
+    public function eliminar_renglones_de_producto($id_producto)
+    {
+        DB::table('dosificaciones')->where('id_producto', '=', $id_producto)->delete();
+    }
+
+    public function cargar_renglones_de_producto($tabla_detalles,$id_producto)
+    {
+        foreach ($tabla_detalles as $r) {
+            $renglon_producto=new Dosificacion();
+            $renglon_producto->id_producto=$id_producto; 
+            $renglon_producto->color=$r['color'];
+            $renglon_producto->id_insumo_producto=$r['id_producto'];
+            $renglon_producto->color=$r['color'];
+            $renglon_producto->cant_unid_produc=$r['cantidad'];
+            $renglon_producto->unidad_consumo_produccion=$r['unidad'];
+            $renglon_producto->save();              
+
+        }
+    }
+
 
     //***************************************
     //
@@ -623,6 +626,9 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
      */
     public function store(Request $request)
     {
+        
+        
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -633,7 +639,7 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
-
+        $data->save();
         event(new BreadDataAdded($dataType, $data));
 
         if (!$request->has('_tagging')) {
@@ -642,7 +648,19 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
             } else {
                 $redirect = redirect()->back();
             }
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<          CARGANDO LAS LINEAS             <<<<<<<<<<<<<<<<<<<<<>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+            
+            $tabla_detalles=unserialize($request['detalles_string']);
+           
+            $this->cargar_renglones_de_producto( $tabla_detalles,$data->id);
+            
             return $redirect->with([
                 'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
                 'alert-type' => 'success',
@@ -650,6 +668,9 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         } else {
             return response()->json(['success' => true, 'data' => $data]);
         }
+
+
+
     }
 
     //***************************************

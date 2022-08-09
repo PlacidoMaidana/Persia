@@ -32,6 +32,7 @@
                     <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
+                            {{--action="{{ $edit ? route(url('/admin/productos/update_fp'), $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"  --}}
                             method="POST" enctype="multipart/form-data">
                         <!-- PUT Method if we are editing -->
                         @if($edit)
@@ -59,43 +60,30 @@
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                             @endphp
                                
-
-                            @foreach($dataTypeRows as $row)
+                            @for ($i = 0; $i < count($dataTypeRows); $i++)
+                            
                                 <!-- GET THE DISPLAY OPTIONS -->
                                 @php
+                                 $row=$dataTypeRows[$i];
                                     $display_options = $row->details->display ?? NULL;
                                     if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
                                         $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
                                     }
+
+                                   
                                 @endphp
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
 
-                                @if (( $row->getTranslatedAttribute('display_name')=='Factor Conversion Unidades'   )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Produccion'    )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'         )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Base'    )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Liston'  )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Factor Compra Consumo Base'    )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Factor Compra Consumo Liston'    )||
+                                @if (( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'   )||
                                      ( $row->getTranslatedAttribute('display_name')=='Precio Compra'    )||
                                      ( $row->getTranslatedAttribute('display_name')=='Unidad Compra'    )||
                                      ( $row->getTranslatedAttribute('display_name')=='Created At'  )
-                                    // ( $row->getTranslatedAttribute('display_name')=='Preciovta'    )||
-                                    // ( $row->getTranslatedAttribute('display_name')=='Id Molde'  )||
-                                    // ($row->getTranslatedAttribute('display_name')=='Factor Vta Produccion'    )||
-                                    // ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion '      )||
-                                    // ( $row->getTranslatedAttribute('display_name')=='Unidad'   )||
-                                    // ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'    )||
-                                    // ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '          )||
-                                    // ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'            )||
                                      )
                                         @php
                                             continue;
                                         @endphp
-
-
                                 @endif
 
                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
@@ -119,7 +107,7 @@
                                         @endforeach
                                     @endif
                                 </div>
-                            @endforeach
+                            @endfor
 
                         </div><!-- panel-body -->
                         </div>
@@ -150,13 +138,13 @@
                                                          <div class="card-body">
                                                              <h4 class="card-title">Insumos</h4>
                                                             
+                                                            
                                                              <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
                                                                 <thead>
                                                                   <tr>
                                                                       <th>id</th>
                                                                       <th>descripcion</th>
                                                                       <th>subrubro</th>
-                                                                      <th>unidad</th>
                                                                       <th>seleccionar</th>
                                                                   </tr>
                                                                  </thead>
@@ -344,7 +332,6 @@
                          {data: 'id', name: 'productos.id', width: '50px'},
                          {data: 'descripcion', name: 'productos.descripcion', width: '205px'},
                          {data: 'subrubro', name: 's.descripcion_subrubro', width: '205px'},
-                         {data: 'unidad', name: 'productos.unidad_consumo_produccion', width: '30px'},
                          {data: 'seleccionar', name: 'seleccionar', width: '150px'},
                                                   
                           ]           

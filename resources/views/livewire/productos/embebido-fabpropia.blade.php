@@ -24,9 +24,20 @@
           <input type="text" wire:model="cantidad" id="cantidad" class="form-control" placeholder="" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Cantidad</small>
         </div>   
-
+        <div class="form-group col-md-4">
+          <label for="">Unidad consumo</label>
+          <input type="text" wire:model="unidad" id="unidad" class="form-control" placeholder="" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Unidad</small>
+        </div> 
+        <div class="form-group col-md-4">
+          <label for="">Color</label>
+          <input type="text" wire:model="color" id="color" class="form-control" placeholder="" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Color</small>
+        </div> 
 
         <input type="hidden" wire:model="id_insumo_producto" id="id_insumo_producto" name="id_insumo_producto" >
+       
+        
         <input type="hidden" name="detalles_string" wire:model="detalles_string">
       
     </div>
@@ -43,7 +54,8 @@
         <tr>
           <th>id</th>
           <th>insumo</th>
-          <th>subrubro  </th>
+          <th>color  </th>
+          <th>cantidad  </th>
           <th>unidad</th>
           <th>acciones</th>
         </tr>
@@ -54,8 +66,9 @@
         <tr>
           <td scope="row">{{$item['id_producto']}}</td>
           <td scope="row">{{$item['producto']}}</td>
+          <td>{{$item['color']}}</td>
           <td>{{$item['cantidad']}}</td>
-          <td scope="row">{{$item['unidad']}}</td>
+          <td>{{$item['unidad']}}</td>
           <td><a wire:click.prevent="quitar({{$index}})"> Quitar</a></td>
         </tr>  
        @endforeach
@@ -68,10 +81,10 @@
 </div>
 
 <script>
-  function elegir(id,nom,unidad)
+  function elegir(id,nom)
   { 
    $('#productos').modal('hide');   
-   Livewire.emit('actualiza', id, nom,unidad);    
+   Livewire.emit('actualiza', id, nom);    
   
    }
 </script>

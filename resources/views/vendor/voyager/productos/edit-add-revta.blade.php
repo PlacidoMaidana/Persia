@@ -23,11 +23,11 @@
 @section('content')
     <div class="page-content edit-add container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
-                    <form role="form"
+                      <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
                             method="POST" enctype="multipart/form-data">
@@ -35,7 +35,7 @@
                         @if($edit)
                             {{ method_field("PUT") }}
                         @endif
-
+                      
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
@@ -71,19 +71,12 @@
                                    <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                    @endif
 
-                                   @if (($row->getTranslatedAttribute('display_name')=='Factor Vta Produccion'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion '      )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '          )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'            )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Produccion'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'         )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion'   )||
+                                   @if (( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '    )||
+                                       ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'      )||
+                                       ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'    )||
                                        ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2'    )||
                                        ( $row->getTranslatedAttribute('display_name')=='Id Molde'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Base'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Liston'  )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Factor Compra Consumo Base'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Factor Compra Consumo Liston'    )||
+                                       ( $row->getTranslatedAttribute('display_name')=='Id Base'    )||
                                        ( $row->getTranslatedAttribute('display_name')=='Created At'  )
                                        )
                                         @php

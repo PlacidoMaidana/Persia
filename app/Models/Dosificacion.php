@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dosificacion extends Model
 {
+    protected $table = 'dosificaciones';
     use HasFactory;
 }

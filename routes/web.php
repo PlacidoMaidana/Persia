@@ -66,8 +66,8 @@ Route::get('/insumos_elegir', function () {
   return datatables()->of(DB::table('productos')
   ->join('rubros as r','productos.rubro_id','=','r.id')
   ->join('subrubros as s','productos.subrubro_id','=','s.id')
-  ->where('r.rubro','=', 'Materia Prima')
-  ->select(['productos.id as id', 'descripcion', 's.descripcion_subrubro as subrubro', 'unidad_consumo_produccion as unidad']))
+  ->where('r.categoria','=', 'Materia Prima')
+  ->select(['productos.id as id', 'descripcion', 's.descripcion_subrubro as subrubro']))
   ->addColumn('seleccionar','vendor\voyager\productos\boton_seleccionar')
   ->rawColumns(['seleccionar'])   
   ->toJson();    
@@ -288,17 +288,15 @@ Route::get('/productos_elegir', function () {
  Route::get('/admin/productos/{id_producto}/editMP', 'App\Http\Controllers\Voyager\ProductosController@editMP');
 
 
-
 Route::get('/vista', function () {
     return view('vista_suelta');
 });
+
 Route::get('/productos', function () {
     return view('Livewire.productos.seleccionar-component');
 });
 
 Route::get('admin/clientes/create2/{np_create}','App\Http\Controllers\ClienteBrebeController@nuevo');
-
-
 
 
 Route::group(['prefix' => 'admin'], function () {

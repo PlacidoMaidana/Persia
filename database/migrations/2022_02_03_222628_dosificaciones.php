@@ -19,6 +19,7 @@ class Dosificaciones extends Migration
             $table->char('color' , 50)->nullable();
             $table->unsignedBigInteger('id_insumo_producto')->nullable();
             $table->decimal('cant_unid_produc', 12, 5)->nullable();
+            $table->char('unidad_consumo_produccion' , 50)->nullable();
             $table->timestamps();
         });
     

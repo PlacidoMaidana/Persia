@@ -27,6 +27,7 @@
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
+                    
                     <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
@@ -34,8 +35,9 @@
                         <!-- PUT Method if we are editing -->
                         @if($edit)
                             {{ method_field("PUT") }}
+                            
                         @endif
-
+                        
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 

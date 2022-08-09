@@ -24,7 +24,7 @@
 @section('content')
     <div class="page-content edit-add container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
@@ -72,18 +72,14 @@
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
 
-                                @if (($row->getTranslatedAttribute('display_name')=='Factor Vta Produccion'    )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion '      )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '          )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'            )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Factor Conversion Unidades'   )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Consumo Produccion'    )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'         )||
+                                @if (( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento' )||
                                      ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'   )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Produccion'   )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2' )||
                                      ( $row->getTranslatedAttribute('display_name')=='Unidad'  )||
                                      ( $row->getTranslatedAttribute('display_name')=='Id Molde'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Id Base'    )||
                                      ( $row->getTranslatedAttribute('display_name')=='Preciovta' )||
                                      ( $row->getTranslatedAttribute('display_name')=='Created At'  )
                                      )
