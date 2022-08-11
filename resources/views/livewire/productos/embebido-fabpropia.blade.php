@@ -18,7 +18,11 @@
             </button>
           </div>
          </div>
-
+        <div class="form-group col-md-4">
+          <label for="">Color</label>
+          <input type="text" wire:model="color" id="color" class="form-control" placeholder="" aria-describedby="helpId">
+          <small id="helpId" class="text-muted">Color</small>
+        </div> 
         <div class="form-group col-md-4">
           <label for="">Cantidad</label>
           <input type="text" wire:model="cantidad" id="cantidad" class="form-control" placeholder="" aria-describedby="helpId">
@@ -29,15 +33,9 @@
           <input type="text" wire:model="unidad" id="unidad" class="form-control" placeholder="" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Unidad</small>
         </div> 
-        <div class="form-group col-md-4">
-          <label for="">Color</label>
-          <input type="text" wire:model="color" id="color" class="form-control" placeholder="" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Color</small>
-        </div> 
+        
 
         <input type="hidden" wire:model="id_insumo_producto" id="id_insumo_producto" name="id_insumo_producto" >
-       
-        
         <input type="hidden" name="detalles_string" wire:model="detalles_string">
       
     </div>
@@ -83,7 +81,7 @@
 <script>
   function elegir(id,nom)
   { 
-   $('#productos').modal('hide');   
+   $('#productos_modal').modal('hide');   
    Livewire.emit('actualiza', id, nom);    
   
    }

@@ -412,7 +412,7 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         ->join('productos as p','p.id','=','d.id_insumo_producto')
         ->select( 'd.id', 'd.id_insumo_producto','p.descripcion','d.color','d.cant_unid_produc', 'd.unidad_consumo_produccion')
         ->where('productos.id',$id_producto)->get();
-        dd($renglones);
+     
         
     }
    

@@ -61,6 +61,10 @@ Route::get('/clientes_create_modal', function () {
     return view('vendor.voyager.clientes.ficha_extra');
 });
 
+Route::get('/tabla_insumos_elegir', function () {
+  return view('vendor.voyager.productos.tabla_insumos_elegir');
+});
+
 Route::get('/insumos_elegir', function () {
      
   return datatables()->of(DB::table('productos')
@@ -293,7 +297,7 @@ Route::get('/vista', function () {
 });
 
 Route::get('/productos', function () {
-    return view('Livewire.productos.seleccionar-component');
+    return view('Livewire.productos.seleccionarcomponent');
 });
 
 Route::get('admin/clientes/create2/{np_create}','App\Http\Controllers\ClienteBrebeController@nuevo');

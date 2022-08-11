@@ -32,7 +32,6 @@
                     <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
-                            {{--action="{{ $edit ? route(url('/admin/productos/update_fp'), $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"  --}}
                             method="POST" enctype="multipart/form-data">
                         <!-- PUT Method if we are editing -->
                         @if($edit)
@@ -43,6 +42,8 @@
                         {{ csrf_field() }}
                         <div class="row">
                         <div class="col-md-6">
+                          
+
                         <div class="panel-body">
 
                             @if (count($errors) > 0)
@@ -76,11 +77,11 @@
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
 
-                                @if (( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'   )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Precio Compra'    )||
+                                
+                                @if (( $row->getTranslatedAttribute('display_name')=='Precio Compra'    )||
                                      ( $row->getTranslatedAttribute('display_name')=='Unidad Compra'    )||
                                      ( $row->getTranslatedAttribute('display_name')=='Created At'  )
-                                     )
+                                    )
                                         @php
                                             continue;
                                         @endphp
@@ -109,8 +110,11 @@
                                 </div>
                             @endfor
 
+                            
                         </div><!-- panel-body -->
+                          
                         </div>
+                        
                    
                         {{--   ********************************************
                             --}}
@@ -179,12 +183,18 @@
                                        @else
                                           @livewire('productos.embebidofabpropia',['renglones' => null])
                                     @endif
-   
-                                   
+                                       
                                 </div>
+                               
                             </div>
+                            
+
+                          
+
                         </div>
                         
+                        
+
                         <div class="panel-footer">
                             @section('submit-buttons')
                                 <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>

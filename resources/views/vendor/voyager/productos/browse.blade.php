@@ -85,7 +85,7 @@
                               <li role="presentation" class="active">
                                 <a href="#one" aria-controls="one" role="tab" data-toggle="tab">Productos para venta</a>
                               </li>
-                              <li role="presentation" class="active">
+                              <li role="presentation" >
                                 <a href="#two" aria-controls="two" role="tab" data-toggle="tab">Productos de fabricacion propia</a>
                               </li>
                               <li role="presentation">
@@ -97,7 +97,7 @@
                           <div class="panel-body" style="width: 100%">
                             <div class="tab-content">
                               <div role="tabpanel" class="tab-pane fade in active" id="one">
-                                <table id="productos_para_venta" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                <table id="productos_para_venta" class="table table-striped table-bordered dt-responsive "  >
                                     <thead>
                                       <tr >
                                           <th class="dt-not-orderable">
@@ -117,7 +117,7 @@
                                 </table>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="two">
-                                <table id="fabricacion_propia" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                <table id="fabricacion_propia" class="table table-striped table-bordered dt-responsive "   >
                                     <thead>
                                         <tr>
                                             <th class="dt-not-orderable">
@@ -139,7 +139,7 @@
                               </div>
 
                               <div role="tabpanel" class="tab-pane fade" id="three">
-                                <table id="materia_prima" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                <table id="materia_prima" class="table table-striped table-bordered dt-responsive "   >
                                     <thead>
                                         <tr>
                                             <th class="dt-not-orderable">
