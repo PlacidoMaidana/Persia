@@ -283,7 +283,7 @@
                             <div class="panel-body" style="width: 100%">
                               <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane fade in active" id="one">
-                                  <table id="ordenes_fabricacion_activas" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                  <table id="ordenes_fabricacion_activas"  class="table table-striped table-bordered dt-responsive"   >
                                       <thead>
                                         <tr >
                                             <th class="dt-not-orderable">
@@ -293,13 +293,14 @@
                                             <th>descripcion</th>
                                             <th>rubro</th>
                                             <th>subrubro</th>
-                                            <th>cantidad</th>
-                                            <th>unidad</th>
-                                            <th>fecha_orden</th>
-                                            <th>entrada_proceso</th>
-                                            <th>salida_proceso</th>
+                                            <th>Mt2 solicitados</th>
+                                            <th>Dias</th>
+                                            <th>Cantidad de Unidades</th>
+                                            <th>Cantidad de Paquetes</th>
+                                            <th>fecha orden</th>
+                                            <th>entrada proceso</th>
+                                            <th>salida proceso</th>
                                             <th>estado</th>
-                                            <th>descripcion_molde</th>
                                             <th>accion</th>
                                           </tr>
                                       </thead>
@@ -307,7 +308,7 @@
                                   </table>
                               </div>
                               <div role="tabpanel" class="tab-pane fade" id="two">
-                                  <table id="ordenes_fabricacion_cerradas" class="table table-striped table-bordered dt-responsive nowrap"   >
+                                  <table id="ordenes_fabricacion_cerradas" class="table table-striped table-bordered dt-responsive"   >
                                       <thead>
                                           <tr>
                                               <th class="dt-not-orderable">
@@ -317,13 +318,14 @@
                                               <th>descripcion</th>
                                               <th>rubro</th>
                                               <th>subrubro</th>
-                                              <th>cantidad</th>
-                                              <th>unidad</th>
+                                              <th>Mt2 solicitados</th>
+                                              <th>Dias</th>
+                                              <th>Cantidad de Unidades</th>
+                                              <th>Cantidad de Paquetes</th>
                                               <th>fecha_orden</th>
                                               <th>entrada_proceso</th>
                                               <th>salida_proceso</th>
                                               <th>estado</th>
-                                              <th>descripcion_molde</th>
                                               <th>accion</th>
                                         </tr>
                                        </thead>
@@ -481,12 +483,13 @@
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},
                      {data: 'descripcion_subrubro', name: 'subrubros.descripcion_subrubro', width: '5%'},
                      {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '5%'},
-                     {data: 'unidad', name: 'productos.unidad', width: '5%'},
+                     {data: 'dias', name: 'dias', width: '5%'},
+                     {data: 'unidades', name: 'unidades', width: '5%'},
+                     {data: 'paquetes', name: 'paquetes', width: '5%'},
                      {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
                      {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
                      {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
-                     {data: 'descripcion_molde', name: 'moldes.descripcion', width: '5%'},
                      {data: 'accion', width: '5%'},
         
                       ]           
@@ -507,12 +510,13 @@
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},
                      {data: 'descripcion_subrubro', name: 'subrubros.descripcion_subrubro', width: '5%'},
                      {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '5%'},
-                     {data: 'unidad', name: 'productos.unidad', width: '5%'},
+                     {data: 'dias', name: 'dias', width: '5%'},
+                     {data: 'unidades', name: 'unidades', width: '5%'},
+                     {data: 'paquetes', name: 'paquetes', width: '5%'},
                      {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
                      {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
                      {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
-                     {data: 'descripcion_molde', name: 'moldes.descripcion', width: '5%'},
                      {data: 'accion', width: '10%'},
                 
                       ]           
