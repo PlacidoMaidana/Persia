@@ -50,7 +50,7 @@ class EmbebidoComponent extends Component
     public function render()
     {
         
-        return view('livewire.pedidos.embebido-component',['detalles'=>$this->detalles])
+        return view('livewire.Pedidos.embebido-component',['detalles'=>$this->detalles])
         ->extends('layouts.app')//extends('voyager::master') //
         ->section('content');
         

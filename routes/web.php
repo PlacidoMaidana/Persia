@@ -131,8 +131,8 @@ Route::get('/productos_elegir', function () {
                 'nota_pedidos.descuento',
                 'nota_pedidos.estado'
               ]))
-    ->addColumn('check','vendor\voyager\nota-pedidos\check_pedido')
-    ->addColumn('accion','vendor\voyager\nota-pedidos\acciones_NPedidos')
+    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
     ->rawColumns(['check','accion'])     
     ->toJson();   
  
@@ -154,8 +154,8 @@ Route::get('/productos_elegir', function () {
                 'nota_pedidos.descuento',
                 'nota_pedidos.estado'
               ]))          
-    ->addColumn('check','vendor\voyager\nota-pedidos\check_pedido')
-    ->addColumn('accion','vendor\voyager\nota-pedidos\acciones_NPedidos')
+    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
     ->rawColumns(['check','accion'])   
     ->toJson();   
  
