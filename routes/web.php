@@ -115,6 +115,37 @@ Route::get('/productos_elegir', function () {
     // dd($d);
  
  });
+
+
+ Route::get('pedidos/export', 'App\Http\Controllers\Voyager\PedidosController@createPDF');
+
+ Route::get('/exportar_pedidos', function () {     
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->where('nota_pedidos.estado','=', 'Entregado')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'nota_pedidos.totalgravado',
+              'nota_pedidos.total',
+              'nota_pedidos.monto_iva',
+              'nota_pedidos.aprobado',
+              'nota_pedidos.id_factura',
+              'nota_pedidos.observaciones',
+              'nota_pedidos.descuento',
+              'nota_pedidos.estado'
+            ]))              
+  ->toJson();   
+
+});
+
+
+
+
+
+
+
  Route::get('/pedidos_pendientes', function () {     
     return datatables()->of(DB::table('nota_pedidos')
     ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
