@@ -289,10 +289,10 @@
                                     {{-- FORMULARIO EMBEBIDO --}}
 
                                     @if (isset($renglones))
-                                        @livewire('compras.compras', ['renglones' => $renglones , 'id_factura'=>$dataTypeContent->getKey()])
+                                        @livewire('Compras.Compras', ['renglones' => $renglones , 'id_factura'=>$dataTypeContent->getKey()])
 
                                     @else
-                                        @livewire('compras.compras',['renglones' => null])
+                                        @livewire('Compras.Compras',['renglones' => null])
                                     @endif 
                                    
                                 </div>

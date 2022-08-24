@@ -17,6 +17,6 @@ class Factura_Compra extends Model
         return $this -> hasMany(Detalle_Factura_Compra::class);
     }
     public function tipo_gasto() {
-        return $this -> belongsto(tipo_gasto::class);
+        return $this -> belongsto(Tipo_gasto::class);
     }
 }
