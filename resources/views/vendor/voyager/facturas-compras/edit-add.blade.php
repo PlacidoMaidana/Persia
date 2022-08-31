@@ -49,7 +49,7 @@
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="panel-body">
 
                                     @if (count($errors) > 0)
@@ -79,7 +79,7 @@
                                              @if (isset($row->details->legend) && isset($row->details->legend->text))
                                                  <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                              @endif
-
+{{--
                                              @if ( $row->getTranslatedAttribute('display_name') =='Subtotal')
                                                @php
                                                    continue;
@@ -140,7 +140,7 @@
                                                    continue;
                                                @endphp
                                              @endif  
-
+--}}
                                              @if ($row->getTranslatedAttribute('display_name')=='proveedor')
                                                 {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                                                 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Boton + proveedor          <<<<<<<<<<<<<<<<<<<<<<<<<
@@ -208,7 +208,7 @@
                                                 @endphp
                                              @endif
 
-                                             <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                             <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 3 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                                  {{ $row->slugify }}
                                                  <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
                                                  @include('voyager::multilingual.input-hidden-bread-edit-add')
@@ -233,7 +233,7 @@
     
                                 </div><!-- panel-body -->
                             </div>
-                            <div class="col-md-6"><!-- panel-detalles -->
+                            <div class="col-md-12"><!-- panel-detalles -->
                                 <div class="col">
                                     <!-- Button trigger modal -->
                                     @section('modal_elejir') <!-- Modal seleccionar producto -->                                     
@@ -287,14 +287,14 @@
                                         
 
                                     {{-- FORMULARIO EMBEBIDO --}}
-
+{{-- 
                                     @if (isset($renglones))
                                         @livewire('Compras.Compras', ['renglones' => $renglones , 'id_factura'=>$dataTypeContent->getKey()])
 
                                     @else
                                         @livewire('Compras.Compras',['renglones' => null])
                                     @endif 
-                                   
+  --}}                                 
                                 </div>
                             </div>
                         </div>

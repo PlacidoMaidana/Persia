@@ -182,8 +182,8 @@ Route::get('/productos_elegir', function () {
                   subrubros.descripcion_subrubro,
                   ordenes_fabricacion.cantidad,  
                   (ordenes_fabricacion.cantidad / (moldes.mt2_por_molde * moldes.cant_moldes)) as dias,
-                    (ordenes_fabricacion.cantidad / productos.unidades_mt2) as unidades,
-                    (ordenes_fabricacion.cantidad / productos.paquetes_mt2) as paquetes,                  
+                    (ordenes_fabricacion.cantidad * productos.unidades_mt2) as unidades,
+                    (ordenes_fabricacion.cantidad * productos.paquetes_mt2) as paquetes,                  
                   ordenes_fabricacion.fecha_orden,
                   ordenes_fabricacion.fecha_entrada_proceso,
                   ordenes_fabricacion.fecha_salida_proceso,
@@ -195,38 +195,37 @@ Route::get('/productos_elegir', function () {
   ->toJson();   
 });
 
-
-
- /* Route::get('/ordenes_fabricacion_activas', function () {     
+Route::get('/ordenes_fabricacion_cerradas', function () {     
   return datatables()->of(DB::table('ordenes_fabricacion')
-  ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
-  ->join('rubros','productos.rubro_id','=','rubros.id')
-  ->join('subrubros','productos.subrubro_id','=','subrubros.id')
-  ->leftjoin('moldes','moldes.id','=','productos.id_molde')
-  ->where('ordenes_fabricacion.estado','!=', 'Entregado')
-  ->select([  'ordenes_fabricacion.id as id_orden_fabricacion',
-              'productos.descripcion',
-              'rubros.rubro',
-              'subrubros.descripcion_subrubro',
-              'ordenes_fabricacion.cantidad',
-              '(ordenes_fabricacion.cantidad $/ (moldes.mt2_por_molde * moldes.cant_moldes)) as dias',
-              '(ordenes_fabricacion.cantidad $/ productos.unidades_mt2) as unidades',
-              '(ordenes_fabricacion.cantidad $/ productos.paquetes_mt2) as paquetes',
-              'ordenes_fabricacion.fecha_orden',
-              'ordenes_fabricacion.fecha_entrada_proceso',
-              'ordenes_fabricacion.fecha_salida_proceso',
-              'ordenes_fabricacion.estado'
-
-            ]))
-  ->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
-  ->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')
-  ->rawColumns(['check','accion'])     
-  ->toJson();   
+->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+->join('rubros','productos.rubro_id','=','rubros.id')
+->join('subrubros','productos.subrubro_id','=','subrubros.id')
+->leftjoin('moldes','moldes.id','=','productos.id_molde')
+->where('ordenes_fabricacion.estado','=', 'Entregado')
+->select( DB::raw('
+                ordenes_fabricacion.id as id_orden_fabricacion,
+                productos.descripcion,
+                rubros.rubro,
+                subrubros.descripcion_subrubro,
+                ordenes_fabricacion.cantidad,  
+                (ordenes_fabricacion.cantidad / (moldes.mt2_por_molde * moldes.cant_moldes)) as dias,
+                  (ordenes_fabricacion.cantidad * productos.unidades_mt2) as unidades,
+                  (ordenes_fabricacion.cantidad * productos.paquetes_mt2) as paquetes,                  
+                ordenes_fabricacion.fecha_orden,
+                ordenes_fabricacion.fecha_entrada_proceso,
+                ordenes_fabricacion.fecha_salida_proceso,
+                ordenes_fabricacion.estado'
+                  )))
+->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
+->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')
+->rawColumns(['check','accion'])     
+->toJson();   
 });
-*/
 
 
- Route::get('/ordenes_fabricacion_cerradas', function () {     
+
+/*
+  Route::get('/ordenes_fabricacion_cerradas', function () {     
     return datatables()->of(DB::table('ordenes_fabricacion')
     ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
     ->join('rubros','productos.rubro_id','=','rubros.id')
@@ -252,6 +251,7 @@ Route::get('/productos_elegir', function () {
     ->rawColumns(['check','accion'])     
     ->toJson();   
   });
+*/
 
  Route::get('/productos_para_venta', function () {     
     return datatables()->of(DB::table('productos')

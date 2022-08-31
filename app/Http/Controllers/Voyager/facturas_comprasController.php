@@ -255,8 +255,8 @@ public function show(Request $request, $id)
         //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
         //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        $renglones=$this->obtener_lineas($id);
-        $totales=$this->obtener_totales_lineas($id);
+    //    $renglones=$this->obtener_lineas($id);
+    //   $totales=$this->obtener_totales_lineas($id);
       
 
  // Replace relationships' keys for labels and create READ links if a slug is provided.
@@ -318,8 +318,8 @@ public function edit(Request $request, $id)
      $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
  }
 
- $renglones=$this->obtener_lineas($id);
- $totales=$this->obtener_totales_lineas($id);
+// $renglones=$this->obtener_lineas($id);
+// $totales=$this->obtener_totales_lineas($id);
  
 
  foreach ($dataType->editRows as $key => $row) {
@@ -344,8 +344,8 @@ public function edit(Request $request, $id)
      $view = "voyager::$slug.edit-add";
  }
 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','totales'));
- 
+// return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','totales'));
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
 }
 
 public function obtener_lineas($id_factura)

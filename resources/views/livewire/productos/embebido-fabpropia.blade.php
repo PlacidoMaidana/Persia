@@ -6,11 +6,22 @@
      
         <form class="row g-2">
           <div class="form-group col-md-4">
+            <label for="">Tipo</label>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Seleccione tipo</option>
+              <option value="1">Base</option>
+              <option value="2">Liston</option>
+              <option value="3"> </option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-4">
             <label for="">Insumo</label>
             <input type="text" wire:model="producto" id="nombre_producto" class="form-control" placeholder="" aria-describedby="helpId" readonly>
             <small id="helpId" class="text-muted">Seleccione el insumo de la lista</small>
        
           </div>
+     
           <div class="form-group col-md-4">
             <button type="button" class="btn btn-primary" id="productos_buscar"
             data-bs-toggle="modal" data-bs-target="#productos">
@@ -33,6 +44,8 @@
           <input type="text" wire:model="unidad" id="unidad" class="form-control" placeholder="" aria-describedby="helpId">
           <small id="helpId" class="text-muted">Unidad</small>
         </div> 
+
+      
         
 
         <input type="hidden" wire:model="id_insumo_producto" id="id_insumo_producto" name="id_insumo_producto" >
