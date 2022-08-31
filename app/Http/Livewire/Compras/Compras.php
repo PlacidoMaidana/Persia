@@ -84,7 +84,7 @@ class Compras extends Component
     public function render()
     {
         
-        return view('livewire.Compras.Compras',['detalles'=>$this->detalles])
+        return view('livewire.compras.compras',['detalles'=>$this->detalles])
         ->extends('layouts.app')//extends('voyager::master') //
         ->section('content');
         

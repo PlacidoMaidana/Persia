@@ -18,6 +18,8 @@
             @include('voyager::partials.bulk-delete')
             <a id="operar" href="javascript:;" class="btn btn-danger delete"> Borrar seleccionados</a>
         @endcan
+        <a href="{{url('pedidos/export')}}" class="btn btn-warning">Exportar</a>
+       
         @can('edit', app($dataType->model_name))
             @if(!empty($dataType->order_column) && !empty($dataType->order_display_column))
                 <a href="{{ route('voyager.'.$dataType->slug.'.order') }}" class="btn btn-primary btn-add-new">
