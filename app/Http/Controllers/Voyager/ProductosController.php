@@ -410,7 +410,7 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         return $renglones=   DB::table('productos')
         ->join('dosificaciones as d','productos.id','=','d.id_producto')
         ->join('productos as p','p.id','=','d.id_insumo_producto')
-        ->select( 'd.id', 'd.id_insumo_producto','p.descripcion','d.color','d.cant_unid_produc', 'd.unidad_consumo_produccion')
+        ->select( 'd.id', 'd.id_insumo_producto','p.descripcion','d.base_liston','d.color','d.cant_unid_produc', 'd.unidad_consumo_produccion')
         ->where('productos.id',$id_producto)->get();
      
         
@@ -561,9 +561,9 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         foreach ($tabla_detalles as $r) {
             $renglon_producto=new Dosificacion();
             $renglon_producto->id_producto=$id_producto; 
+            $renglon_producto->base_liston=$r['base_liston'];
             $renglon_producto->color=$r['color'];
             $renglon_producto->id_insumo_producto=$r['id_producto'];
-            $renglon_producto->color=$r['color'];
             $renglon_producto->cant_unid_produc=$r['cantidad'];
             $renglon_producto->unidad_consumo_produccion=$r['unidad'];
             $renglon_producto->save();              

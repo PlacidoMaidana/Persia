@@ -5,44 +5,48 @@
     <div class="row">
      
         <form class="row g-2">
-          <div class="form-group col-md-4">
-            <label for="">Tipo</label>
-            <select class="form-select" aria-label="Default select example">
-              <option selected>Seleccione tipo</option>
-              <option value="1">Base</option>
-              <option value="2">Liston</option>
-              <option value="3"> </option>
-            </select>
-          </div>
+          
 
-          <div class="form-group col-md-4">
+          <div class=" form-group col-md-8">
             <label for="">Insumo</label>
-            <input type="text" wire:model="producto" id="nombre_producto" class="form-control" placeholder="" aria-describedby="helpId" readonly>
-            <small id="helpId" class="text-muted">Seleccione el insumo de la lista</small>
-       
-          </div>
-     
-          <div class="form-group col-md-4">
-            <button type="button" class="btn btn-primary" id="productos_buscar"
+            <input type="text" wire:model="producto" id="nombre_producto"  placeholder="" aria-describedby="helpId" readonly>
+            <button type="button" class=" btn btn-primary" id="productos_buscar"
             data-bs-toggle="modal" data-bs-target="#productos">
             Insumos
             </button>
+           
+            <small id="helpId" class="text-muted">Seleccione el insumo de la lista</small>
+            
+          </div>
+     
+          <div class="form-group col-md-4">
+            
           </div>
          </div>
-        <div class="form-group col-md-4">
+
+         <div class="form-group col-md-3">
+          <label for="">base_liston</label>
+          <select name="base_liston" wire:model="base_liston" class="form-control  form-select"  aria-label="Default select example">
+            <option selected value="-"> </option>
+            <option value="Base">Base</option>
+            <option value="Liston">Liston</option>
+            
+          </select>
+        </div>
+        <div class="form-group col-md-3">
           <label for="">Color</label>
           <input type="text" wire:model="color" id="color" class="form-control" placeholder="" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Color</small>
+          
         </div> 
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
           <label for="">Cantidad</label>
           <input type="text" wire:model="cantidad" id="cantidad" class="form-control" placeholder="" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Cantidad</small>
+        
         </div>   
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
           <label for="">Unidad consumo</label>
           <input type="text" wire:model="unidad" id="unidad" class="form-control" placeholder="" aria-describedby="helpId">
-          <small id="helpId" class="text-muted">Unidad</small>
+          
         </div> 
 
       
@@ -65,6 +69,7 @@
         <tr>
           <th>id</th>
           <th>insumo</th>
+          <th>base_liston</th>
           <th>color  </th>
           <th>cantidad  </th>
           <th>unidad</th>
@@ -77,6 +82,7 @@
         <tr>
           <td scope="row">{{$item['id_producto']}}</td>
           <td scope="row">{{$item['producto']}}</td>
+          <td scope="row">{{$item['base_liston']}}</td>
           <td>{{$item['color']}}</td>
           <td>{{$item['cantidad']}}</td>
           <td>{{$item['unidad']}}</td>

@@ -12,6 +12,7 @@ class embebidofabpropia extends Component
     public $id_producto;
     public $producto;
     public $cantidad;
+    public $base_liston;
     public $color;
     public $unidad;
     public $detalles=array();
@@ -36,7 +37,8 @@ class embebidofabpropia extends Component
                    $a=array(
                    'id_producto'=> $value->id_insumo_producto,
                    'producto'=> $value->descripcion,   
-                   'color'=> $value->color,   
+                   'base_liston'=> $value->base_liston,   
+                   'color'=> $value->color, 
                    'cantidad'=> $value->cant_unid_produc,
                    'unidad'=> $value->unidad_consumo_produccion); 
                     $this->detalles[]=$a;
@@ -62,6 +64,7 @@ class embebidofabpropia extends Component
          $a=array(
            'id_producto'=> $value['id_insumo_producto'],
            'producto'=> $value['descripcion'],   
+           'base_liston'=> $value['base_liston'],
            'color'=> $value['color'],
            'cantidad'=> $value['cant_unid_produc'],
            'unidad'=> $value['unidad_consumo_produccion']); 
@@ -73,6 +76,7 @@ class embebidofabpropia extends Component
     {
         $this->id_producto =null;
         $this->producto ="";
+        $this->base_liston=null;
         $this->color=null;
         $this->cantidad=null;
         $this->unidad =null;
@@ -80,13 +84,15 @@ class embebidofabpropia extends Component
     public function addDetalles()
     {
         $a=array('id_producto'=> $this->id_producto,
-       'producto'=> $this->producto,   
+       'producto'=> $this->producto, 
+       'base_liston'=> $this->base_liston,  
        'color'=> $this->color,
        'cantidad'=> $this->cantidad,
        'unidad'=>  $this->unidad);
        $this->detalles[]=$a;     
        $this->detalles_string=serialize($this->detalles);
       //$this->resetImput();
+     // dd($a);
     }  
     public function quitar($index)
     {
