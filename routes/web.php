@@ -89,6 +89,14 @@ Route::get('/productos_elegir', function () {
  
  });
 
+ Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
+      
+  return datatables()->of(DB::table('mov_financieros')
+  ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
+  ->where('id_nota_pedido' , '=' ,$id_notapedido))
+  ->toJson();    
+
+});
  Route::get('/localidades_elegir', function () {
      
     return datatables()->of(DB::table('localidades')
@@ -116,7 +124,6 @@ Route::get('/productos_elegir', function () {
  
  });
 
-
  Route::get('pedidos/export', 'App\Http\Controllers\Voyager\PedidosController@createPDF');
 
  Route::get('/exportar_pedidos', function () {     
@@ -130,7 +137,6 @@ Route::get('/productos_elegir', function () {
               'nota_pedidos.totalgravado',
               'nota_pedidos.total',
               'nota_pedidos.monto_iva',
-              'nota_pedidos.aprobado',
               'nota_pedidos.id_factura',
               'nota_pedidos.observaciones',
               'nota_pedidos.descuento',
@@ -156,7 +162,6 @@ Route::get('/productos_elegir', function () {
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
                 'nota_pedidos.monto_iva',
-                'nota_pedidos.aprobado',
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -179,7 +184,6 @@ Route::get('/productos_elegir', function () {
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
                 'nota_pedidos.monto_iva',
-                'nota_pedidos.aprobado',
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -207,6 +211,7 @@ Route::get('/productos_elegir', function () {
   ->leftjoin('moldes','moldes.id','=','productos.id_molde')
   ->where('ordenes_fabricacion.estado','!=', 'Entregado')
   ->select( DB::raw('
+                  ordenes_fabricacion.id_pedido as id_pedido,
                   ordenes_fabricacion.id as id_orden_fabricacion,
                   productos.descripcion,
                   rubros.rubro,
@@ -234,6 +239,7 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 ->leftjoin('moldes','moldes.id','=','productos.id_molde')
 ->where('ordenes_fabricacion.estado','=', 'Entregado')
 ->select( DB::raw('
+                ordenes_fabricacion.id_pedido as id_pedido,
                 ordenes_fabricacion.id as id_orden_fabricacion,
                 productos.descripcion,
                 rubros.rubro,

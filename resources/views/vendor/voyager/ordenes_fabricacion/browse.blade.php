@@ -98,7 +98,8 @@
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
                                             </th>
-                                            <th>id</th>
+                                            <th>id pedido</th>
+                                            <th>id orden</th>
                                             <th>descripcion</th>
                                             <th>rubro</th>
                                             <th>subrubro</th>
@@ -123,7 +124,8 @@
                                               <th class="dt-not-orderable">
                                                   <input type="checkbox" class="select_all">
                                               </th>
-                                              <th>id</th>
+                                              <th>id pedido</th>
+                                              <th>id orden</th>
                                               <th>descripcion</th>
                                               <th>rubro</th>
                                               <th>subrubro</th>
@@ -287,6 +289,7 @@
              "ajax":"{{url('ordenes_fabricacion_activas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
+                     {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
                      {data: 'id_orden_fabricacion', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},
@@ -314,6 +317,7 @@
              "ajax":"{{url('ordenes_fabricacion_cerradas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
+                     {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
                      {data: 'id_orden_fabricacion', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},

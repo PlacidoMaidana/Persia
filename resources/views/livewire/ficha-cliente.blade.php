@@ -41,10 +41,9 @@
              @endif
 
         @endforeach
-         <button type="button" wire:click="guardar" id="guardar_cliente"class="btn btn-primary">+ cliente </button>
+         <button type="button" wire:click="guardar" id="guardar_cliente"class="btn btn-primary">Guardar </button>
 
          
-
 
     </div>
 </div>

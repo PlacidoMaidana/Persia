@@ -13,8 +13,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css"> --}}
-
-   
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
@@ -27,20 +25,63 @@
 
     <a href="{{url('admin/factura-ventas/create')}}" class="btn btn-primary">Facturar</a>
 
+    <a href="{{url('admin/factura-ventas/create')}}" class="btn btn-primary">Imprime Presupuesto</a>
+
+    {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
+
+    <button type="button" id="cobranzas_boton" class="btn btn-primary" >
+        Cobranzas
+    </button>
 
 
-    @include('voyager::multilingual.language-selector')
-@stop
+    
 
+
+
+
+    <div class="modal fade modal-warning" id="cobranzas" v-if="allowCrop">
+      <div class="modal-dialog"  style="min-width: 90%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Cobranzas del pedido</h4>
+            </div>
+                  
+            <div id="x34" class="modal-body">
+                <div class="card" style="min-width: 70%">
+                    <img class="card-img-top" src="holder.js/100x180/" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title">Cobranzas</h4>
+                       <table id="example_cobranzas" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                            <thead>
+                              <tr>
+                                  <th>id</th>
+                                  <th>fecha</th>
+                                  <th>detalle</th>
+                                  <th>importe</th>
+                              </tr>
+                             </thead>
+                            </table>
+                       
+                    </div>
+                </div>
+            </div>
+        
+            <div class="modal-footer">
+                <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+  </div> 
+
+  @include('voyager::multilingual.language-selector')
+  @stop
 @section('content')
     <div class="page-content edit-add container-fluid">
         <div class="row">
             <div class="col-md-12">
-
                 <div class="panel panel-bordered">
                     <!-- form start -->
-                    
-
                     <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
@@ -51,7 +92,6 @@
                            
                         @endif
 
-                  
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
                         <div class="row">
@@ -108,7 +148,6 @@
 
                                                                            <livewire:ficha-cliente /> 
 
-
                                                                        </div>
                                                                    
                                                                        <div class="modal-footer">
@@ -120,7 +159,7 @@
                                                              </div>	
                                     
 
-                                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                                     {{ $row->slugify }}
                                                     <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}
                                                           <!-- Button trigger modal -->
@@ -154,7 +193,7 @@
                                                 @endphp
                                              @endif
 
-                                             <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                             <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                                  {{ $row->slugify }}
                                                  <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
                                                  @include('voyager::multilingual.input-hidden-bread-edit-add')
@@ -175,6 +214,10 @@
                                                      @endforeach
                                                  @endif
                                              </div>
+                                             @php
+                                          
+                                             $id_notapedido=$id_filtro_pedido;
+                                         @endphp
                                     @endfor
     
                                 </div><!-- panel-body -->
@@ -236,6 +279,8 @@
                                         <input type="hidden" name="monto_iva">
                                         <input type="hidden" name="total">
                                         <input type="hidden" name="totalgravado">
+
+                                       
                                          
 
                                     {{-- FORMULARIO EMBEBIDO --}}
@@ -254,12 +299,14 @@
                         <div class="panel-footer">
                             @section('submit-buttons')
                                 <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
+                                <button type="button" id="ordenfabricacion" class="btn btn-primary" 
+                                 wire:click='generaordenesfabricacion'.$id_notapedido > Genera Orden Fabricacion
+                                </button>
                             @stop
                             @yield('submit-buttons')
                         </div>
                     </form>
-
-                     
+                      
                                    
 
                     <iframe id="form_target" name="form_target" style="display:none"></iframe>
@@ -440,13 +487,16 @@
 
    
 
-    <script>
+   <script>
     $('#productos_buscar').on('click',function(){
         $('#productos').modal({show:true});
-    //   $('#x34').load("{{url('/tabla_productos_elegir')}}",function(){
-    //        $('#productos').modal('show');
-    //       });
+  
     });
+   </script> 
+   <script>
+    $('#cobranzas_boton').on('click',function(){
+        $('#cobranzas').modal({show:true});
+     });
    </script> 
 
    <script>
@@ -460,18 +510,17 @@
     });
    </script> 
   
-  {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
        <<<<<<<<<<<<<<<< script localidades  <<<<<<<<<<<<<<<<<<
        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-       <script>
+   <script>
     $('#localidad').on('click',function(){
         $('#modal_localidad').modal({show:true});
-       
     });
-    
- </script> 
+    </script> 
  
-<script>
+
+    <script>
     $(document).ready(function() {
         $('#localidades_elegir').dataTable( {
              "serverSide": true,
@@ -483,26 +532,34 @@
                      {data:'seleccionar' }                             
                       ]           
         } );
+     } );
+
+     </script> 
+    <script>
+    $(document).ready(function() {
+        $('#example_cobranzas').dataTable( {
+             "serverSide": true,
+             "ajax":"{{url('/cobranzas_notapedido/'.$id_notapedido)}}",
+             "columns":[
+                     {data:'id' } ,
+                     {data:'fecha' },
+                     {data:'detalle' } ,
+                     {data:'importe_ingreso' }                             
+                      ]           
+        } );
     } );
 
-</script> 
+     </script> 
 
-
-<script>
-    function elegir_localidad(id,provincia,localidad) {     
+     <script>
+       function elegir_localidad(id,provincia,localidad) {     
         $('#descripcion_localidad').html(localidad+'('+provincia+')');
         $('#modal_localidad').modal('hide');
         Livewire.emit('localidad_elegida',id);  
-      }
-</script>
+        }
+     </script>
 
-
- 
-
-{{-- <<<<<<<<<<<<<<<<<<<<<<<< fin localidades script <<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-
-   
-    <script>
+     <script>
         $(document).ready(function() {
             $('#example').dataTable( {
                  "serverSide": true,
@@ -519,7 +576,6 @@
             } );
         } );
     
-    
      </script> 
      <script>
         // Cambiar el tamaño de la caja de edicion de texto
@@ -529,8 +585,5 @@
 
         });
      </script>
-
-
-
 
 @stop

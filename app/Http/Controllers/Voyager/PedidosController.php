@@ -382,10 +382,11 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $view = "voyager::$slug.edit-add";
         }
          
-       
+       $id_filtro_pedido=$id;
         
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones'));
+       $id_filtro_pedido=$id;
+       return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido'));
     }
 
     public function obtener_lineas($id_pedido)
@@ -419,6 +420,17 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.pedido_id')
         ->join('productos as p','r.producto_id','=','p.id')        
         ->where('nota_pedidos.id',$id_pedido)->sum('r.total_linea');
+    }
+    public function generaordenesfabricacion($id_pedido)
+    {
+        // if tipo_presupuesto = Muebles o tipo_presupuesto = Productos
+       //  Verificar si ya genero las ordenes de fabric ->  
+         DB::insert ('insert into ordenes_fabricacion ( fecha_orden, observaciones, estado,
+        -> fecha_entrada_proceso, fecha_salida_proceso, id_producto,cantidad, id_pedido)
+        -> select  now(), null , "Pendiente", null, null, id_producto , cantidad, id_pedido
+        -> from renglones_notapedidos where id_pedido = $id_pedido ') ;
+      
+       // endif
     }
 
     // POST BR(E)AD

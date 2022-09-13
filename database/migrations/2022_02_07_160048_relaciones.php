@@ -50,7 +50,7 @@ class Relaciones extends Migration
             $table->foreign('id_producto')->references('id')->on('productos');
         });
         Schema::table('ordenes_fabricacion', function (Blueprint $table) {
-            $table->foreign('id_renglon_pedido')->references('id')->on('renglones_notapedidos');
+            $table->foreign('id_pedido')->references('id')->on('nota_pedidos');
         });
 
         Schema::table('productos', function (Blueprint $table) {

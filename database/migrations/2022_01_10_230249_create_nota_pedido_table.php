@@ -21,10 +21,13 @@ class CreateNotaPedidoTable extends Migration
             $table->decimal('total', 19, 2)->nullable();
             $table->decimal('monto_iva', 9, 2)->default(0.00);
             $table->unsignedBigInteger('id_vendedor')->nullable()->index('FK_vendedor');
-            $table->char('aprobado', 2)->default('No');;
             $table->integer('id_factura')->nullable();
             $table->decimal('descuento', 13, 2)->nullable();
             $table->char('observaciones', 255)->nullable();
+            $table->char('estado', 30)->nullable();
+            $table->char('estado_pago', 10)->nullable();
+            $table->unsignedBigInteger('id_vendedor_2')->nullable()->index('FK_vendedor');
+            $table->char('tipo_presupuesto', 10)->nullable();
             $table->timestamps();
         });
 
