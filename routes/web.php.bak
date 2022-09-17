@@ -23,12 +23,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/simbolico', function () {
-  Artisan::call('storage:link');
-   echo "el enlace simbolico fue ejecutado";
-});
-
 Route::get('/ComponenteUser', function () {
     return view('User.ComponenteUser');
 });

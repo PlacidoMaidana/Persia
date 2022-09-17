@@ -19,13 +19,14 @@ use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Yajra\DataTables\WithExportQueue;
 
 class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
 
     
     use BreadRelationshipParser;
+    use WithExportQueue;
 
     //***************************************
     //               ____
@@ -230,11 +231,11 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $pdf = PDF::loadView('index', $productos);
             return $pdf->download('archivo-pdf.pdf');*/
 
-            return view("vendor.voyager.nota-pedidos.exportar");
-           // Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-           /* $pdf = Pdf::loadView("vendor.voyager.nota-pedidos.exportar")
+           // return view("vendor.voyager.nota-pedidos.exportar");
+            Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+            $pdf = Pdf::loadView("vendor.voyager.nota-pedidos.exportar")
             ->setOptions(['defaultFont' => 'sans-serif']);
-            return $pdf->download('invoice.pdf');*/
+            return $pdf->download('invoice.pdf');
 
         }
 

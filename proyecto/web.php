@@ -15,14 +15,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/enlace_simbolico', function () {
-    Artisan::call('storage:link');
-);
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/enlace', function () {
+  //Artisan::call('storage:link');
+  echo "el enlace simbolico fue ejecutado";
+});
 
 Route::get('/simbolico', function () {
   Artisan::call('storage:link');
