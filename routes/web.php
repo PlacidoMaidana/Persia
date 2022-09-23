@@ -83,7 +83,7 @@ Route::get('/insumos_elegir', function () {
   ->join('subrubros as s','productos.subrubro_id','=','s.id')
   ->where('r.categoria','=', 'Materia Prima')
   ->select(['productos.id as id', 'descripcion', 's.descripcion_subrubro as subrubro']))
-  ->addColumn('seleccionar','vendor\voyager\productos\boton_seleccionar')
+  ->addColumn('seleccionar','vendor/voyager/productos/boton_seleccionar')
   ->rawColumns(['seleccionar'])   
   ->toJson();    
 
@@ -94,7 +94,7 @@ Route::get('/productos_elegir', function () {
     ->join('rubros as r','productos.rubro_id','=','r.id')
     ->join('subrubros as s','productos.subrubro_id','=','s.id')
     ->select(['productos.id as id', 'descripcion', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'preciovta']))
-    ->addColumn('seleccionar','vendor\voyager\nota-pedidos\boton_seleccionar')
+    ->addColumn('seleccionar','vendor/voyager/nota-pedidos/boton_seleccionar')
     ->rawColumns(['seleccionar'])   
     ->toJson();    
  
@@ -112,7 +112,7 @@ Route::get('/productos_elegir', function () {
      
     return datatables()->of(DB::table('localidades')
     ->select(['id', 'provincia', 'localidad']))
-    ->addColumn('seleccionar','vendor\voyager\localidad\boton_seleccionar')
+    ->addColumn('seleccionar','vendor/voyager/localidad/boton_seleccionar')
     ->rawColumns(['seleccionar'])   
     ->toJson();    
  
@@ -126,7 +126,7 @@ Route::get('/productos_elegir', function () {
     return datatables()->of(DB::table('rubros')
     ->join('subrubros as s','rubros.id','=','s.rubro_id')
     ->select(['rubros.id as id_rubro', 'rubros.rubro','s.id as id_subrubro','s.descripcion_subrubro']))
-    ->addColumn('seleccionar','vendor\voyager\rubros\boton_seleccionar')
+    ->addColumn('seleccionar','vendor/voyager/rubros/boton_seleccionar')
     ->rawColumns(['seleccionar'])   
     ->toJson();   
 
@@ -157,7 +157,6 @@ Route::get('/productos_elegir', function () {
 
 });
 
-
  Route::get('/pedidos_pendientes', function () {     
     return datatables()->of(DB::table('nota_pedidos')
     ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
@@ -167,11 +166,7 @@ Route::get('/productos_elegir', function () {
                 'clientes.id as id_cliente',
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
-<<<<<<< HEAD
-                'nota_pedidos.monto_iva',                
-=======
                 'nota_pedidos.monto_iva',
->>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -193,11 +188,7 @@ Route::get('/productos_elegir', function () {
                 'clientes.id as id_cliente',
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
-<<<<<<< HEAD
-                'nota_pedidos.monto_iva',                
-=======
                 'nota_pedidos.monto_iva',
->>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -224,11 +215,8 @@ Route::get('/productos_elegir', function () {
   ->leftjoin('moldes','moldes.id','=','productos.id_molde')
   ->where('ordenes_fabricacion.estado','!=', 'Entregado')
   ->select( DB::raw('
-<<<<<<< HEAD
-				  ordenes_fabricacion.id_pedido as id_pedido,
-=======
+
                   ordenes_fabricacion.id_pedido as id_pedido,
->>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                   ordenes_fabricacion.id as id_orden_fabricacion,
                   productos.descripcion,
                   rubros.rubro,
@@ -242,8 +230,8 @@ Route::get('/productos_elegir', function () {
                   ordenes_fabricacion.fecha_salida_proceso,
                   ordenes_fabricacion.estado'
                     )))
-  ->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
-  ->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')
+  ->addColumn('check','vendor/voyager/ordenes_fabricacion/check_ordenes_fabricacion')
+  ->addColumn('accion','vendor/voyager/ordenes_fabricacion/acciones_ordenes_fabricacion')
   ->rawColumns(['check','accion'])     
   ->toJson();   
 });
@@ -256,11 +244,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 ->leftjoin('moldes','moldes.id','=','productos.id_molde')
 ->where('ordenes_fabricacion.estado','=', 'Entregado')
 ->select( DB::raw('
-<<<<<<< HEAD
-				 ordenes_fabricacion.id_pedido as id_pedido,
-=======
+
                 ordenes_fabricacion.id_pedido as id_pedido,
->>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                 ordenes_fabricacion.id as id_orden_fabricacion,
                 productos.descripcion,
                 rubros.rubro,
@@ -274,8 +259,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
                 ordenes_fabricacion.fecha_salida_proceso,
                 ordenes_fabricacion.estado'
                   )))
-->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
-->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')
+->addColumn('check','vendor/voyager/ordenes_fabricacion/check_ordenes_fabricacion')
+->addColumn('accion','vendor/voyager/ordenes_fabricacion/acciones_ordenes_fabricacion')
 ->rawColumns(['check','accion'])     
 ->toJson();   
 });
@@ -347,8 +332,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
                 'productos.activo', 
                 'rubros.categoria'
               ]))
-    ->addColumn('check','vendor\voyager\productos\check_productos')
-    ->addColumn('accion','vendor\voyager\productos\acciones_FP')
+    ->addColumn('check','vendor/voyager/productos/check_productos')
+    ->addColumn('accion','vendor/voyager/productos/acciones_FP')
     ->rawColumns(['check','accion'])     
     ->toJson();   
 
@@ -370,8 +355,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
                 'productos.activo', 
                 'rubros.categoria'
               ]))
-    ->addColumn('check','vendor\voyager\productos\check_productos')
-    ->addColumn('accion','vendor\voyager\productos\acciones_MP')
+    ->addColumn('check','vendor/voyager/productos/check_productos')
+    ->addColumn('accion','vendor/voyager/productos/acciones_MP')
     ->rawColumns(['check','accion'])     
     ->toJson();   
 
