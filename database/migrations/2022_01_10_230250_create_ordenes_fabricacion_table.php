@@ -22,7 +22,7 @@ class CreateOrdenesFabricacionTable extends Migration
             $table->dateTime('fecha_salida_proceso')->nullable();
             $table->unsignedBigInteger('id_producto')->nullable();
             $table->decimal('cantidad' , 18, 2)->nullable();
-            $table->unsignedBigInteger('id_renglon_pedido')->nullable();
+            $table->unsignedBigInteger('id_pedido')->nullable();
             $table->timestamps();
         });
       

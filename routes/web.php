@@ -167,7 +167,11 @@ Route::get('/productos_elegir', function () {
                 'clientes.id as id_cliente',
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
+<<<<<<< HEAD
                 'nota_pedidos.monto_iva',                
+=======
+                'nota_pedidos.monto_iva',
+>>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -189,7 +193,11 @@ Route::get('/productos_elegir', function () {
                 'clientes.id as id_cliente',
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
+<<<<<<< HEAD
                 'nota_pedidos.monto_iva',                
+=======
+                'nota_pedidos.monto_iva',
+>>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -216,7 +224,11 @@ Route::get('/productos_elegir', function () {
   ->leftjoin('moldes','moldes.id','=','productos.id_molde')
   ->where('ordenes_fabricacion.estado','!=', 'Entregado')
   ->select( DB::raw('
+<<<<<<< HEAD
 				  ordenes_fabricacion.id_pedido as id_pedido,
+=======
+                  ordenes_fabricacion.id_pedido as id_pedido,
+>>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                   ordenes_fabricacion.id as id_orden_fabricacion,
                   productos.descripcion,
                   rubros.rubro,
@@ -244,7 +256,11 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 ->leftjoin('moldes','moldes.id','=','productos.id_molde')
 ->where('ordenes_fabricacion.estado','=', 'Entregado')
 ->select( DB::raw('
+<<<<<<< HEAD
 				 ordenes_fabricacion.id_pedido as id_pedido,
+=======
+                ordenes_fabricacion.id_pedido as id_pedido,
+>>>>>>> 83427307120d2bbcfd24bf61c085e43d897e2eb9
                 ordenes_fabricacion.id as id_orden_fabricacion,
                 productos.descripcion,
                 rubros.rubro,
