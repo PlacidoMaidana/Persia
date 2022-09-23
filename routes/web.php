@@ -325,8 +325,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
                 'productos.activo',
                 'rubros.categoria'
               ]))
-    ->addColumn('check','vendor\voyager\productos\check_productos')
-    ->addColumn('accion','vendor\voyager\productos\acciones_productosrevta')
+    ->addColumn('check','vendor/voyager/productos/check_productos')
+    ->addColumn('accion','vendor/voyager/productos/acciones_productosrevta')
     ->rawColumns(['check','accion'])     
     ->toJson();   
   });
