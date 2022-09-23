@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/enlace_simbolico', function () {
     Artisan::call('storage:link');
-);
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -100,6 +100,14 @@ Route::get('/productos_elegir', function () {
  
  });
 
+ Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
+      
+  return datatables()->of(DB::table('mov_financieros')
+  ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
+  ->where('id_nota_pedido' , '=' ,$id_notapedido))
+  ->toJson();    
+
+});
  Route::get('/localidades_elegir', function () {
      
     return datatables()->of(DB::table('localidades')
@@ -127,10 +135,29 @@ Route::get('/productos_elegir', function () {
  
  });
 
-
  Route::get('pedidos/export', 'App\Http\Controllers\Voyager\PedidosController@createPDF');
 
- 
+ Route::get('/exportar_pedidos', function () {     
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->where('nota_pedidos.estado','=', 'Entregado')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'nota_pedidos.totalgravado',
+              'nota_pedidos.total',
+              'nota_pedidos.monto_iva',
+              'nota_pedidos.id_factura',
+              'nota_pedidos.observaciones',
+              'nota_pedidos.descuento',
+              'nota_pedidos.estado'
+            ]))              
+  ->toJson();   
+
+});
+
+
  Route::get('/pedidos_pendientes', function () {     
     return datatables()->of(DB::table('nota_pedidos')
     ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
@@ -140,8 +167,7 @@ Route::get('/productos_elegir', function () {
                 'clientes.id as id_cliente',
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
-                'nota_pedidos.monto_iva',
-                'nota_pedidos.aprobado',
+                'nota_pedidos.monto_iva',                
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -163,8 +189,7 @@ Route::get('/productos_elegir', function () {
                 'clientes.id as id_cliente',
                 'nota_pedidos.totalgravado',
                 'nota_pedidos.total',
-                'nota_pedidos.monto_iva',
-                'nota_pedidos.aprobado',
+                'nota_pedidos.monto_iva',                
                 'nota_pedidos.id_factura',
                 'nota_pedidos.observaciones',
                 'nota_pedidos.descuento',
@@ -177,14 +202,13 @@ Route::get('/productos_elegir', function () {
  
  });
  
+
  Route::get('/pagar_pedidos/{id_pedido}', function ($id_pedido) {
      Session()->flash('id_pedido', $id_pedido);
      return redirect(url('admin/mov-financieros/create'));
  });
-
- 
-   
-  Route::get('/ordenes_fabricacion_activas', function () {     
+  
+   Route::get('/ordenes_fabricacion_activas', function () {     
     return datatables()->of(DB::table('ordenes_fabricacion')
   ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
   ->join('rubros','productos.rubro_id','=','rubros.id')
@@ -192,6 +216,7 @@ Route::get('/productos_elegir', function () {
   ->leftjoin('moldes','moldes.id','=','productos.id_molde')
   ->where('ordenes_fabricacion.estado','!=', 'Entregado')
   ->select( DB::raw('
+				  ordenes_fabricacion.id_pedido as id_pedido,
                   ordenes_fabricacion.id as id_orden_fabricacion,
                   productos.descripcion,
                   rubros.rubro,
@@ -219,6 +244,7 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 ->leftjoin('moldes','moldes.id','=','productos.id_molde')
 ->where('ordenes_fabricacion.estado','=', 'Entregado')
 ->select( DB::raw('
+				 ordenes_fabricacion.id_pedido as id_pedido,
                 ordenes_fabricacion.id as id_orden_fabricacion,
                 productos.descripcion,
                 rubros.rubro,
