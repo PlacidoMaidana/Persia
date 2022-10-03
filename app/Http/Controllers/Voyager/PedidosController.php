@@ -19,7 +19,7 @@ use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Yajra\DataTables\WithExportQueue;
 
 class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
