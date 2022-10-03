@@ -26,6 +26,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     
     use BreadRelationshipParser;
+    
 
     //***************************************
     //               ____
@@ -230,11 +231,11 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             $pdf = PDF::loadView('index', $productos);
             return $pdf->download('archivo-pdf.pdf');*/
 
-            return view("vendor.voyager.nota-pedidos.exportar");
-           // Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-           /* $pdf = Pdf::loadView("vendor.voyager.nota-pedidos.exportar")
+           // return view("vendor.voyager.nota-pedidos.exportar");
+            Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+            $pdf = Pdf::loadView("vendor.voyager.nota-pedidos.exportar")
             ->setOptions(['defaultFont' => 'sans-serif']);
-            return $pdf->download('invoice.pdf');*/
+            return $pdf->download('invoice.pdf');
 
         }
 
