@@ -135,7 +135,7 @@ Route::get('/productos_elegir', function () {
  
  });
 
- Route::get('pedidos/export', 'App\Http\Controllers\Voyager\PedidosController@createPDF');
+ Route::get('pedidos/export/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@createPDF');
 
  Route::get('/exportar_pedidos', function () {     
   return datatables()->of(DB::table('nota_pedidos')

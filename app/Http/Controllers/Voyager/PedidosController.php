@@ -18,7 +18,8 @@ use TCG\Voyager\Events\BreadDataUpdated;
 use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
-use Barryvdh\DomPDF\Facade\Pdf;
+
+use PDF;
 use Yajra\DataTables\WithExportQueue;
 
 class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
@@ -224,7 +225,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<          >><<<<<<<<<<   <<<<<>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<>>>>>>>><<>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>
 
-        public function createPDF(){
+        public function createPDF($id_ped){
             //Recuperar todos los productos de la db
            /* $productos = Producto::all();
             view()->share('productos', $productos);
@@ -232,10 +233,66 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             return $pdf->download('archivo-pdf.pdf');*/
 
            // return view("vendor.voyager.nota-pedidos.exportar");
-            Pdf::setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-            $pdf = Pdf::loadView("vendor.voyager.nota-pedidos.exportar")
-            ->setOptions(['defaultFont' => 'sans-serif']);
-            return $pdf->download('invoice.pdf');
+           
+           $texto="esto es el texto de la nota";
+           $datosPedidos= DB::table('nota_pedidos')
+           ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+           ->where('nota_pedidos.id', $id_ped)
+           ->select([ 'nota_pedidos.id as id_pedido',
+                     'nota_pedidos.fecha',
+                     'clientes.nombre',
+                     'clientes.id as id_cliente',
+                     'nota_pedidos.totalgravado',
+                     'nota_pedidos.total',
+                     'nota_pedidos.monto_iva',
+                     'nota_pedidos.id_factura',
+                     'nota_pedidos.observaciones',
+                     'nota_pedidos.descuento',
+                     'nota_pedidos.estado'
+               ])           
+           ->first();
+           
+
+          
+           $detallesPedidos= DB::table('nota_pedidos')
+           ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')
+           ->join('productos','renglones_notapedidos.id_producto','=','productos.id')
+           ->where('nota_pedidos.id', $id_ped)
+           ->select(['nota_pedidos.id as id_pedido',
+           'renglones_notapedidos.id',
+           'renglones_notapedidos.cantidad',
+           'renglones_notapedidos.id_producto',
+           'renglones_notapedidos.total_linea',
+           'productos.descripcion'
+           ])
+           ->get();
+            
+           
+      //   return view('vendor.voyager.nota-pedidos.exportar', compact('id_ped','texto','datosPedidos','detallesPedidos'));
+           
+/*           
+           $contxt= stream_context_create([
+                'ssl'=>[
+                'verify_peer'=>FALSE,
+                'verify_peer_name'=> FALSE,
+                'allow_self_signed'=>TRUE,
+                ]
+                ]);*/
+       
+               
+
+             /* $pdf= app('dompdf.wrapper');
+              $pdf->getDomPDF()->setHttpContext($contxt);
+              //$pdf->setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+             $pdf->setOptions(['defaultFont' => 'sans-serif','isHTML5ParserEnabled'=>TRUE, 'isRemoteEnabled'=>TRUE])
+             ->loadView("vendor.voyager.nota-pedidos.exportar",
+                compact('id_ped','texto','datosPedidos','detallesPedidos'));*/
+             
+  
+
+                $pdf = PDF::loadView("vendor.voyager.nota-pedidos.exportar",
+                   compact('id_ped','texto','datosPedidos','detallesPedidos'));
+             return $pdf->stream('invoice.pdf');
 
         }
 
