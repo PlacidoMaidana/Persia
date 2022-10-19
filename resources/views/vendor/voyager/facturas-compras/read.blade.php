@@ -37,10 +37,8 @@
         {{-- pantalla de edición --}}
 
         <div class="row">
-           
             
                 <div class="col-md-6">
-    
                     <div class="panel panel-bordered" style="padding-bottom:5px;">
                         <!-- form start -->
                         @foreach($dataType->readRows as $row)
@@ -144,13 +142,10 @@
             
 
 
-
+{{-- 
             <div class="col-md-6"><!-- panel-detalles -->
                 
                 <div class="col">
-            
-
-                    
                     <table class="table">
                         <thead>
                         <tr>
@@ -162,36 +157,16 @@
                             
                         </tr>
                         </thead>
-                        <tbody>
 
-                        
-                        
-                        @foreach ($renglones as $index=>$item)
-                        <tr>
-                            <td scope="row">{{$item->id_producto}}</td>
-                            <td scope="row">{{$item->descripcion}}</td>
-                            <td>{{$item->cantidad}}</td>
-                            <td>{{number_format($item->precio_c, 2, '.', ',')}}</td>
-                            <td>{{number_format($item->total_linea, 2, '.', ',')}}</td>
-                        
-                        </tr>  
-                        @endforeach
-                        
-                        
-                        </tbody>
                     </table>
-                    {{--<div class="form-group col-md-6 ">
+                     
                     </div>
-                        Subtotal:   {{number_format($totales, 2, '.', ',')}} </tr>  
-                    
-                     <div class="row">
-                     </div>  --}}                         
-                    </div>
+
                     <div class="form-group col-md-9 ">
                     </div>
                     <div class="form-group col-md-2 ">
                         <label class="control-label" for="name">Subtotal</label>
-                        <input type="text" class="form-control" name="subtotal" placeholder="Subtotal" value="{{number_format($totales, 2, '.', ',')}}">
+                        <input type="text" class="form-control" name="subtotal" placeholder="Subtotal" value="">
                     </div>
                     <div class="row">
                     </div> 
@@ -245,14 +220,9 @@
                         <input type="text" class="form-control" name="total_factura" placeholder="Total Factura" value="">
                     </div>
                 </div>
-            
+            --}}
             </div>
         </div>
-
-
-
-
-
 
     </div>
 

@@ -100,6 +100,10 @@ Route::get('/productos_elegir', function () {
  
  });
 
+ 
+
+ Route::get('/CobranzasPedido/{pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@CobranzasPedido');
+
  Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
       
   return datatables()->of(DB::table('mov_financieros')

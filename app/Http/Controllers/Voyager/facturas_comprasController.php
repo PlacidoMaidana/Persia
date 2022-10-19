@@ -280,7 +280,8 @@ public function show(Request $request, $id)
      $view = "voyager::$slug.read";
  }
 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones','totales'));
+ //return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones','totales'));
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
 }
 
 //***************************************
@@ -436,8 +437,8 @@ public function update(Request $request, $id)
 
         $tabla_detalles=unserialize($request['detalles_string']);
         //dd($request['detalles_string']);
-        $this->eliminar_renglones_de_compra($data->id);
-        $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
+       // $this->eliminar_renglones_de_compra($data->id);
+       // $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
             
 
 
@@ -578,7 +579,7 @@ public function store(Request $request)
 
             $tabla_detalles=unserialize($request['detalles_string']);
             // dd($request['detalles_string']);
-            $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
+           // $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
             
             
             //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

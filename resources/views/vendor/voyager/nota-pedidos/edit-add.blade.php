@@ -29,9 +29,8 @@
 
     {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
 
-    <button type="button" id="cobranzas_boton" class="btn btn-primary" >
-        Cobranzas
-    </button>
+    <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
+    
 
 
     
