@@ -35,31 +35,25 @@
 
     <img class="img-responsive" 
     src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
-    <h1>id_pedido: {{$datosPedidos->id_pedido}}</h1> 
+
+    <h3>Fecha: {{$datosPedidos->fecha}} </h3> 
+    <h3>Cliente: {{$datosPedidos->nombre}}</h3> 
     <hr />
-    fecha: {{$datosPedidos->fecha}} <br>
-    Cliente: {{$datosPedidos->nombre}} <br>
-    id_cliente: {{$datosPedidos->id_cliente}} <br>
-    totalgravado: {{$datosPedidos->totalgravado}} <br>
-    total: {{$datosPedidos->total}} <br>
-    monto_iva: {{$datosPedidos->monto_iva}} <br>
-    id_factura: {{$datosPedidos->id_factura}} <br>
-    observaciones: {{$datosPedidos->observaciones}} <br>
-    descuento: {{$datosPedidos->descuento}} <br>
-    estado: {{$datosPedidos->estado}} <br>
+    
+    Pedido Nro: {{$datosPedidos->id_pedido}} <br>
+    Estado: {{$datosPedidos->estado}} <br>  
+     
+
     <hr style="color: rgb(84, 83, 83); background-color: rgb(101, 100, 100); width:100% higth:2px ;" />
 
     <table class="table">
         <tbody>
             <thead >
                 <tr>
-                  
                   <th scope="col">id producto</th>
                   <th scope="col">Descripcion</th>
                   <th scope="col">Cantidad</th>
                   <th scope="col">Total linea</th>
-                  
-                 
                 </tr>
               </thead>
     @foreach($detallesPedidos as $p)
@@ -68,18 +62,30 @@
         <td> {{ $p->descripcion }}</td>
         <td> {{ $p->cantidad }}</td>
         <td> {{ $p->total_linea }}</td>
-           
-        
+
     </tr>
         
-         
     @endforeach
 
     </tbody>
     </table>
+    <br>
 
+    Total sin IVA: {{$datosPedidos->totalgravado}} <br>
+    IVA: {{$datosPedidos->monto_iva}} <br>
+    Descuento: {{$datosPedidos->descuento}} <br>
+    Total general: {{$datosPedidos->total}} <br>
+    <br>
+    <hr />
+    <br>
+    Observaciones: {{$datosPedidos->observaciones}} <br>
+    <br>
+    <hr />
+    <br>
+    Forma pago: {{$texto->Forma_pago_Productos}} <br>
 
-
-
+    <img class="img-responsive" 
+    src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
 </body>
+
 </html>

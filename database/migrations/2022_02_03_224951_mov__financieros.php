@@ -25,6 +25,7 @@ class MovFinancieros extends Migration
             $table->integer('nro_cheque')->nullable();
             $table->dateTime('fecha_vto')->nullable();
             $table->unsignedBigInteger('id_cuenta_bancaria')->nullable();
+            $table->unsignedBigInteger('id_tipo_gasto')->nullable();
             $table->char('detalle', 100)->nullable();
             $table->unsignedBigInteger('id_jurisdiccion')->nullable();
             $table->char('tipo_retencion',10)->nullable();

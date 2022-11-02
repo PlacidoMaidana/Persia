@@ -109,6 +109,9 @@ Route::get('/productos_elegir', function () {
   return datatables()->of(DB::table('mov_financieros')
   ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
   ->where('id_nota_pedido' , '=' ,$id_notapedido))
+  ->addColumn('check','vendor/voyager/mov-financieros/check')
+  ->addColumn('accion','vendor/voyager/mov-financieros/acciones_MFinancieros')
+  ->rawColumns(['check','accion'])  
   ->toJson();    
 
 });
@@ -363,11 +366,75 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
     ->addColumn('accion','vendor/voyager/productos/acciones_MP')
     ->rawColumns(['check','accion'])     
     ->toJson();   
-
  });
 
  Route::get('/admin/productos/{id_producto}/editMP', 'App\Http\Controllers\Voyager\ProductosController@editMP');
 
+ Route::get('/Egresos', function () {     
+  return datatables()->of(DB::table('mov_financieros')
+  ->join('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
+  ->join('users','users.id','=','mov_financieros.id_usuario') 
+  ->where('mov_financieros.tipo_movimiento','=', 'Gastos/Egresos')
+  ->select([  'mov_financieros.id as id_movimiento',
+              'mov_financieros.tipo_movimiento',
+              'mov_financieros.fecha',
+              'mov_financieros.modalidad_pago',
+              'Tipos_gastos.tipo1',
+              'Tipos_gastos.tipo2',
+              'mov_financieros.detalle',
+              'mov_financieros.importe_egreso',
+              'mov_financieros.id_caja',
+              'users.name'
+            ]))
+  ->addColumn('check','vendor/voyager/movimientos_financieros/check')
+  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones')
+  ->rawColumns(['check','accion'])     
+  ->toJson();   
+});
+  
+ Route::get('/Ingresos', function () {     
+  return datatables()->of(DB::table('mov_financieros')
+  ->leftjoin('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
+  ->join('users','users.id','=','mov_financieros.id_usuario') 
+  ->where('mov_financieros.tipo_movimiento','=', 'Cobranza/Ingresos')
+  ->select([  'mov_financieros.id as id_movimiento',
+              'mov_financieros.tipo_movimiento',
+              'mov_financieros.fecha',
+              'mov_financieros.modalidad_pago',
+              'Tipos_gastos.tipo1',
+              'Tipos_gastos.tipo2',
+              'mov_financieros.detalle',
+              'mov_financieros.importe_egreso',
+              'mov_financieros.id_caja',
+              'users.name'
+            ]))
+  ->addColumn('check','vendor/voyager/movimientos_financieros/check')
+  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones')
+  ->rawColumns(['check','accion'])     
+  ->toJson();   
+});
+
+Route::get('/Otros_movfinancieros', function () {     
+  return datatables()->of(DB::table('mov_financieros')
+  ->leftjoin('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
+  ->join('users','users.id','=','mov_financieros.id_usuario') 
+  ->whereNotIn('mov_financieros.tipo_movimiento', ['Gastos/Egresos', 'Cobranza/Ingresos'])
+  ->select([  'mov_financieros.id as id_movimiento',
+              'mov_financieros.tipo_movimiento',
+              'mov_financieros.fecha',
+              'mov_financieros.modalidad_pago',
+              'Tipos_gastos.tipo1',
+              'Tipos_gastos.tipo2',
+              'mov_financieros.detalle',
+              'mov_financieros.importe_egreso',
+              'mov_financieros.id_caja',
+              'users.name'
+            ]))
+  ->addColumn('check','vendor/voyager/movimientos_financieros/check')
+  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones')
+  ->rawColumns(['check','accion'])     
+  ->toJson();   
+});
 
 Route::get('/vista', function () {
     return view('vista_suelta');
@@ -387,4 +454,14 @@ Route::group(['prefix' => 'admin'], function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//+------------------------------------------------------------------+
+//|                   Rutas de acción de cobranzas                   |
+//+------------------------------------------------------------------+
+
+//Route::get('admin/movimientos_financieros/create','App\Http\Controllers\Voyager\MovFinancieroController@cobranzas_create');
+//Route::get('pagos/{id}/edit','App\Http\Controllers\ClienteBrebeController@nuevo');
+
+
+
 

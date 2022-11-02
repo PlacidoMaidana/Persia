@@ -204,12 +204,12 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 
 
     //***************************************
-    //               ____
-    //              |  _ _\
+    //               _____
+    //              |  _ _ |
     //              | |
-    //              |  
-    //              | |_ _ |
-    //              |______/
+    //              | |
+    //              | |_ _ 
+    //              |______|
     //
     //      COBRANZAS DEL PEDIDO
     //
@@ -217,11 +217,16 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 
     public function CobranzasPedido($pedido)
     {
-       $cobranzas= DB::table('mov_financieros')
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+
+        $cobranzas= DB::table('mov_financieros')
          ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
          ->where('id_nota_pedido' , '=' ,$pedido);
+
         return view("vendor.voyager.mov-financieros.cobranzas_pedido", compact(
-            'cobranzas', 'pedido',           
+            'cobranzas', 'pedido','dataType','isSoftDeleted',           
         ));
 
     }
@@ -455,6 +460,49 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
+
+    //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    //                                PAGOS CREATE    
+    //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    public function cobranzas_create(Request $request)
+    {
+        $slug = $this->getSlug($request);
+
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+        // Check permission
+        $this->authorize('add', app($dataType->model_name));
+
+        $dataTypeContent = (strlen($dataType->model_name) != 0)
+                            ? new $dataType->model_name()
+                            : false;
+
+        foreach ($dataType->addRows as $key => $row) {
+            $dataType->addRows[$key]['col_width'] = $row->details->width ?? 100;
+        }
+
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'add');
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'add', $isModelTranslatable);
+
+        $view = 'voyager::bread.edit-add';
+
+        if (view()->exists("voyager::$slug.edit-add")) {
+            $view = "voyager::$slug.edit-add";
+        }
+
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+    }
+
+
+
+
+
 
     /**
      * POST BRE(A)D - Store data.
