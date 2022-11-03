@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Voyager;
 
+use App\Models\MovFinanciero;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -220,7 +221,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $slug = "movimientos_financieros";
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         $isSoftDeleted = false;
-
+        $model = app($dataType->model_name);
         $cobranzas= DB::table('mov_financieros')
          ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
          ->where('id_nota_pedido' , '=' ,$pedido);
@@ -315,7 +316,6 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
     public function edit(Request $request, $id)
     {
         $slug = $this->getSlug($request);
-
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         if (strlen($dataType->model_name) != 0) {
@@ -363,6 +363,8 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
+
+       
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -413,6 +415,64 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         ]);
     }
 
+    public function edit_cobranzas(Request $request, $id)
+    {
+      //  $slug = $this->getSlug($request);
+        
+
+        
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+
+        // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+        // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+        if (strlen($dataType->model_name) != 0) {
+            $model = app($dataType->model_name);
+            $query = $model->query();
+
+                // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+            if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+                $query = $query->withTrashed();
+            }
+            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+                $query = $query->{$dataType->scope}();
+            }
+            $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+        } else {
+            // If Model doest exist, get data from table name
+            $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+        }
+
+        foreach ($dataType->editRows as $key => $row) {
+            $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+        }
+
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'edit');
+
+        // Check permission
+         $this->authorize('edit', $dataTypeContent);
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+        $view = 'voyager::bread.edit-add';
+
+        if (view()->exists("voyager::$slug.edit-add")) {
+           // $view = "voyager::$slug.edit-add";
+            $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
+        }
+
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+    }
+
+
     //***************************************
     //
     //                   /\
@@ -462,14 +522,18 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
     }
 
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
-    //                                PAGOS CREATE    
+    //                                COBRANZAS CREATE    
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
-    public function cobranzas_create(Request $request)
+    public function cobranzas_create(Request $request,$id_pedido)
     {
-        $slug = $this->getSlug($request);
-
+        
+        $slug = "movimientos_financieros";
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
 
+
+        
         // Check permission
         $this->authorize('add', app($dataType->model_name));
 
@@ -493,10 +557,11 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $view = 'voyager::bread.edit-add';
 
         if (view()->exists("voyager::$slug.edit-add")) {
-            $view = "voyager::$slug.edit-add";
+          //  $view = "voyager::$slug.edit-add";  
+          $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
         }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido'));
     }
 
 
@@ -513,6 +578,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
      */
     public function store(Request $request)
     {
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -524,13 +590,36 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
 
+       //+-------------------------------------------------------------------------+
+       //+     Agregando el id_nota_pedido  tipo_movimiento                        +
+       //+-------------------------------------------------------------------------+
+            if (!empty($request['id_nota_pedido'])) {
+              $data->id_nota_pedido=$request['id_nota_pedido'];
+              $data->tipo_movimiento=$request['tipo_movimiento'];
+            
+              $data->save();
+            }
+       
+       
+
+
+       event(new BreadDataAdded($dataType,  $data));
+
+
+
+
+
+
         event(new BreadDataAdded($dataType, $data));
 
         if (!$request->has('_tagging')) {
             if (auth()->user()->can('browse', $data)) {
                 $redirect = redirect()->route("voyager.{$dataType->slug}.index");
             } else {
-                $redirect = redirect()->back();
+                if (!empty($request['id_nota_pedido'])) {
+                    return redirect(route('CobranzasPedido/'))->with('id_pedido',$request['id_nota_pedido']);
+                }else{ $redirect = redirect()->back();}
+               
             }
 
             return $redirect->with([

@@ -110,7 +110,7 @@ Route::get('/productos_elegir', function () {
   ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
   ->where('id_nota_pedido' , '=' ,$id_notapedido))
   ->addColumn('check','vendor/voyager/mov-financieros/check')
-  ->addColumn('accion','vendor/voyager/mov-financieros/acciones_MFinancieros')
+  ->addColumn('accion','vendor/voyager/mov-financieros/acciones_ingresos')
   ->rawColumns(['check','accion'])  
   ->toJson();    
 
@@ -391,7 +391,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
   ->rawColumns(['check','accion'])     
   ->toJson();   
 });
-  
+
+ 
  Route::get('/Ingresos', function () {     
   return datatables()->of(DB::table('mov_financieros')
   ->leftjoin('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
@@ -458,7 +459,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //+------------------------------------------------------------------+
 //|                   Rutas de acción de cobranzas                   |
 //+------------------------------------------------------------------+
-
+Route::get('/admin/mov-financieros/{id_movimiento}/edit_cobranzas', 'App\Http\Controllers\Voyager\MovFinancieroController@edit_cobranzas');
+Route::get('/admin/mov-financieros/create_cobranzas/{id_pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@cobranzas_create');
+ 
 //Route::get('admin/movimientos_financieros/create','App\Http\Controllers\Voyager\MovFinancieroController@cobranzas_create');
 //Route::get('pagos/{id}/edit','App\Http\Controllers\ClienteBrebeController@nuevo');
 

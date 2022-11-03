@@ -39,7 +39,7 @@
                         {{ csrf_field() }}
 
                         <div class="panel-body">
-<h1>PATITO</h1>
+
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger">
                                     <ul>

@@ -3,26 +3,29 @@
     $add  = is_null($dataTypeContent->getKey());
 @endphp
 
-@extends('voyager::master')
-
+{{-- @extends('voyager::master') --}}
+@extends('layouts.voyager2')
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
-
 @section('page_header')
     <h1 class="page-title">
-        <i class="{{ $dataType->icon }}"></i>  pagaremos el pedido {{Session()->get('id_pedido')}}
+        <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
+        - Cobranzas de la Nota de Pedido
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
 
+
 @section('content')
     <div class="page-content edit-add container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
+
+                
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
@@ -91,6 +94,14 @@
                             @endforeach
 
                         </div><!-- panel-body -->
+
+                     
+
+                        <input type="hidden" name="id_nota_pedido" value="{{$id_pedido}}">
+                        <input type="hidden" name="tipo_movimiento" value="Cobranza/Ingresos">
+                       
+        
+
 
                         <div class="panel-footer">
                             @section('submit-buttons')

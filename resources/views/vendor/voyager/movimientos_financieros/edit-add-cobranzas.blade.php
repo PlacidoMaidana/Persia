@@ -24,6 +24,8 @@
         <div class="row">
             <div class="col-md-12">
 
+               
+
                 <div class="panel panel-bordered">
                     <!-- form start -->
                     <form role="form"
@@ -38,8 +40,10 @@
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
+
+                      
                         <div class="panel-body">
-<h1>PATITO</h1>
+
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger">
                                     <ul>
@@ -54,6 +58,9 @@
                             @php
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                             @endphp
+
+
+                            
 
                             @foreach($dataTypeRows as $row)
                                 <!-- GET THE DISPLAY OPTIONS -->
@@ -91,6 +98,11 @@
                             @endforeach
 
                         </div><!-- panel-body -->
+
+                      
+                           
+
+                        
 
                         <div class="panel-footer">
                             @section('submit-buttons')
