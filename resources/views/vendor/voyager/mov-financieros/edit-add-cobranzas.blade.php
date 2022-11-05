@@ -69,6 +69,16 @@
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
+                                @if (( $row->getTranslatedAttribute('display_name')=='Tipo Movimiento'  )||
+                                   ( $row->getTranslatedAttribute('display_name')=='Importe Egreso'    )||
+                                   ( $row->getTranslatedAttribute('display_name')=='Tipo gasto'  )||
+                                   ( $row->getTranslatedAttribute('display_name')=='Id Nota Pedido'  )||
+                                   ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
+                   )
+                                  @php
+                                     continue;
+                                  @endphp
+                                @endif
 
                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 3 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                     {{ $row->slugify }}

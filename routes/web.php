@@ -101,20 +101,6 @@ Route::get('/productos_elegir', function () {
  });
 
  
-
- Route::get('/CobranzasPedido/{pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@CobranzasPedido');
-
- Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
-      
-  return datatables()->of(DB::table('mov_financieros')
-  ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
-  ->where('id_nota_pedido' , '=' ,$id_notapedido))
-  ->addColumn('check','vendor/voyager/mov-financieros/check')
-  ->addColumn('accion','vendor/voyager/mov-financieros/acciones_ingresos')
-  ->rawColumns(['check','accion'])  
-  ->toJson();    
-
-});
  Route::get('/localidades_elegir', function () {
      
     return datatables()->of(DB::table('localidades')
@@ -370,12 +356,66 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 
  Route::get('/admin/productos/{id_producto}/editMP', 'App\Http\Controllers\Voyager\ProductosController@editMP');
 
- Route::get('/Egresos', function () {     
+
+///////////////////////////////////////////////////
+//                COBRANZAS DE NOTAS DE PEDIDO
+////////////////////////////////////////////////////
+
+Route::get('/CobranzasPedido/{pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@CobranzasPedido');
+
+Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
+     
+ return datatables()->of(DB::table('mov_financieros')
+ ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
+ ->where('id_nota_pedido' , '=' ,$id_notapedido))
+ ->addColumn('check','vendor/voyager/mov-financieros/check')
+ ->addColumn('accion','vendor/voyager/mov-financieros/acciones_ingresos')
+ ->rawColumns(['check','accion'])  
+ ->toJson();    
+
+}); 
+
+///////////////////////////////////////////////////
+//                  MOVIMIENTOS FINANCIEROS 
+////////////////////////////////////////////////////
+
+
+
+ Route::get('/admin/movimientos_financieros/{id}/ingresos', 'App\Http\Controllers\Voyager\MovFinancieroController@Ingresos');
+
+ Route::get('/Ingresos', function () {     
+  return datatables()->of(DB::table('mov_financieros')
+  ->join('users','users.id','=','mov_financieros.id_usuario') 
+  ->join('nota_pedidos','nota_pedidos.id','=','mov_financieros.id_nota_pedido') 
+  ->join('clientes','clientes.id','=','nota_pedidos.id_cliente') 
+  ->where('mov_financieros.tipo_movimiento','=', 'Cobranza/Ingresos')
+  ->select([  'mov_financieros.id as id',
+              'mov_financieros.id_nota_pedido as pedido',
+              'clientes.nombre as cliente',
+              'mov_financieros.tipo_movimiento',
+              'mov_financieros.fecha',
+              'mov_financieros.modalidad_pago',
+              'mov_financieros.detalle',
+              'mov_financieros.importe_egreso',
+              'mov_financieros.id_caja',
+              'users.name'
+            ]))
+  ->addColumn('check','vendor/voyager/movimientos_financieros/check')
+  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones_ingresos')
+  ->rawColumns(['check','accion'])     
+  ->toJson();   
+});
+
+
+//
+Route::get('/admin/movimientos_financieros/{id}/egresos', 'App\Http\Controllers\Voyager\MovFinancieroController@Egresos');
+
+Route::get('/Egresos', function () {     
   return datatables()->of(DB::table('mov_financieros')
   ->join('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
   ->join('users','users.id','=','mov_financieros.id_usuario') 
   ->where('mov_financieros.tipo_movimiento','=', 'Gastos/Egresos')
-  ->select([  'mov_financieros.id as id_movimiento',
+  ->select([  'mov_financieros.id as id',
               'mov_financieros.tipo_movimiento',
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
@@ -387,55 +427,37 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
               'users.name'
             ]))
   ->addColumn('check','vendor/voyager/movimientos_financieros/check')
-  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones')
+  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones_egresos')
   ->rawColumns(['check','accion'])     
   ->toJson();   
 });
 
- 
- Route::get('/Ingresos', function () {     
-  return datatables()->of(DB::table('mov_financieros')
-  ->leftjoin('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
-  ->join('users','users.id','=','mov_financieros.id_usuario') 
-  ->where('mov_financieros.tipo_movimiento','=', 'Cobranza/Ingresos')
-  ->select([  'mov_financieros.id as id_movimiento',
-              'mov_financieros.tipo_movimiento',
-              'mov_financieros.fecha',
-              'mov_financieros.modalidad_pago',
-              'Tipos_gastos.tipo1',
-              'Tipos_gastos.tipo2',
-              'mov_financieros.detalle',
-              'mov_financieros.importe_egreso',
-              'mov_financieros.id_caja',
-              'users.name'
-            ]))
-  ->addColumn('check','vendor/voyager/movimientos_financieros/check')
-  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones')
-  ->rawColumns(['check','accion'])     
-  ->toJson();   
-});
 
+
+Route::get('/admin/movimientos_financieros/{id}/edit_otrosmov', 'App\Http\Controllers\Voyager\MovFinancieroController@Otros_movfinancieros');
 Route::get('/Otros_movfinancieros', function () {     
   return datatables()->of(DB::table('mov_financieros')
-  ->leftjoin('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
   ->join('users','users.id','=','mov_financieros.id_usuario') 
   ->whereNotIn('mov_financieros.tipo_movimiento', ['Gastos/Egresos', 'Cobranza/Ingresos'])
-  ->select([  'mov_financieros.id as id_movimiento',
+  ->select([  'mov_financieros.id as id',
               'mov_financieros.tipo_movimiento',
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
-              'Tipos_gastos.tipo1',
-              'Tipos_gastos.tipo2',
               'mov_financieros.detalle',
               'mov_financieros.importe_egreso',
               'mov_financieros.id_caja',
               'users.name'
             ]))
   ->addColumn('check','vendor/voyager/movimientos_financieros/check')
-  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones')
+  ->addColumn('accion','vendor/voyager/movimientos_financieros/acciones_otrosmov')
   ->rawColumns(['check','accion'])     
   ->toJson();   
 });
+
+
+
+///////////////////////
+
 
 Route::get('/vista', function () {
     return view('vista_suelta');

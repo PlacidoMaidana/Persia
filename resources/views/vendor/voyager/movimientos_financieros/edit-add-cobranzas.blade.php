@@ -13,8 +13,9 @@
 
 @section('page_header')
     <h1 class="page-title">
-        <i class="{{ $dataType->icon }}"></i>  pagaremos el pedido {{Session()->get('id_pedido')}}
+        <i class="{{ $dataType->icon }}"></i> 
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
+        - REGISTRO DE INGRESOS
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -22,7 +23,7 @@
 @section('content')
     <div class="page-content edit-add container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
 
                
 
@@ -73,6 +74,15 @@
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
+                                @if (( $row->getTranslatedAttribute('display_name')=='Tipo Movimiento'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Importe Egreso'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Tipo gasto'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
+                           )
+                                  @php
+                                    continue;
+                                  @endphp
+                                @endif
 
                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 3 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                     {{ $row->slugify }}
@@ -99,10 +109,8 @@
 
                         </div><!-- panel-body -->
 
-                      
-                           
-
-                        
+               
+                        <input type="hidden" name="tipo_movimiento" value="Cobranza/Ingresos">       
 
                         <div class="panel-footer">
                             @section('submit-buttons')

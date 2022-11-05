@@ -363,8 +363,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-
-       
+     
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -414,13 +413,10 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
             'alert-type' => 'success',
         ]);
     }
-
+/// 
     public function edit_cobranzas(Request $request, $id)
     {
-      //  $slug = $this->getSlug($request);
-        
-
-        
+      //  $slug = $this->getSlug($request);      
         $slug = "movimientos_financieros";
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         $isSoftDeleted = false;
@@ -466,11 +462,179 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 
         if (view()->exists("voyager::$slug.edit-add")) {
            // $view = "voyager::$slug.edit-add";
-            $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
+           // $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
+            $view = "vendor.voyager.movimientos_financieros.edit-add-cobranzas";
+           
         }
 
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
+///
+public function Ingresos(Request $request , $id)
+{
+  //  $slug = $this->getSlug($request);      
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+    // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+       // $view = "voyager::$slug.edit-add";
+        $view = "vendor.voyager.movimientos_financieros.edit-add-cobranzas";
+        
+    }
+
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+  
+}
+////
+public function Egresos(Request $request , $id)
+{
+  //  $slug = $this->getSlug($request);      
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+    // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+       // $view = "voyager::$slug.edit-add";
+        $view = "vendor.voyager.movimientos_financieros.edit-add-pagos";
+    }
+
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+   
+}
+////
+public function Otros_movfinancieros(Request $request , $id)
+{
+  //  $slug = $this->getSlug($request);      
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+    // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+       // $view = "voyager::$slug.edit-add";
+       $view = "vendor.voyager.movimientos_financieros.edit-add-otrosmovfinancieros";
+       
+    }
+
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+}
 
 
     //***************************************
@@ -516,6 +680,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
+
         }
 
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
@@ -565,7 +730,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
     }
 
 
-
+  
 
 
 
@@ -605,30 +770,26 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 
        event(new BreadDataAdded($dataType,  $data));
 
-
-
-
-
-
-        event(new BreadDataAdded($dataType, $data));
-
-        if (!$request->has('_tagging')) {
-            if (auth()->user()->can('browse', $data)) {
-                $redirect = redirect()->route("voyager.{$dataType->slug}.index");
-            } else {
-                if (!empty($request['id_nota_pedido'])) {
-                    return redirect(route('CobranzasPedido/'))->with('id_pedido',$request['id_nota_pedido']);
-                }else{ $redirect = redirect()->back();}
-               
-            }
-
-            return $redirect->with([
-                'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
-                'alert-type' => 'success',
-            ]);
+       
+     //   return redirect()->route('/CobranzasPedido/{$id_nota_pedido}');
+     //  return redirect()->route('/CobranzasPedido/{id_pedido}')->with($data);
+     if (!$request->has('_tagging')) {
+        if (auth()->user()->can('browse', $data)) {
+            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
         } else {
-            return response()->json(['success' => true, 'data' => $data]);
+            if (!empty($request['id_nota_pedido'])) {
+            return redirect(route('CobranzasPedido/'))->with('id_pedido',$request['id_nota_pedido']);
+            }else{ $redirect = redirect()->back();}
+           
         }
+
+        return $redirect->with([
+            'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
+            'alert-type' => 'success',
+        ]);
+    } else {
+       return response()->json(['success' => true, 'data' => $data]);
+    }
     }
 
     //***************************************
