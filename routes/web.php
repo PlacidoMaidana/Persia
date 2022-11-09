@@ -127,7 +127,9 @@ Route::get('/productos_elegir', function () {
     // dd($d);
  
  });
-
+/////////////////////////////////////////// 
+//      IMPRESION DE PRESUPUESTO O PEDIDO
+///////////////////////////////////////////
  Route::get('pedidos/export/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@createPDF');
 
  Route::get('/exportar_pedidos', function () {     
@@ -150,19 +152,45 @@ Route::get('/productos_elegir', function () {
 
 });
 
+/////////////////////////////////////////// 
+//      IMPRESION DE ORDEN DE FABRICACION 
+///////////////////////////////////////////
+Route::get('ordenes_fabricacion/export/{id_ped}', 'App\Http\Controllers\Voyager\OrdenesFabricController@createPDF');
+
+Route::get('/exportar_ordenes_fabricacion', function () {     
+ return datatables()->of(DB::table('ordenes_fabricacion') 
+ ->join('nota_pedidos','ordenes_fabricacion.id_pedido','=','nota_pedidos.id')
+ ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+ ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+ ->where('ordenes_fabricacion.estado','!=', 'Entregado')
+ ->select([  'ordenes_fabricacion.id as id_orden',
+             'ordenes_fabricacion.fecha',
+             'clientes.nombre',
+             'clientes.id as id_cliente',
+             'ordenes_fabricacion.id_producto',
+             'ordenes_fabricacion.cantidad',
+             'productos.descripcion'
+           ]))              
+ ->toJson();   
+
+});
+
+
+//////////////////////////////////////////////////////////
+// GRILLA DE NOTAS DE PEDIDOS
+//////////////////////////////////////////////////////////
+
  Route::get('/pedidos_pendientes', function () {     
     return datatables()->of(DB::table('nota_pedidos')
     ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+    ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+    ->where('nota_pedidos.estado','=', 'Pendiente Aprobacion')
     ->select([  'nota_pedidos.id as id_pedido',
                 'nota_pedidos.fecha',
                 'clientes.nombre',
                 'clientes.id as id_cliente',
-                'nota_pedidos.totalgravado',
+                'empleados.apellidoynombre as vendedor',
                 'nota_pedidos.total',
-                'nota_pedidos.monto_iva',
-                'nota_pedidos.id_factura',
-                'nota_pedidos.observaciones',
-                'nota_pedidos.descuento',
                 'nota_pedidos.estado'
               ]))
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
@@ -172,21 +200,18 @@ Route::get('/productos_elegir', function () {
  
  });
  Route::get('/pedidos_terminados', function () {     
-    return datatables()->of(DB::table('nota_pedidos')
-    ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-    ->where('nota_pedidos.estado','=', 'Entregado')
-    ->select([  'nota_pedidos.id as id_pedido',
-                'nota_pedidos.fecha',
-                'clientes.nombre',
-                'clientes.id as id_cliente',
-                'nota_pedidos.totalgravado',
-                'nota_pedidos.total',
-                'nota_pedidos.monto_iva',
-                'nota_pedidos.id_factura',
-                'nota_pedidos.observaciones',
-                'nota_pedidos.descuento',
-                'nota_pedidos.estado'
-              ]))          
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->where('nota_pedidos.estado','=', 'Entregado')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'empleados.apellidoynombre as vendedor',
+              'nota_pedidos.total',
+              'nota_pedidos.estado'
+            ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
     ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
     ->rawColumns(['check','accion'])   
@@ -194,7 +219,45 @@ Route::get('/productos_elegir', function () {
  
  });
  
-
+ Route::get('/pedidos_negativos', function () {     
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->where('nota_pedidos.estado','=', 'Rechazado')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'empleados.apellidoynombre as vendedor',
+              'nota_pedidos.total',
+              'nota_pedidos.estado'
+            ]))   
+    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->rawColumns(['check','accion'])   
+    ->toJson();   
+ 
+ });
+ Route::get('/pedidos_abiertos', function () {     
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->where('nota_pedidos.estado','=', 'Pendiente Entrega')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'empleados.apellidoynombre as vendedor',
+              'nota_pedidos.total',
+              'nota_pedidos.estado'
+            ]))   
+    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->rawColumns(['check','accion'])   
+    ->toJson();   
+ 
+ });
+ //////////////////////////////////FIN GRILLA NOTA PEDIDOS
  Route::get('/pagar_pedidos/{id_pedido}', function ($id_pedido) {
      Session()->flash('id_pedido', $id_pedido);
      return redirect(url('admin/mov-financieros/create'));

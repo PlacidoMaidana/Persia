@@ -17,7 +17,7 @@ use TCG\Voyager\Events\BreadDataUpdated;
 use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
-
+use PDF;
 class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
     use BreadRelationshipParser;
@@ -204,6 +204,70 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
         ));
     }
 
+//<<<<<<<<<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<       <>>>>>><<<<<         <>>>>>><<<<><<              <>>>>>>>>>>>
+        //<<<<<<<<<<<<    <<<<<>    >>><<<<<    <<<<    >>><<<>><<<    <<<<<>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<   <<<<<>>>    >><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<   <<<<<>>>    >><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<   <<<<<>>>    >><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<               <<<<<<<   <<<<<>>>    <<<<<<<<             <<<<<>>>>>>>>
+        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<   <<<<<>    >>>><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<          >><<<<<<<<<<   <<<<<>>>>>>>>>>>>>>>>>>>
+        //<<<<<<<<<<<<<<<<<>>>>>>>><<>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>
+
+        public function createPDF($id_orden){
+
+           $texto="Detalle de la Orden de fabricación";
+           // $texto= DB::table('formaspago')
+           // ->where('formaspago.id', 1)
+           // ->select([ 'formaspago.Forma_pago_Productos',
+           //           'formaspago.Forma_pago_Obras',
+           //           'formaspago.Forma_pago_Muebles'
+           //          ])           
+           // ->first();
+ 
+
+        
+      
+  
+
+            $datosOrden= DB::table('ordenes_fabricacion')
+                ->join('nota_pedidos','ordenes_fabricacion.id_pedido','=','nota_pedidos.id')
+                ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+                ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+                ->where('ordenes_fabricacion.estado','!=', 'Entregado')
+                ->select([  'ordenes_fabricacion.id as id_orden',
+                    'ordenes_fabricacion.fecha_orden as fecha',
+                    'clientes.nombre',
+                    'clientes.id as id_cliente',
+                    'ordenes_fabricacion.id_producto',
+                    'ordenes_fabricacion.cantidad',
+                    'ordenes_fabricacion.estado',
+                    'productos.descripcion'
+                ])           
+            ->first();
+            
+            $detallesOrden= DB::table('ordenes_fabricacion')
+            ->join('dosificaciones','ordenes_fabricacion.id_producto','=','dosificaciones.id_producto')
+            ->join('productos','dosificaciones.id_insumo_producto','=','productos.id')
+            ->where('ordenes_fabricacion.id', $id_orden)
+            ->select(['ordenes_fabricacion.id as id_orden',
+            'dosificaciones.cant_unid_produc as cantidad',
+            'dosificaciones.id_insumo_producto as id_producto',
+            'dosificaciones.unidad_consumo_produccion as unidad',
+            'productos.descripcion'
+               
+            ])
+            ->get();
+             
+              $pdf = PDF::loadView("vendor.voyager.ordenes_fabricacion.exportar",
+              compact('id_orden','texto','datosOrden','detallesOrden'));
+              return $pdf->stream('orden_fabricacion.pdf');
+ 
+         } 
+
     //***************************************
     //                _____
     //               |  __ \
@@ -324,8 +388,8 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
-
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        $id_filtro_orden=$id;
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_filtro_orden'));
     }
 
     // POST BR(E)AD
