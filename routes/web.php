@@ -459,7 +459,7 @@ Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
               'mov_financieros.detalle',
-              'mov_financieros.importe_egreso',
+              'mov_financieros.importe_ingreso',
               'mov_financieros.id_caja',
               'users.name'
             ]))
@@ -507,6 +507,7 @@ Route::get('/Otros_movfinancieros', function () {
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
               'mov_financieros.detalle',
+              'mov_financieros.importe_ingreso',
               'mov_financieros.importe_egreso',
               'mov_financieros.id_caja',
               'users.name'

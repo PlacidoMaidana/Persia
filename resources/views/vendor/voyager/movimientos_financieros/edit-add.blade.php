@@ -3,7 +3,8 @@
     $add  = is_null($dataTypeContent->getKey());
 @endphp
 
-@extends('voyager::master')
+{{-- @extends('voyager::master') --}}
+@extends('layouts.voyager2')
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -13,8 +14,11 @@
 
 @section('page_header')
     <h1 class="page-title">
-        <i class="{{ $dataType->icon }}"></i>  pagaremos el pedido {{Session()->get('id_pedido')}}
-        {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
+        <i class="{{ $dataType->icon }}"></i>  {{Session()->get('id_pedido')}}
+     {{-- 
+           {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
+    --}}
+           Nuevo Egreso
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -22,7 +26,7 @@
 @section('content')
     <div class="page-content edit-add container-fluid">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
@@ -66,7 +70,17 @@
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
-
+                                @if (( $row->getTranslatedAttribute('display_name')=='Id Nota Pedido'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Tipo Movimiento'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Importe Ingreso'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Nro Recibo'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Pto Vta'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
+                                )
+                                   @php
+                                       continue;
+                                   @endphp
+                                @endif
                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 3 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                     {{ $row->slugify }}
                                     <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}</label>
@@ -91,7 +105,9 @@
                             @endforeach
 
                         </div><!-- panel-body -->
-
+                        <input type="hidden" name="id_nota_pedido" value=0>
+                        <input type="hidden" name="tipo_movimiento" value="Gastos/Egresos">
+                    
                         <div class="panel-footer">
                             @section('submit-buttons')
                                 <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>

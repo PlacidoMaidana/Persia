@@ -108,7 +108,6 @@
                                           <th>Tipo2</th>
                                           <th>Detalle</th>
                                           <th>Importe</th>
-                                          <th>Caja</th>
                                           <th>Operador</th>
                                           <th>accion</th>
                                         </tr>
@@ -130,7 +129,6 @@
                                            <th>Modalidad de pago</th>
                                            <th>Detalle</th>
                                            <th>Importe</th>
-                                           <th>Caja</th>
                                            <th>Operador</th>
                                            <th>accion</th>
                                       </tr>
@@ -151,8 +149,8 @@
                                             <th>Fecha</th>
                                             <th>Modalidad de pago</th>
                                             <th>Detalle</th>
-                                            <th>Importe</th>
-                                            <th>Caja</th>
+                                            <th>Importe Ingreso</th>
+                                            <th>Importe Egreso</th>
                                             <th>Operador</th>
                                             <th>accion</th>
                                       </tr>
@@ -308,7 +306,6 @@
                      {data: 'tipo2', name: 'Tipos_gastos.tipo2', width: '10%'},
                      {data: 'detalle', name: 'mov_financieros.detalle', width: '10%'},
                      {data: 'importe_egreso', name: 'mov_financieros.importe_egreso', width: '10%'},
-                     {data: 'id_caja', name: 'mov_financieros.id_caja', width: '10%'},
                      {data: 'name', name: 'users.name', width: '10%'},
                      {data: 'accion', width: '10%'},
                       ]           
@@ -329,8 +326,7 @@
                      {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
                      {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
                      {data: 'detalle', name: 'mov_financieros.detalle', width: '10%'},
-                     {data: 'importe_egreso', name: 'mov_financieros.importe_egreso', width: '10%'},
-                     {data: 'id_caja', name: 'mov_financieros.id_caja', width: '10%'},
+                     {data: 'importe_ingreso', name: 'mov_financieros.importe_ingreso', width: '10%'},
                      {data: 'name', name: 'users.name', width: '10%'},
                      {data: 'accion', width: '10%'},
                       ]           
@@ -349,8 +345,8 @@
                      {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
                      {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
                      {data: 'detalle', name: 'mov_financieros.detalle', width: '10%'},
+                     {data: 'importe_ingreso', name: 'mov_financieros.importe_ingreso', width: '10%'},
                      {data: 'importe_egreso', name: 'mov_financieros.importe_egreso', width: '10%'},
-                     {data: 'id_caja', name: 'mov_financieros.id_caja', width: '10%'},
                      {data: 'name', name: 'users.name', width: '10%'},
                      {data: 'accion', width: '10%'},
                       ]                  
