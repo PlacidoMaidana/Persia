@@ -211,8 +211,8 @@
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Totales</h5>
-        <p class="card-text">el total de todo</p>
+        <h5 class="card-title">Cantidad de pedidos:</h5>
+        <h5 class="card-title">Importe total acumulado:</h5>
     </div>
 </div>
 
@@ -262,6 +262,8 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    
 @stop
 
 @section('css')
@@ -364,6 +366,8 @@
                       ]           
         } );
     } );
+
+   
 </script> 
 <script>
     $(document).ready(function() {
@@ -449,6 +453,8 @@
     }
   </script>
   <script src "/vendor/datatables/buttons.server-side.js"> </script>
+  
+
   
  <script>
         // $(document).ready(function(){

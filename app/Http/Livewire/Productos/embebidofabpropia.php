@@ -50,7 +50,7 @@ class embebidofabpropia extends Component
 
     public function render()
     {
-         return view('livewire.Productos.embebido-fabpropia',['detalles'=>$this->detalles])
+         return view('livewire.productos.embebido-fabpropia',['detalles'=>$this->detalles])
         ->extends('layouts.app')//extends('voyager::master') //
         ->section('content');
     }

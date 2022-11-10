@@ -447,7 +447,12 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
         
     }
+    public function obtener_totales_NP($fecha_desde,$fecha_hasta)
+    {
+        return $total_importe_NP=   DB::table('nota_pedidos')
+        ->whereBetween('nota_pedidos.fecha',array($fecha_desde,$fecha_hasta) ) ->where('estado', '=', 'Pendiente')->sum('nota_pedidos.total');
 
+    }
     public function obtener_totales_lineas($id_pedido)
     {
 

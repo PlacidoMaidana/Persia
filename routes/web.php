@@ -199,6 +199,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
     ->toJson();   
  
  });
+
  Route::get('/pedidos_terminados', function () {     
   return datatables()->of(DB::table('nota_pedidos')
   ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
@@ -475,15 +476,15 @@ Route::get('/admin/movimientos_financieros/{id}/egresos', 'App\Http\Controllers\
 
 Route::get('/Egresos', function () {     
   return datatables()->of(DB::table('mov_financieros')
-  ->join('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
+  ->join('tipos_gastos','tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
   ->join('users','users.id','=','mov_financieros.id_usuario') 
   ->where('mov_financieros.tipo_movimiento','=', 'Gastos/Egresos')
   ->select([  'mov_financieros.id as id',
               'mov_financieros.tipo_movimiento',
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
-              'Tipos_gastos.tipo1',
-              'Tipos_gastos.tipo2',
+              'tipos_gastos.tipo1',
+              'tipos_gastos.tipo2',
               'mov_financieros.detalle',
               'mov_financieros.importe_egreso',
               'mov_financieros.id_caja',
