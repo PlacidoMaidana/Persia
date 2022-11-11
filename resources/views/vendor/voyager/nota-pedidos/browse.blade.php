@@ -43,26 +43,6 @@
 
 @section('content')
 
-
-<div class="form-group col-md-2 ">
-    <label for="">fecha_desde</label>
-    <input type="date"  id="fecha_desde" class="form-control" placeholder="" aria-describedby="helpId">
-    <small id="helpId" class="text-muted">fecha_desde</small>
-</div>
-<div class="form-group col-md-2 ">
-    <label for="">fecha_hasta</label>
-    <input type="date" id="fecha_hasta" class="form-control" placeholder="" aria-describedby="helpId">
-    <small id="helpId" class="text-muted">fecha_hasta</small>
-</div>
-
-<div class="row ">
-    <div class="col-md-2  ">
-      <button  type="button" id="informe_compras"  onclick="filtrar()" class="btn btn-sm btn-primary" >Filtrar pedidos</button>
-    </div>    
-</div>
-<a href="informes_compras/export/" class="btn btn-sm btn-primary">Excel</a>
-
-
     <div class="page-content browse container-fluid">
         @include('voyager::alerts')
         <div class="row">
@@ -207,15 +187,14 @@
 
                   
                     
-
-
+{{-- 
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Cantidad de pedidos:</h5>
         <h5 class="card-title">Importe total acumulado:</h5>
     </div>
 </div>
-
+--}}
 
                         @if ($isServerSide)
                             <div class="pull-left">

@@ -276,13 +276,6 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
 
 
-
-
-
-
-
-
-
     //***************************************
     //                _____
     //               |  __ \
@@ -455,7 +448,6 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     }
     public function obtener_totales_lineas($id_pedido)
     {
-
         return $total=   DB::table('nota_pedidos')
         ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.pedido_id')
         ->join('productos as p','r.producto_id','=','p.id')        
