@@ -194,7 +194,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
                 'nota_pedidos.estado'
               ]))
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
-    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidosPend')
     ->rawColumns(['check','accion'])     
     ->toJson();   
  
@@ -214,7 +214,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
               'nota_pedidos.estado'
             ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
-    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidosTerm')
     ->rawColumns(['check','accion'])   
     ->toJson();   
  
@@ -234,7 +234,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
               'nota_pedidos.estado'
             ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
-    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidosNeg')
     ->rawColumns(['check','accion'])   
     ->toJson();   
  
@@ -253,7 +253,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
               'nota_pedidos.estado'
             ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
-    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidosAbie')
     ->rawColumns(['check','accion'])   
     ->toJson();   
  

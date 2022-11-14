@@ -290,8 +290,8 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function show(Request $request, $id)
     {
-
-       // dd('esto es mostrar el pedido');
+      
+   
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -324,9 +324,11 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
         //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    
         $renglones=$this->obtener_lineas($id);
-        $totales=$this->obtener_totales_lineas($id);
-
+       // dd('esto es mostrar el pedido');
+       // $totales=$this->obtener_totales_lineas($id);
+    
         // Replace relationships' keys for labels and create READ links if a slug is provided.
         $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
 
@@ -347,8 +349,9 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
         if (view()->exists("voyager::$slug.read")) {
             $view = "voyager::$slug.read";
         }
-
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones','totales'));
+        
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones'));
+        
     }
 
     //***************************************
