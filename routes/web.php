@@ -121,12 +121,22 @@ Route::get('/productos_elegir', function () {
     ->select(['rubros.id as id_rubro', 'rubros.rubro','s.id as id_subrubro','s.descripcion_subrubro']))
     ->addColumn('seleccionar','vendor/voyager/rubros/boton_seleccionar')
     ->rawColumns(['seleccionar'])   
-    ->toJson();   
-
-   
-    // dd($d);
- 
+    ->toJson();    
  });
+
+ Route::get('/ordenes_fabricacion_pedido/{id_notapedido}', function ($id_notapedido) {
+     
+  return datatables()->of(DB::table('ordenes_fabricacion')
+  ->join('productos as p','ordenes_fabricacion.id_producto','=','p.id')
+  ->join('rubros as r','p.rubro_id','=','r.id')
+  ->join('subrubros as s','p.subrubro_id','=','s.id')
+  ->where('ordenes_fabricacion.id_pedido','=', $id_notapedido)
+  ->select(['ordenes_fabricacion.id_pedido as pedido', 'ordenes_fabricacion.fecha_orden as fecha', 'p.descripcion as producto', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'ordenes_fabricacion.cantidad']))
+  ->toJson();    
+
+});
+
+
 /////////////////////////////////////////// 
 //      IMPRESION DE PRESUPUESTO O PEDIDO
 ///////////////////////////////////////////
@@ -152,9 +162,18 @@ Route::get('/productos_elegir', function () {
 
 });
 
+
+/////////////////////////////////////////// 
+//      GENERA ORDEN DE FABRICACION 
+///////////////////////////////////////////
+
+Route::get('ordenes_fabricacion/generar_orden/{id_pedido}', 'App\Http\Controllers\Voyager\PedidosController@generaordenesfabricacion');
 /////////////////////////////////////////// 
 //      IMPRESION DE ORDEN DE FABRICACION 
 ///////////////////////////////////////////
+
+
+
 Route::get('ordenes_fabricacion/export/{id_ped}', 'App\Http\Controllers\Voyager\OrdenesFabricController@createPDF');
 
 Route::get('/exportar_ordenes_fabricacion', function () {     
@@ -322,36 +341,6 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 ->toJson();   
 });
 
-
-
-/*
-  Route::get('/ordenes_fabricacion_cerradas', function () {     
-    return datatables()->of(DB::table('ordenes_fabricacion')
-    ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
-    ->join('rubros','productos.rubro_id','=','rubros.id')
-    ->join('subrubros','productos.subrubro_id','=','subrubros.id')
-    ->leftjoin('moldes','moldes.id','=','productos.id_molde')
-    ->where('ordenes_fabricacion.estado','=', 'Entregado')
-    ->select([  'ordenes_fabricacion.id as id_orden_fabricacion',
-                'productos.descripcion',
-                'rubros.rubro',
-                'subrubros.descripcion_subrubro',
-                'ordenes_fabricacion.cantidad',
-                '(ordenes_fabricacion.cantidad / (moldes.mt2_por_molde * moldes.cant_moldes)) as dias',
-                '(ordenes_fabricacion.cantidad / productos.unidades_mt2) as unidades',
-                '(ordenes_fabricacion.cantidad / productos.paquetes_mt2) as paquetes',
-                'ordenes_fabricacion.fecha_orden',
-                'ordenes_fabricacion.fecha_entrada_proceso',
-                'ordenes_fabricacion.fecha_salida_proceso',
-                'ordenes_fabricacion.estado'
-
-              ]))
-    ->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
-    ->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')
-    ->rawColumns(['check','accion'])     
-    ->toJson();   
-  });
-*/
 
  Route::get('/productos_para_venta', function () {     
     return datatables()->of(DB::table('productos')

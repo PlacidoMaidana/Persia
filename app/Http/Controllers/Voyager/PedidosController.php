@@ -86,7 +86,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
                 if ($request->get('showSoftDeleted')) {
                     $showSoftDeleted = true;
-                    $query = $query->withTrashed();
+                    $query = $query->withTbuscarashed();
                 }
             }
 
@@ -460,12 +460,20 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
     {
         // if tipo_presupuesto = Muebles o tipo_presupuesto = Productos
        //  Verificar si ya genero las ordenes de fabric ->  
-         DB::insert ('insert into ordenes_fabricacion ( fecha_orden, observaciones, estado,
-        -> fecha_entrada_proceso, fecha_salida_proceso, id_producto,cantidad, id_pedido)
-        -> select  now(), null , "Pendiente", null, null, id_producto , cantidad, id_pedido
-        -> from renglones_notapedidos where id_pedido = $id_pedido ') ;
+       // dd("Generamos ordenes de pedido al pedido".$id_pedido);
+
+         DB::insert('insert into ordenes_fabricacion ( fecha_orden, observaciones, estado,
+        fecha_entrada_proceso, fecha_salida_proceso, id_producto,cantidad, id_pedido)
+        select  now(), null , "Pendiente", null, null, id_producto , cantidad, id_pedido
+        from renglones_notapedidos where id_pedido =  '.$id_pedido) ;
       
-       // endif
+        $redirect = redirect()->back();
+       
+
+        return $redirect->with([
+            'message'    => __('voyager::generic.successfully_updated')." {}",
+            'alert-type' => 'success',
+        ]);
     }
 
     // POST BR(E)AD

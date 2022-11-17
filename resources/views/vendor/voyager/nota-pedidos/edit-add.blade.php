@@ -270,8 +270,68 @@
                                                  </div>
                                              </div>
                                          </div>
-                                       </div>	
-                                       @stop  
+                                       </div>
+                                       
+                                       
+
+
+                                     
+                                       <!-- Modal --> 
+                                       <div class="modal fade modal-warning" id="modal_ordenes_fabricacion" v-if="allowCrop">
+                                           <div class="modal-dialog"  style="min-width: 90%">
+                                               <div class="modal-content">
+                                              
+                                                   <div class="modal-header">
+                                                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                       <h4 class="modal-title">Ordenes de Fabricacion</h4>
+                                                   </div>
+                                               
+                                                   <div id="x34" class="modal-body">
+                                                       <div class="card" style="min-width: 70%">
+                                                           <img class="card-img-top" src="holder.js/100x180/" alt="">
+                                                           <div class="card-body">
+
+
+                                                               {{-- pato 
+
+                                                               {{dd($dataTypeRows[3])}}--}}
+                                                                 
+                                                               <a id="btn_genera_ordenes_fabricacion"   href="{{url('ordenes_fabricacion/generar_orden/'.$id_filtro_pedido)}}" class="btn btn-primary">
+                                                                Genera Ordenes de Fabricacion 
+                                                               </a>
+    
+                                                               
+                                                               
+
+                                                               
+                                                                <table id="ordenes_fabricacion" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                                                                   <thead>
+                                                                     <tr>
+                                                                         <th>pedido</th>
+                                                                         <th>fecha</th>
+                                                                         <th>producto</th>
+                                                                         <th>rubro</th>
+                                                                         <th>subrubro</th>
+                                                                         <th>mt2 solicitados</th>
+ 
+                                                                     </tr>
+                                                                    </thead>
+                                                                
+                                                                   </table>
+
+                                                           </div>
+                                                       </div>
+                                                     </div>
+                                               
+                                                   <div class="modal-footer">
+                                                       <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+  
+                                                   </div>
+                                               </div>
+                                           </div>
+                                        </div>	
+
+                                        @stop  
                                    
                                     {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
                                         <input type="hidden" name="id_vendedor">
@@ -293,86 +353,17 @@
                                 </div>
                                
                             </div>
-                            <div class="col-md-6"><!-- panel-detalles -->
-                                <div class="col">
-                                    <!-- Button trigger modal -->
-                                        
-                                    @section('modal_elejir') <!-- Modal seleccionar producto -->
-                                     
-                                     <!-- Modal --> 
-                                     <div class="modal fade modal-warning" id="productos" v-if="allowCrop">
-                                         <div class="modal-dialog"  style="min-width: 90%">
-                                             <div class="modal-content">
-                                            
-                                                 <div class="modal-header">
-                                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                     <h4 class="modal-title">Seleccione un producto</h4>
-                                                 </div>
-                                             
-                                                 <div id="x34" class="modal-body">
-                                                     <div class="card" style="min-width: 70%">
-                                                         <img class="card-img-top" src="holder.js/100x180/" alt="">
-                                                         <div class="card-body">
-                                                             <h4 class="card-title">Productos</h4>
-                                                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
-                                                                 <thead>
-                                                                   <tr>
-                                                                       <th>id</th>
-                                                                       <th>descripcion</th>
-                                                                       <th>rubro</th>
-                                                                       <th>subrubro</th>
-                                                                       <th>preciovta</th>
-                                                                       <th>seleccionar</th>
-
-                                                                   </tr>
-                                                                  </thead>
-                                                              
-                                                                 </table>
-                                                             
-                                                             
-                                                         </div>
-                                                     </div>
-
-
-                                                 </div>
-                                             
-                                                 <div class="modal-footer">
-                                                     <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
-
-                                                 </div>
-                                             </div>
-                                         </div>
-                                       </div>	
-                                       @stop  
-                                   
-                                    {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
-                                        <input type="hidden" name="id_vendedor">
-                                        <input type="hidden" name="monto_iva">
-                                        <input type="hidden" name="total">
-                                        <input type="hidden" name="totalgravado">
-
-                                       
-                                         
-
-                                    {{-- FORMULARIO EMBEBIDO --}}
-                                                                     
-                                    @if (isset($renglones))
-                                        @livewire('pedidos.embebido-component', ['renglones' => $renglones])
-                                    @else
-                                        @livewire('pedidos.embebido-component',['renglones' => null])
-                                    @endif
-                                    
-                                </div>
-                               
-                            </div>                            
+                       
                         </div>
                      
                         <div class="panel-footer">
                             @section('submit-buttons')
                                 <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
-                                <button type="button" id="ordenfabricacion" class="btn btn-primary" 
-                                 wire:click='generaordenesfabricacion'.$id_notapedido > Genera Orden Fabricacion
+                               
+                                <button type="button" class="btn btn-primary" id="btn_ordenes_fabricacion" >
+                                 Genera Orden Fabricacion   
                                 </button>
+
                             @stop
                             @yield('submit-buttons')
                         </div>
@@ -561,11 +552,20 @@
    <script>
     $('#productos_buscar').on('click',function(){
         $('#productos').modal({show:true});
-  
     });
    </script> 
-   <script>
-    $('#cobranzas_boton').on('click',function(){
+    <script>
+    $('#btn_ordenes_fabricacion').on('click',function(){
+            $('#modal_ordenes_fabricacion').modal({show:true});
+        });
+    </script> 
+    <script>
+      /*  $('#btn_genera_ordenes_fabricacion').on('click',function(){
+             alert('Aqui se debe copiar las ordenes y validar si ya no estan copiadas');
+            });*/
+    </script> 
+    <script>
+        $('#cobranzas_boton').on('click',function(){
         $('#cobranzas').modal({show:true});
      });
    </script> 
@@ -622,6 +622,21 @@
 
      </script> 
 
+    <script>
+        // pato
+      
+    $(document).ready(function() {
+        $('#btn_ordenes_fabricacion').hide();
+       if ($('[name="estado"]').val()=="Pendiente Entrega") {
+          $('#btn_ordenes_fabricacion').show();
+       }  
+    } );
+
+    </script> 
+
+
+
+
      <script>
        function elegir_localidad(id,provincia,localidad) {     
         $('#descripcion_localidad').html(localidad+'('+provincia+')');
@@ -648,6 +663,24 @@
         } );
     
      </script> 
+     <script> 
+        $(document).ready(function() {
+            $('#ordenes_fabricacion').dataTable( {
+                 "serverSide": true,
+                 "ajax":"{{url('/ordenes_fabricacion_pedido/'.$id_filtro_pedido)}}",                
+                 "columns":[
+                         {data: 'pedido', name: 'ordenes_fabricacion.id_pedido', width: '50px'},
+                         {data: 'fecha', name: 'ordenes_fabricacion.fecha_orden', width: '50px'},
+                         {data: 'producto', name: 'productos.descripcion', width: '205px'},
+                         {data: 'rubro', name: 'r.rubro', width: '30px'},
+                         {data: 'subrubro', name: 's.descripcion_subrubro', width: '205px'},
+                         {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '205px'},                                             
+                          ]           
+            } );
+        } );
+    
+     </script>
+
      <script>
         // Cambiar el tamaño de la caja de edicion de texto
         $(document).ready(function(){
