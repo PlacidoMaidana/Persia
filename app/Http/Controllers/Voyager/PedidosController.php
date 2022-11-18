@@ -212,6 +212,14 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             'showCheckboxColumn'
         ));
     }
+////////////////////////////////////////
+//       REMITOS
+//////////////////////////////////////////
+
+public function remitos()
+{
+   return view('vendor.voyager.remitos.browse');
+}
 
     //<<<<<<<<<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<       <>>>>>><<<<<         <>>>>>><<<<><<              <>>>>>>>>>>>

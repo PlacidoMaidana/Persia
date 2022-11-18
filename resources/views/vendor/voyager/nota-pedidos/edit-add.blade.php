@@ -32,12 +32,6 @@
     <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
     
 
-
-    
-
-
-
-
     <div class="modal fade modal-warning" id="cobranzas" v-if="allowCrop">
       <div class="modal-dialog"  style="min-width: 90%">
         <div class="modal-content">
@@ -299,11 +293,7 @@
                                                                <a id="btn_genera_ordenes_fabricacion"   href="{{url('ordenes_fabricacion/generar_orden/'.$id_filtro_pedido)}}" class="btn btn-primary">
                                                                 Genera Ordenes de Fabricacion 
                                                                </a>
-    
-                                                               
-                                                               
 
-                                                               
                                                                 <table id="ordenes_fabricacion" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
                                                                    <thead>
                                                                      <tr>
@@ -559,11 +549,7 @@
             $('#modal_ordenes_fabricacion').modal({show:true});
         });
     </script> 
-    <script>
-      /*  $('#btn_genera_ordenes_fabricacion').on('click',function(){
-             alert('Aqui se debe copiar las ordenes y validar si ya no estan copiadas');
-            });*/
-    </script> 
+
     <script>
         $('#cobranzas_boton').on('click',function(){
         $('#cobranzas').modal({show:true});

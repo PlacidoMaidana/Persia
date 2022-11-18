@@ -116,9 +116,6 @@ class EmbebidoComponent extends Component
        $this->total_general-=$this->detalles[$index]['total-linea'];
        unset($this->detalles[$index]);
        $this->detalles_string=serialize($this->detalles);
-       
-      
-
     }
 
     public function seleccion_producto($id,$nombre,$precio)
