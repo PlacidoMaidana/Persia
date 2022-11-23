@@ -21,10 +21,10 @@
 @section('content')
     <div class="page-content read container-fluid">
         <div class="row">
-            <div class="col-md-6">
-
+            <div class="col-md-12">
                 <div class="panel panel-bordered" style="padding-bottom:5px;">
                     <!-- form start -->
+                    
                     <div class="row">
                         <div class="col">
                             @foreach($dataType->readRows as $row)
@@ -121,10 +121,8 @@
                             @if(!$loop->last)
                                 <hr style="margin:0;">
                             @endif
-                        @endforeach
-    
-    
-    
+                            @endforeach
+  
                         </div>
                         <div class="col">
                             <table class="table">
@@ -133,9 +131,9 @@
                                     <th>id</th>
                                     <th>producto</th>
                                     <th>cantidad  </th>
-                                    <th>precio</th>
-                                    <th>detalle</th>
-                                   
+                                    <th>precio unitario</th>
+                                    <th>importe</th>
+                                               
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -148,7 +146,6 @@
                                     <td>{{$item->cantidad}}</td>
                                     <td>{{number_format($item->preciovta, 2, '.', ',')}}</td>
                                     <td>{{number_format($item->total_linea, 2, '.', ',')}}</td>
-                                   
                                   </tr>  
                                  @endforeach 
                                 
@@ -157,46 +154,19 @@
                               </table>
                                                                   
                             </div>
-                          </div>
-    
-    
-    
+                        </div>
+ 
                         </div>
                     </div>
 
-                    
-
-
                    
                 </div>
-                <div class="panel panel-bordered" style="padding-bottom:5px;">
-                    <!-- para la lista de productos -->
-                   
-                </div>
+
             </div>
         </div>
     </div>
 
-    {{-- Single delete modal --}}
-    <div class="modal modal-danger fade" tabindex="-1" id="delete_modal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('voyager::generic.close') }}"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="voyager-trash"></i> {{ __('voyager::generic.delete_question') }} {{ strtolower($dataType->getTranslatedAttribute('display_name_singular')) }}?</h4>
-                </div>
-                <div class="modal-footer">
-                    <form action="{{ route('voyager.'.$dataType->slug.'.index') }}" id="delete_form" method="POST">
-                        {{ method_field('DELETE') }}
-                        {{ csrf_field() }}
-                        <input type="submit" class="btn btn-danger pull-right delete-confirm"
-                               value="{{ __('voyager::generic.delete_confirm') }} {{ strtolower($dataType->getTranslatedAttribute('display_name_singular')) }}">
-                    </form>
-                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+
 @stop
 
 @section('javascript')
