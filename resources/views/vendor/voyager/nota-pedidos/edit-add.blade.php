@@ -64,8 +64,8 @@
                 <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
-    </div>
-  </div> 
+      </div>
+    </div> 
 
   @include('voyager::multilingual.language-selector')
   @stop
@@ -285,11 +285,7 @@
                                                            <img class="card-img-top" src="holder.js/100x180/" alt="">
                                                            <div class="card-body">
 
-
-                                                               {{-- pato 
-
-                                                               {{dd($dataTypeRows[3])}}--}}
-                                                                 
+                                                              
                                                                <a id="btn_genera_ordenes_fabricacion"   href="{{url('ordenes_fabricacion/generar_orden/'.$id_filtro_pedido)}}" class="btn btn-primary">
                                                                 Genera Ordenes de Fabricacion 
                                                                </a>
@@ -609,7 +605,7 @@
      </script> 
 
     <script>
-        // pato
+
       
     $(document).ready(function() {
         $('#btn_ordenes_fabricacion').hide();

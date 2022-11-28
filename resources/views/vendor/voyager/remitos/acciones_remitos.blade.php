@@ -12,10 +12,18 @@
 <a href="{{url('admin/nota-pedidos/'.$id_pedido.'/edit')}}" title="Edit" class="btn btn-sm btn-primary pull-right edit">
 <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm">Edit</span>
 </a>
---}}
-
 <a href="{{url('admin/nota-pedidos/'.$id_pedido)}}" title="View" class="btn btn-sm btn-warning pull-right view">
 <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">View</span>
 </a> 
-                                             
+--}}
+ <a href="{{url('admin/remitos/'.$id_pedido.'/ver_remito')}}" title="View" class="btn btn-sm btn-warning pull-right view">
+  <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">View</span>
+  </a> 
+
+
+
+
+
+  
+
 </td>

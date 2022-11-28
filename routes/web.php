@@ -42,6 +42,9 @@ Route::get('/embebido','App\Http\Livewire\Pedidos\EmbebidoComponent');
 
 Route::get('/embebido/{id}','App\Http\Livewire\pedidos\embebidocomponent@mostrar');
 
+Route::get('/admin/remitos/{id_pedido}/ver_remito', 'App\Http\Controllers\Voyager\PedidosController@ver_remito');
+
+
 Route::get('/Remitos','App\Http\Controllers\Voyager\PedidosController@remitos');
 Route::get('/IVAcompras','App\Http\Controllers\iva_compras@index');
 Route::get('/IVAventas','App\Http\Controllers\iva_ventas@index');
@@ -279,7 +282,20 @@ Route::get('/exportar_ordenes_fabricacion', function () {
     ->toJson();   
   });
 
- /////////////////////
+
+
+ //////////////////////////////////////////////////////////////////
+ //   ACCIONES EN NOTAS PEDIDO
+ ////////////////////////////////////////////////////////
+
+
+ Route::get('admin/notas-pedido/crea_factura/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@crea_factura');
+
+ /////////////////////////////////////////////////////////////////
+ //           REMITOS
+ /////////////////////////////////////////////////////////////////
+ Route::get('remitos/export/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@createremitosPDF');
+
  Route::get('/remitos', function () {     
   return datatables()->of(DB::table('nota_pedidos')
   ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
@@ -294,12 +310,14 @@ Route::get('/exportar_ordenes_fabricacion', function () {
               'nota_pedidos.estado'
             ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
-    ->addColumn('accion','vendor/voyager/remitos/acciones_Remitos')
+    ->addColumn('accion','vendor/voyager/remitos/acciones_remitos')
     ->rawColumns(['check','accion'])   
     ->toJson();   
   });
 
- //////////////////////////////////FIN GRILLA NOTA PEDIDOS
+ ////////////////////
+
+
  Route::get('/pagar_pedidos/{id_pedido}', function ($id_pedido) {
      Session()->flash('id_pedido', $id_pedido);
      return redirect(url('admin/mov-financieros/create'));

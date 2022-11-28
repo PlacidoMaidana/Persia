@@ -11,6 +11,7 @@ class EmbebidoComponent extends Component
     public $producto;
     public $cantidad;
     public $precio;
+    public $unidad;
     public $total_linea;
     public $total_general=0;
 
@@ -36,6 +37,7 @@ class EmbebidoComponent extends Component
                    'id_producto'=> $value->id_producto,
                    'producto'=> $value->descripcion,   
                    'cantidad'=> $value->cantidad,
+                   'unidad'=> $value->unidad,
                    'precio'=> $prod['preciovta'], //$renglones->precio,
                    'total-linea'=>$value->total_linea);
                    $this->detalles[]=$a;
@@ -72,6 +74,7 @@ class EmbebidoComponent extends Component
            'id_producto'=> $value['id_producto'],
            'producto'=> $value['descripcion'],   
            'cantidad'=> $value['cantidad'],
+           'unidad'=> $value['unidad'],
            'precio'=> $prod['preciocosto'], //$renglones->precio,
            'total-linea'=>$value['total_linea']);
          $this->detalles[]=$a; 
@@ -98,6 +101,7 @@ class EmbebidoComponent extends Component
        $a=array('id_producto'=> $this->id_producto,
        'producto'=> $this->producto,   
        'cantidad'=> $this->cantidad,
+       'unidad'=> $this->unidad,
        'precio'=>  $this->precio,
        'total-linea' =>$this->total_linea);
        $this->detalles[]=$a;     

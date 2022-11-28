@@ -35,7 +35,7 @@
 
     <img class="img-responsive" 
     src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
-    <h1>PRESUPUESTO</h1> 
+    <h1>REMITO </h1> 
     <h3>Fecha: {{$datosPedidos->fecha}} </h3> 
     <h3>Cliente: {{$datosPedidos->nombre}}</h3> 
     <hr />
@@ -82,8 +82,9 @@
     <br>
     <hr />
     <br>
+    {{-- 
     Forma pago: {{$texto->Forma_pago_Productos}} <br>
-
+    --}}
     <img class="img-responsive" 
     src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
 </body>

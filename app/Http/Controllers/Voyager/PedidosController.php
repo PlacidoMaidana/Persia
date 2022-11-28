@@ -283,7 +283,53 @@ public function remitos()
         }
 
 
+        public function createremitosPDF($id_ped){
 
+            //$texto="esto es el texto de la nota";
+            $texto= DB::table('formaspago')
+            //->where('nota_pedidos.id', $id_ped)
+             ->where('formaspago.id', 1)
+            ->select([ 'formaspago.Forma_pago_Productos',
+                      'formaspago.Forma_pago_Obras',
+                      'formaspago.Forma_pago_Muebles'
+                     ])           
+            ->first();
+ 
+            $datosPedidos= DB::table('nota_pedidos')
+            ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+            ->where('nota_pedidos.id', $id_ped)
+            ->select([ 'nota_pedidos.id as id_pedido',
+                      'nota_pedidos.fecha',
+                      'clientes.nombre',
+                      'clientes.id as id_cliente',
+                      'nota_pedidos.totalgravado',
+                      'nota_pedidos.total',
+                      'nota_pedidos.monto_iva',
+                      'nota_pedidos.id_factura',
+                      'nota_pedidos.observaciones',
+                      'nota_pedidos.descuento',
+                      'nota_pedidos.estado'
+                ])           
+            ->first();
+            
+            $detallesPedidos= DB::table('nota_pedidos')
+            ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')
+            ->join('productos','renglones_notapedidos.id_producto','=','productos.id')
+            ->where('nota_pedidos.id', $id_ped)
+            ->select(['nota_pedidos.id as id_pedido',
+            'renglones_notapedidos.id',
+            'renglones_notapedidos.cantidad',
+            'renglones_notapedidos.id_producto',
+            'renglones_notapedidos.total_linea',
+            'productos.descripcion'
+            ])
+            ->get();
+             
+              $pdf = PDF::loadView("vendor.voyager.remitos.exportar",
+              compact('id_ped','texto','datosPedidos','detallesPedidos'));
+              return $pdf->stream('remito.pdf');
+ 
+        }
     //***************************************
     //                _____
     //               |  __ \
@@ -295,11 +341,9 @@ public function remitos()
     //  Read an item of our Data Type B(R)EAD
     //
     //****************************************
-
     public function show(Request $request, $id)
     {
-      
-   
+          
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -362,6 +406,71 @@ public function remitos()
         
     }
 
+    public function ver_remito(Request $request, $id)
+    {
+       // dd('llego a ver_remito');  
+       // $slug = $this->getSlug($request);
+        $slug = 'nota-pedidos';
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+        $isSoftDeleted = false;
+
+        if (strlen($dataType->model_name) != 0) {
+            $model = app($dataType->model_name);
+            $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+            if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+                $query = $query->withTrashed();
+            }
+            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+                $query = $query->{$dataType->scope}();
+            }
+            $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+            if ($dataTypeContent->deleted_at) {
+                $isSoftDeleted = true;
+            }
+        } else {
+            // If Model doest exist, get data from table name
+            $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+        }
+        //<<<<<<<<<<<<<<        <<<<<<<<          <<<<<<<                 <<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<  <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<<   <<<<<          <<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
+        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    
+        $renglones=$this->obtener_lineas($id);
+       // dd('esto es mostrar el pedido');
+       // $totales=$this->obtener_totales_lineas($id);
+    
+        // Replace relationships' keys for labels and create READ links if a slug is provided.
+        $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
+
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'read');
+
+        // Check permission
+        $this->authorize('read', $dataTypeContent);
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'read', $isModelTranslatable);
+
+        $view = 'voyager::bread.read';
+
+        if (view()->exists("voyager::$slug.read")) {
+           // $view = "voyager::$slug.read";
+            $view = "vendor.voyager.remitos.read";
+        }
+        
+        return view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones', 'id'));
+        
+    }
     //***************************************
     //                ______
     //               |  ____|
@@ -443,13 +552,19 @@ public function remitos()
         
        
 
+
         return $renglones=   DB::table('nota_pedidos')
         ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.id_pedido')
         ->join('productos as p','r.id_producto','=','p.id')
-        ->select('r.id', 'id_producto','descripcion','cantidad','p.preciovta' ,'r.total_linea', 'iva', 'nota_pedidos.id_factura as factura')
+        ->join('rubros as rub','p.rubro_id','=','rub.id')
+        ->leftjoin ('ordenes_fabricacion as of',function($join){
+            $join->on('of.id_producto','=','r.id_producto')
+                ->on('of.id_pedido','=','r.id_pedido');
+               })
+        ->select('r.id','r.id_producto','rub.rubro','p.descripcion','r.cantidad','p.unidad','p.preciovta' ,'r.total_linea', 'iva', 'nota_pedidos.id_factura as factura', 'of.estado as estado_fabricacion')
         ->where('nota_pedidos.id',$id_pedido)->get();
 
-        
+       
     }
     public function obtener_totales_NP($fecha_desde,$fecha_hasta)
     {
@@ -473,7 +588,9 @@ public function remitos()
          DB::insert('insert into ordenes_fabricacion ( fecha_orden, observaciones, estado,
         fecha_entrada_proceso, fecha_salida_proceso, id_producto,cantidad, id_pedido)
         select  now(), null , "Pendiente", null, null, id_producto , cantidad, id_pedido
-        from renglones_notapedidos where id_pedido =  '.$id_pedido) ;
+        from renglones_notapedidos inner join productos p on p.id = renglones_notapedidos.id_producto
+        inner join rubros r on r.id = p.rubro_id
+        where id_pedido =  '.$id_pedido. ' and r.categoria = "Elaboración Propia" ') ;
       
         $redirect = redirect()->back();
        
@@ -625,7 +742,6 @@ public function remitos()
     public function store(Request $request)
     {
 
-       
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
