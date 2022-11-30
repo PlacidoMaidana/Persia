@@ -42,12 +42,17 @@ Route::get('/embebido','App\Http\Livewire\Pedidos\EmbebidoComponent');
 
 Route::get('/embebido/{id}','App\Http\Livewire\pedidos\embebidocomponent@mostrar');
 
+Route::get('/admin/remitos/{id_pedido}/ver_remito', 'App\Http\Controllers\Voyager\PedidosController@ver_remito');
+
+
+Route::get('/Remitos','App\Http\Controllers\Voyager\PedidosController@remitos');
 Route::get('/IVAcompras','App\Http\Controllers\iva_compras@index');
 Route::get('/IVAventas','App\Http\Controllers\iva_ventas@index');
 Route::get('/Informeventas','App\Http\Controllers\informes_ventas@index');
 Route::get('/Informecompras','App\Http\Controllers\informes_compras@index');
 Route::get('/Informetesoreria','App\Http\Controllers\informes_tesoreria@index');
 Route::get('/informe_productos', 'App\Http\Controllers\informesProductos@index');
+
 
 Route::get('/ivavtas_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_ventas@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/ivacomprasen_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_compras@en_rango_de_fechas');//ruta que devuelve datos
@@ -63,7 +68,9 @@ Route::get('informes_tesoreria/export/', 'App\Http\Controllers\informes_tesoreri
 Route::get('iva_compras/export/{from}/{to}', 'App\Http\Controllers\Iva_compras@export');
 Route::get('iva_ventas/export/{from}/{to}', 'App\Http\Controllers\iva_ventas@export');
 
-
+///////////////////////////////////////////
+//
+//////////////////////////////////////////////
 Route::get('/tabla_productos_elegir', function () {
     return view('vendor.voyager.nota-pedidos.tabla_productos_elegir');
 });
@@ -121,13 +128,25 @@ Route::get('/productos_elegir', function () {
     ->select(['rubros.id as id_rubro', 'rubros.rubro','s.id as id_subrubro','s.descripcion_subrubro']))
     ->addColumn('seleccionar','vendor/voyager/rubros/boton_seleccionar')
     ->rawColumns(['seleccionar'])   
-    ->toJson();   
-
-   
-    // dd($d);
- 
+    ->toJson();    
  });
 
+ Route::get('/ordenes_fabricacion_pedido/{id_notapedido}', function ($id_notapedido) {
+     
+  return datatables()->of(DB::table('ordenes_fabricacion')
+  ->join('productos as p','ordenes_fabricacion.id_producto','=','p.id')
+  ->join('rubros as r','p.rubro_id','=','r.id')
+  ->join('subrubros as s','p.subrubro_id','=','s.id')
+  ->where('ordenes_fabricacion.id_pedido','=', $id_notapedido)
+  ->select(['ordenes_fabricacion.id_pedido as pedido', 'ordenes_fabricacion.fecha_orden as fecha', 'p.descripcion as producto', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'ordenes_fabricacion.cantidad']))
+  ->toJson();    
+
+});
+
+
+/////////////////////////////////////////// 
+//      IMPRESION DE PRESUPUESTO O PEDIDO
+///////////////////////////////////////////
  Route::get('pedidos/export/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@createPDF');
 
  Route::get('/exportar_pedidos', function () {     
@@ -150,56 +169,168 @@ Route::get('/productos_elegir', function () {
 
 });
 
+
+/////////////////////////////////////////// 
+//      GENERA ORDEN DE FABRICACION 
+///////////////////////////////////////////
+
+Route::get('ordenes_fabricacion/generar_orden/{id_pedido}', 'App\Http\Controllers\Voyager\PedidosController@generaordenesfabricacion');
+/////////////////////////////////////////// 
+//      IMPRESION DE ORDEN DE FABRICACION 
+///////////////////////////////////////////
+
+Route::get('ordenes_fabricacion/export/{id_ped}', 'App\Http\Controllers\Voyager\OrdenesFabricController@createPDF');
+
+Route::get('/exportar_ordenes_fabricacion', function () {     
+ return datatables()->of(DB::table('ordenes_fabricacion') 
+ ->join('nota_pedidos','ordenes_fabricacion.id_pedido','=','nota_pedidos.id')
+ ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+ ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+ ->where('ordenes_fabricacion.estado','!=', 'Entregado')
+ ->select([  'ordenes_fabricacion.id as id_orden',
+             'ordenes_fabricacion.fecha',
+             'clientes.nombre',
+             'clientes.id as id_cliente',
+             'ordenes_fabricacion.id_producto',
+             'ordenes_fabricacion.cantidad',
+             'productos.descripcion'
+           ]))              
+ ->toJson();   
+
+});
+
+
+//////////////////////////////////////////////////////////
+// GRILLA DE NOTAS DE PEDIDOS
+//////////////////////////////////////////////////////////
+
  Route::get('/pedidos_pendientes', function () {     
     return datatables()->of(DB::table('nota_pedidos')
     ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+    ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+    ->where('nota_pedidos.estado','=', 'Pendiente Aprobacion')
     ->select([  'nota_pedidos.id as id_pedido',
                 'nota_pedidos.fecha',
+                'nota_pedidos.tipo_presupuesto as tipo',
                 'clientes.nombre',
                 'clientes.id as id_cliente',
-                'nota_pedidos.totalgravado',
+                'empleados.apellidoynombre as vendedor',
                 'nota_pedidos.total',
-                'nota_pedidos.monto_iva',
-                'nota_pedidos.id_factura',
-                'nota_pedidos.observaciones',
-                'nota_pedidos.descuento',
                 'nota_pedidos.estado'
               ]))
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
-    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidospend')
     ->rawColumns(['check','accion'])     
     ->toJson();   
  
  });
+
  Route::get('/pedidos_terminados', function () {     
-    return datatables()->of(DB::table('nota_pedidos')
-    ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-    ->where('nota_pedidos.estado','=', 'Entregado')
-    ->select([  'nota_pedidos.id as id_pedido',
-                'nota_pedidos.fecha',
-                'clientes.nombre',
-                'clientes.id as id_cliente',
-                'nota_pedidos.totalgravado',
-                'nota_pedidos.total',
-                'nota_pedidos.monto_iva',
-                'nota_pedidos.id_factura',
-                'nota_pedidos.observaciones',
-                'nota_pedidos.descuento',
-                'nota_pedidos.estado'
-              ]))          
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->where('nota_pedidos.estado','=', 'Entregado')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'nota_pedidos.tipo_presupuesto as tipo',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'empleados.apellidoynombre as vendedor',
+              'nota_pedidos.total',
+              'nota_pedidos.estado'
+            ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
-    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_NPedidos')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidosterm')
     ->rawColumns(['check','accion'])   
     ->toJson();   
  
  });
  
+ Route::get('/pedidos_negativos', function () {     
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->where('nota_pedidos.estado','=', 'Rechazado')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'nota_pedidos.tipo_presupuesto as tipo',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'empleados.apellidoynombre as vendedor',
+              'nota_pedidos.total',
+              'nota_pedidos.estado'
+            ]))   
+    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidosneg')
+    ->rawColumns(['check','accion'])   
+    ->toJson();   
+ 
+ });
+ Route::get('/pedidos_abiertos', function () {     
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->where('nota_pedidos.estado','=', 'Pendiente Entrega')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'nota_pedidos.tipo_presupuesto as tipo',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'empleados.apellidoynombre as vendedor',
+              'nota_pedidos.total',
+              'nota_pedidos.estado'
+            ]))   
+    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidosabie')
+    ->rawColumns(['check','accion'])   
+    ->toJson();   
+  });
+
+
+
+ //////////////////////////////////////////////////////////////////
+ //   ACCIONES EN NOTAS PEDIDO
+ ////////////////////////////////////////////////////////
+
+
+ Route::get('admin/notas-pedido/crea_factura/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@crea_factura');
+
+ /////////////////////////////////////////////////////////////////
+ //           REMITOS
+ /////////////////////////////////////////////////////////////////
+ Route::get('remitos/export/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@createremitosPDF');
+
+ Route::get('/remitos', function () {     
+  return datatables()->of(DB::table('nota_pedidos')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->where('nota_pedidos.estado','=', 'Pendiente Entrega')
+  ->select([  'nota_pedidos.id as id_pedido',
+              'nota_pedidos.fecha',
+              'clientes.nombre',
+              'clientes.id as id_cliente',
+              'empleados.apellidoynombre as vendedor',
+              'nota_pedidos.total',
+              'nota_pedidos.estado'
+            ]))   
+    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    ->addColumn('accion','vendor/voyager/remitos/acciones_remitos')
+    ->rawColumns(['check','accion'])   
+    ->toJson();   
+  });
+
+ ////////////////////
+
 
  Route::get('/pagar_pedidos/{id_pedido}', function ($id_pedido) {
      Session()->flash('id_pedido', $id_pedido);
      return redirect(url('admin/mov-financieros/create'));
  });
-  
+
+//////////////////////////////////////////////////////////////
+//         GRILLA ORDENES DE FABRICACION
+/////////////////////////////////////////////////////////////
+
    Route::get('/ordenes_fabricacion_activas', function () {     
     return datatables()->of(DB::table('ordenes_fabricacion')
   ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
@@ -258,36 +389,9 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 ->toJson();   
 });
 
-
-
-/*
-  Route::get('/ordenes_fabricacion_cerradas', function () {     
-    return datatables()->of(DB::table('ordenes_fabricacion')
-    ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
-    ->join('rubros','productos.rubro_id','=','rubros.id')
-    ->join('subrubros','productos.subrubro_id','=','subrubros.id')
-    ->leftjoin('moldes','moldes.id','=','productos.id_molde')
-    ->where('ordenes_fabricacion.estado','=', 'Entregado')
-    ->select([  'ordenes_fabricacion.id as id_orden_fabricacion',
-                'productos.descripcion',
-                'rubros.rubro',
-                'subrubros.descripcion_subrubro',
-                'ordenes_fabricacion.cantidad',
-                '(ordenes_fabricacion.cantidad / (moldes.mt2_por_molde * moldes.cant_moldes)) as dias',
-                '(ordenes_fabricacion.cantidad / productos.unidades_mt2) as unidades',
-                '(ordenes_fabricacion.cantidad / productos.paquetes_mt2) as paquetes',
-                'ordenes_fabricacion.fecha_orden',
-                'ordenes_fabricacion.fecha_entrada_proceso',
-                'ordenes_fabricacion.fecha_salida_proceso',
-                'ordenes_fabricacion.estado'
-
-              ]))
-    ->addColumn('check','vendor\voyager\ordenes_fabricacion\check_ordenes_fabricacion')
-    ->addColumn('accion','vendor\voyager\ordenes_fabricacion\acciones_ordenes_fabricacion')
-    ->rawColumns(['check','accion'])     
-    ->toJson();   
-  });
-*/
+//////////////////////////////////////////////////////////////
+//         GRILLA PRODUCTOS
+/////////////////////////////////////////////////////////////
 
  Route::get('/productos_para_venta', function () {     
     return datatables()->of(DB::table('productos')
@@ -356,6 +460,28 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 
  Route::get('/admin/productos/{id_producto}/editMP', 'App\Http\Controllers\Voyager\ProductosController@editMP');
 
+ Route::get('/obras', function () {     
+  return datatables()->of(DB::table('productos')
+  ->join ('rubros','productos.rubro_id','=','rubros.id')
+  ->join ('subrubros','productos.subrubro_id','=','subrubros.id')
+  ->where('rubros.categoria','=', 'Obras')
+  ->select([  'productos.id as id_producto',
+              'productos.descripcion',
+              'rubros.rubro',
+              'subrubros.descripcion_subrubro',
+              'productos.preciovta',
+              'productos.unidad',
+              'productos.activo', 
+              'rubros.categoria'
+            ]))
+  ->addColumn('check','vendor/voyager/productos/check_productos')
+  ->addColumn('accion','vendor/voyager/productos/acciones_obras')
+  ->rawColumns(['check','accion'])     
+  ->toJson();   
+});
+
+Route::get('/admin/productos/{id_producto}/editobras', 'App\Http\Controllers\Voyager\ProductosController@editobras');
+
 
 ///////////////////////////////////////////////////
 //                COBRANZAS DE NOTAS DE PEDIDO
@@ -396,7 +522,7 @@ Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
               'mov_financieros.detalle',
-              'mov_financieros.importe_egreso',
+              'mov_financieros.importe_ingreso',
               'mov_financieros.id_caja',
               'users.name'
             ]))
@@ -412,15 +538,15 @@ Route::get('/admin/movimientos_financieros/{id}/egresos', 'App\Http\Controllers\
 
 Route::get('/Egresos', function () {     
   return datatables()->of(DB::table('mov_financieros')
-  ->join('Tipos_gastos','Tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
+  ->join('tipos_gastos','tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
   ->join('users','users.id','=','mov_financieros.id_usuario') 
   ->where('mov_financieros.tipo_movimiento','=', 'Gastos/Egresos')
   ->select([  'mov_financieros.id as id',
               'mov_financieros.tipo_movimiento',
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
-              'Tipos_gastos.tipo1',
-              'Tipos_gastos.tipo2',
+              'tipos_gastos.tipo1',
+              'tipos_gastos.tipo2',
               'mov_financieros.detalle',
               'mov_financieros.importe_egreso',
               'mov_financieros.id_caja',
@@ -444,6 +570,7 @@ Route::get('/Otros_movfinancieros', function () {
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',
               'mov_financieros.detalle',
+              'mov_financieros.importe_ingreso',
               'mov_financieros.importe_egreso',
               'mov_financieros.id_caja',
               'users.name'

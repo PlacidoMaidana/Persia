@@ -21,14 +21,14 @@ class CreateProductosTable extends Migration
             $table->decimal('preciovta', 19, 3)->nullable();
             $table->decimal('tasa_iva', 5, 2)->nullable();
             $table->char('unidad', 100)->nullable();
-            $table->char('Precio_compra', 19, 3)->nullable(); 
+            $table->decimal('Precio_compra', 19, 3)->nullable(); 
             $table->char('Unidad_compra', 100)->nullable();
             $table->char('activo', 2)->nullable();
             $table->unsignedBigInteger('id_molde')->nullable()->index('FK_Productos_Moldes');
             $table->unsignedBigInteger('id_base')->nullable();
             $table->char('manual_procedimiento', 255)->nullable();
-            $table->integer('unidades_mt2')->nullable();
-            $table->integer('paquetes_mt2')->nullable();
+            $table->decimal('unidades_mt2', 10, 2)->nullable(); 
+            $table->decimal('paquetes_mt2', 10, 2)->nullable(); 
             $table->timestamps();
         });
   

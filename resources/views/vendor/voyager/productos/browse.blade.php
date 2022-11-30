@@ -91,6 +91,9 @@
                               <li role="presentation">
                                 <a href="#three" aria-controls="three" role="tab" data-toggle="tab">Materia Prima</a>
                               </li>
+                              <li role="presentation">
+                                <a href="#four" aria-controls="four" role="tab" data-toggle="tab">Obras</a>
+                              </li>
                               
                             </ul>
                           </div>
@@ -158,6 +161,26 @@
                                      </thead>
                                     </table>
                               </div>  
+                              <div role="tabpanel" class="tab-pane fade" id="four">
+                                <table id="obras" class="table table-striped table-bordered dt-responsive "   >
+                                    <thead>
+                                        <tr>
+                                            <th class="dt-not-orderable">
+                                                <input type="checkbox" class="select_all">
+                                            </th>
+                                            <th>id</th>
+                                            <th>descripcion</th>
+                                            <th>rubro</th>
+                                            <th>subrubro</th>
+                                            <th>precio venta</th>
+                                            <th>unidad</th>
+                                            <th>activo</th>
+                                            <th>categoria</th>
+                                            <th>accion</th>
+                                      </tr>
+                                     </thead>
+                                    </table>
+                              </div> 
                               </div>
                             </div>
                           </div>
@@ -362,7 +385,26 @@
     } );
  </script> 
 
-
+<script>
+    $(document).ready(function() {
+        $('#obras').dataTable( {
+             "serverSide": true,
+             "ajax":"{{url('obras')}}",                
+             "columns":[
+                     {data: 'check', width: '5%'},
+                     {data: 'id_producto', name: 'productos.id', width: '5%'},
+                     {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
+                     {data: 'rubro', name: 'rubros.rubro', width: '10%'},
+                     {data: 'descripcion_subrubro', name: 'subrubros.descripcion_subrubro', width: '10%'},
+                     {data: 'preciovta', name: 'productos.preciovta', width: '10%'},
+                     {data: 'unidad', name: 'productos.unidad', width: '10%'},
+                     {data: 'activo', name: 'productos.activo', width: '10%'},
+                     {data: 'categoria', name: 'rubros.categoria', width: '10%'},
+                     {data: 'accion', width: '10%'},
+                      ]           
+        } );
+    } );
+ </script> 
 <script>
      function borrar(id) {
             // alert(id);

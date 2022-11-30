@@ -10,6 +10,7 @@ class EmbebidoComponent extends Component
     public $id_producto;
     public $producto;
     public $cantidad;
+    public $unidad;
     public $precio;
     public $total_linea;
     public $total_general=0;
@@ -25,7 +26,7 @@ class EmbebidoComponent extends Component
     public function mount($renglones)
     {
       //session()->flash('El producto', $renglones[0]->descripcion);
-         //  dd($renglones[0]->descripcion);
+           //dd($renglones[0]->unidad);
 
             if (!is_null($renglones)) {
                $this->total_general=0;
@@ -36,7 +37,8 @@ class EmbebidoComponent extends Component
                    'id_producto'=> $value->id_producto,
                    'producto'=> $value->descripcion,   
                    'cantidad'=> $value->cantidad,
-                   'precio'=> $prod['preciovta'], //$renglones->precio,
+                   'unidad'=> $value->unidad,
+                   'precio'=> $value->precio, // $prod['preciovta'], //$renglones->precio,
                    'total-linea'=>$value->total_linea);
                    $this->detalles[]=$a;
                    $this->detalles_string=serialize($this->detalles);
@@ -44,7 +46,6 @@ class EmbebidoComponent extends Component
                 }
             }
 
-            
     }
 
     public function render()
@@ -54,15 +55,12 @@ class EmbebidoComponent extends Component
         ->extends('layouts.app')//extends('voyager::master') //
         ->section('content');
         
-      
-        
+
     }
 
     public function editar_renglones($renglones)
     {
     
-      
-      
       $this->total_general=0;
      
       foreach ($renglones as $key => $value) {
@@ -72,7 +70,8 @@ class EmbebidoComponent extends Component
            'id_producto'=> $value['id_producto'],
            'producto'=> $value['descripcion'],   
            'cantidad'=> $value['cantidad'],
-           'precio'=> $prod['preciocosto'], //$renglones->precio,
+           'unidad'=> $value['unidad'],
+           'precio'=> $value['precio'], // $prod['preciocosto'], //$renglones->precio,
            'total-linea'=>$value['total_linea']);
          $this->detalles[]=$a; 
 
@@ -87,10 +86,7 @@ class EmbebidoComponent extends Component
         $this->cantidad=null;
         $this->precio =null;
         
-        
     }
-
-    
 
     public function addDetalles()
     {
@@ -100,6 +96,7 @@ class EmbebidoComponent extends Component
        $a=array('id_producto'=> $this->id_producto,
        'producto'=> $this->producto,   
        'cantidad'=> $this->cantidad,
+       'unidad'=> $this->unidad,
        'precio'=>  $this->precio,
        'total-linea' =>$this->total_linea);
        $this->detalles[]=$a;     
@@ -118,9 +115,6 @@ class EmbebidoComponent extends Component
        $this->total_general-=$this->detalles[$index]['total-linea'];
        unset($this->detalles[$index]);
        $this->detalles_string=serialize($this->detalles);
-       
-      
-
     }
 
     public function seleccion_producto($id,$nombre,$precio)

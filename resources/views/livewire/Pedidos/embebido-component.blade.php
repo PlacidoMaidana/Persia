@@ -55,8 +55,9 @@
           <th>id</th>
           <th>producto</th>
           <th>cantidad  </th>
+          <th>unidad  </th>
           <th>precio</th>
-          <th>detalle</th>
+          <th>importe</th>
           <th>acciones</th>
         </tr>
       </thead>
@@ -67,6 +68,7 @@
           <td scope="row">{{$item['id_producto']}}</td>
           <td scope="row">{{$item['producto']}}</td>
           <td>{{$item['cantidad']}}</td>
+          <td>{{$item['unidad']}}</td>
           <td>{{number_format($item['precio'], 2, '.', ',')}}</td>
           <td>{{number_format($item['total-linea'], 2, '.', ',')}}</td>
           <td><a wire:click.prevent="quitar({{$index}})"> Quitar</a></td>

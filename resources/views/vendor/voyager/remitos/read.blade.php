@@ -7,14 +7,59 @@
 
 @section('page_header')
     <h1 class="page-title">
-        <i class="{{ $dataType->icon }}"></i> {{ __('voyager::generic.viewing') }} {{ ucfirst($dataType->getTranslatedAttribute('display_name_singular')) }} &nbsp;
-
+       
         @can('browse', $dataTypeContent)
         <a href="{{ route('voyager.'.$dataType->slug.'.index') }}" class="btn btn-warning">
             <i class="glyphicon glyphicon-list"></i> <span class="hidden-xs hidden-sm">{{ __('voyager::generic.return_to_list') }}</span>
         </a>
+        <div class="col-auto">
+            <button type="button" class="btn btn-primary" id="boton_cobranzas"
+            data-bs-toggle="modal" data-bs-target="#cobranzas">
+            Cobranzas
+            </button>
+          </div>
+        {{--
+            <a id="cobranzas"   href="{{url('/CobranzasPedido/.4')}}" class="btn btn-primary">Cobranzas</a>
+        --}}
+        <a id="imprime_remito"   href="{{url('/remitos/export/'.$id)}}" class="btn btn-primary">Imprime Remito</a>
+        
         @endcan
     </h1>
+
+    <div class="modal fade modal-warning" id="modal_cobranzas" v-if="allowCrop">
+        <div class="modal-dialog"  style="min-width: 90%">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">Cobranzas del pedido</h4>
+              </div>
+                    
+              <div id="x34" class="modal-body">
+                  <div class="card" style="min-width: 70%">
+                      <img class="card-img-top" src="holder.js/100x180/" alt="">
+                      <div class="card-body">
+                          <h4 class="card-title">Cobranzas</h4>
+                         <table id="example_cobranzas" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                              <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>fecha</th>
+                                    <th>detalle</th>
+                                    <th>importe</th>
+                                </tr>
+                               </thead>
+                              </table>
+                         
+                      </div>
+                  </div>
+              </div>
+          
+              <div class="modal-footer">
+                  <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              </div>
+          </div>
+        </div>
+      </div> 
     @include('voyager::multilingual.language-selector')
 @stop
 
@@ -23,7 +68,8 @@
         <div class="row">
             <div class="col-md-12">
               
-                <h1>NOTAS PEDIDO</h1>
+                 <h1> REMITOS </h1> 
+                
 
                 <div class="panel panel-bordered" style="padding-bottom:5px;">
                     <!-- form start -->
@@ -131,11 +177,6 @@
                                             <p>{{ $dataTypeContent->{$row->field} }}</p>
                                         @endif
                                     </div><!-- panel-body -->
-                                    {{-- 
-                                    @if(!$loop->last)
-                                        <hr style="margin:0;">
-                                    @endif
-                                    --}}
                                     
                                 </div>
                                 <div class="col-md-6">
@@ -253,11 +294,14 @@
                                 <thead>
                                   <tr>
                                     <th>id</th>
+                                    <th>rubro</th>
                                     <th>producto</th>
-                                    <th>cantidad  </th>
+                                    <th>cantidad</th>
+                                    <th>unidad</th>
                                     <th>precio unitario</th>
                                     <th>importe</th>
-                                               
+                                    <th>estado fabricacion</th>
+                                                                                 
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -266,11 +310,14 @@
                                  @foreach ($renglones as $index=>$item)
                                   <tr>
                                     <td scope="row">{{$item->id_producto}}</td>
+                                    <td scope="row">{{$item->rubro}}</td>
                                     <td scope="row">{{$item->descripcion}}</td>
                                     <td>{{$item->cantidad}}</td>
+                                    <td>{{$item->unidad}}</td>
                                     <td>{{number_format($item->preciovta, 2, '.', ',')}}</td>
                                     <td>{{number_format($item->total_linea, 2, '.', ',')}}</td>
-                                  </tr>  
+                                    <td scope="row">{{$item->estado_fabricacion}}</td>
+                                    </tr>  
                                  @endforeach 
                                 
                                  
@@ -319,4 +366,25 @@
         });
 
     </script>
+        <script>
+            
+            $(document).ready(function() {
+                $('#example_cobranzas').dataTable( {
+                     "serverSide": true,
+                     "ajax":"{{url('/cobranzas_notapedido/'.$id)}}",
+                     "columns":[
+                             {data:'id' } ,
+                             {data:'fecha' },
+                             {data:'detalle' } ,
+                             {data:'importe_ingreso' }                             
+                              ]           
+                } );
+            } );
+        
+        </script> 
+        <script>
+            $('#boton_cobranzas').on('click',function(){
+                $('#modal_cobranzas').modal({show:true});
+            });
+        </script> 
 @stop

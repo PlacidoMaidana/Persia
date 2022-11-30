@@ -28,6 +28,7 @@ class CreateNotaPedidoTable extends Migration
             $table->char('estado_pago', 10)->nullable();
             $table->unsignedBigInteger('id_vendedor_2')->nullable()->index('FK_vendedor');
             $table->char('tipo_presupuesto', 10)->nullable();
+            $table->unsignedBigInteger('nro_remito')->nullable();
             $table->timestamps();
         });
 

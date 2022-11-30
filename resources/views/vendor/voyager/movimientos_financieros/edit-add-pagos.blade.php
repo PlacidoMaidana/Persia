@@ -76,8 +76,6 @@
                                    @php
                                        continue;
                                    @endphp
-
-
                                 @endif
 
                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 3 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>

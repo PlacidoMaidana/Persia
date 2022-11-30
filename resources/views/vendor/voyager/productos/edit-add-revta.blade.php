@@ -77,6 +77,8 @@
                                        ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2'    )||
                                        ( $row->getTranslatedAttribute('display_name')=='Id Molde'    )||
                                        ( $row->getTranslatedAttribute('display_name')=='Id Base'    )||
+                                       ( $row->getTranslatedAttribute('display_name')=='moldes'    )||
+                                       ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'    )||
                                        ( $row->getTranslatedAttribute('display_name')=='Created At'  )
                                        )
                                         @php
