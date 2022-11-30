@@ -10,8 +10,8 @@ class EmbebidoComponent extends Component
     public $id_producto;
     public $producto;
     public $cantidad;
-    public $precio;
     public $unidad;
+    public $precio;
     public $total_linea;
     public $total_general=0;
 
@@ -26,7 +26,7 @@ class EmbebidoComponent extends Component
     public function mount($renglones)
     {
       //session()->flash('El producto', $renglones[0]->descripcion);
-         //  dd($renglones[0]->descripcion);
+           //dd($renglones[0]->unidad);
 
             if (!is_null($renglones)) {
                $this->total_general=0;
@@ -38,7 +38,7 @@ class EmbebidoComponent extends Component
                    'producto'=> $value->descripcion,   
                    'cantidad'=> $value->cantidad,
                    'unidad'=> $value->unidad,
-                   'precio'=> $prod['preciovta'], //$renglones->precio,
+                   'precio'=> $value->precio, // $prod['preciovta'], //$renglones->precio,
                    'total-linea'=>$value->total_linea);
                    $this->detalles[]=$a;
                    $this->detalles_string=serialize($this->detalles);
@@ -46,7 +46,6 @@ class EmbebidoComponent extends Component
                 }
             }
 
-            
     }
 
     public function render()
@@ -56,15 +55,12 @@ class EmbebidoComponent extends Component
         ->extends('layouts.app')//extends('voyager::master') //
         ->section('content');
         
-      
-        
+
     }
 
     public function editar_renglones($renglones)
     {
     
-      
-      
       $this->total_general=0;
      
       foreach ($renglones as $key => $value) {
@@ -75,7 +71,7 @@ class EmbebidoComponent extends Component
            'producto'=> $value['descripcion'],   
            'cantidad'=> $value['cantidad'],
            'unidad'=> $value['unidad'],
-           'precio'=> $prod['preciocosto'], //$renglones->precio,
+           'precio'=> $value['precio'], // $prod['preciocosto'], //$renglones->precio,
            'total-linea'=>$value['total_linea']);
          $this->detalles[]=$a; 
 
@@ -89,7 +85,6 @@ class EmbebidoComponent extends Component
         $this->producto ="";
         $this->cantidad=null;
         $this->precio =null;
-        
         
     }
 

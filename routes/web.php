@@ -211,6 +211,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
     ->where('nota_pedidos.estado','=', 'Pendiente Aprobacion')
     ->select([  'nota_pedidos.id as id_pedido',
                 'nota_pedidos.fecha',
+                'nota_pedidos.tipo_presupuesto as tipo',
                 'clientes.nombre',
                 'clientes.id as id_cliente',
                 'empleados.apellidoynombre as vendedor',
@@ -231,6 +232,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
   ->where('nota_pedidos.estado','=', 'Entregado')
   ->select([  'nota_pedidos.id as id_pedido',
               'nota_pedidos.fecha',
+              'nota_pedidos.tipo_presupuesto as tipo',
               'clientes.nombre',
               'clientes.id as id_cliente',
               'empleados.apellidoynombre as vendedor',
@@ -251,6 +253,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
   ->where('nota_pedidos.estado','=', 'Rechazado')
   ->select([  'nota_pedidos.id as id_pedido',
               'nota_pedidos.fecha',
+              'nota_pedidos.tipo_presupuesto as tipo',
               'clientes.nombre',
               'clientes.id as id_cliente',
               'empleados.apellidoynombre as vendedor',
@@ -270,6 +273,7 @@ Route::get('/exportar_ordenes_fabricacion', function () {
   ->where('nota_pedidos.estado','=', 'Pendiente Entrega')
   ->select([  'nota_pedidos.id as id_pedido',
               'nota_pedidos.fecha',
+              'nota_pedidos.tipo_presupuesto as tipo',
               'clientes.nombre',
               'clientes.id as id_cliente',
               'empleados.apellidoynombre as vendedor',
@@ -455,6 +459,28 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
  });
 
  Route::get('/admin/productos/{id_producto}/editMP', 'App\Http\Controllers\Voyager\ProductosController@editMP');
+
+ Route::get('/obras', function () {     
+  return datatables()->of(DB::table('productos')
+  ->join ('rubros','productos.rubro_id','=','rubros.id')
+  ->join ('subrubros','productos.subrubro_id','=','subrubros.id')
+  ->where('rubros.categoria','=', 'Obras')
+  ->select([  'productos.id as id_producto',
+              'productos.descripcion',
+              'rubros.rubro',
+              'subrubros.descripcion_subrubro',
+              'productos.preciovta',
+              'productos.unidad',
+              'productos.activo', 
+              'rubros.categoria'
+            ]))
+  ->addColumn('check','vendor/voyager/productos/check_productos')
+  ->addColumn('accion','vendor/voyager/productos/acciones_obras')
+  ->rawColumns(['check','accion'])     
+  ->toJson();   
+});
+
+Route::get('/admin/productos/{id_producto}/editobras', 'App\Http\Controllers\Voyager\ProductosController@editobras');
 
 
 ///////////////////////////////////////////////////

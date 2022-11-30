@@ -114,6 +114,7 @@
                                           </th>
                                           <th>id_pedido</th>
                                           <th>fecha</th>
+                                          <th>tipo</th>
                                           <th>cliente</th>
                                           <th>vendedor</th>
                                           <th>total</th>
@@ -133,6 +134,7 @@
                                             </th>
                                             <th>id_pedido</th>
                                             <th>fecha</th>
+                                            <th>tipo</th>
                                             <th>cliente</th>
                                             <th>vendedor</th>
                                             <th>total</th>
@@ -151,6 +153,7 @@
                                             </th>
                                             <th>id_pedido</th>
                                             <th>fecha</th>
+                                            <th>tipo</th>
                                             <th>cliente</th>
                                             <th>vendedor</th>
                                             <th>total</th>
@@ -169,6 +172,7 @@
                                             </th>
                                             <th>id_pedido</th>
                                             <th>fecha</th>
+                                            <th>tipo</th>
                                             <th>cliente</th>
                                             <th>vendedor</th>
                                             <th>total</th>
@@ -337,6 +341,7 @@
                      {data: 'check', width: '5%'},
                      {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
                      {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
+                     {data: 'tipo', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
                      {data: 'nombre', name: 'clientes.nombre', width: '10%'},
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},
@@ -357,6 +362,7 @@
                      {data: 'check', width: '5%'},
                      {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
                      {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
+                     {data: 'tipo', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
                      {data: 'nombre', name: 'clientes.nombre', width: '10%'},
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},
@@ -375,6 +381,7 @@
                      {data: 'check', width: '5%'},
                      {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
                      {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
+                     {data: 'tipo', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
                      {data: 'nombre', name: 'clientes.nombre', width: '10%'},
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},
@@ -393,6 +400,7 @@
                      {data: 'check', width: '5%'},
                      {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
                      {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
+                     {data: 'tipo', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
                      {data: 'nombre', name: 'clientes.nombre', width: '10%'},
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},

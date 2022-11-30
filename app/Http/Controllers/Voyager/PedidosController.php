@@ -266,14 +266,19 @@ public function remitos()
            $detallesPedidos= DB::table('nota_pedidos')
            ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')
            ->join('productos','renglones_notapedidos.id_producto','=','productos.id')
+           ->join('rubros as r','productos.rubro_id','=','r.id')
+           ->join('subrubros as s','productos.subrubro_id','=','s.id')
            ->where('nota_pedidos.id', $id_ped)
-           ->select(['nota_pedidos.id as id_pedido',
-           'renglones_notapedidos.id',
-           'renglones_notapedidos.cantidad',
-           'renglones_notapedidos.id_producto',
-           'renglones_notapedidos.total_linea',
-           'productos.descripcion'
-           ])
+           ->select(DB::raw('nota_pedidos.id as id_pedido,
+           renglones_notapedidos.id,
+           s.descripcion_subrubro as subrubro,
+           renglones_notapedidos.cantidad,
+           renglones_notapedidos.id_producto,
+           renglones_notapedidos.total_linea / renglones_notapedidos.cantidad as punit,
+           renglones_notapedidos.total_linea,
+           productos.descripcion,
+           productos.unidad' 
+           ) )
            ->get();
             
              $pdf = PDF::loadView("vendor.voyager.nota-pedidos.exportar",
@@ -330,6 +335,89 @@ public function remitos()
               return $pdf->stream('remito.pdf');
  
         }
+        public function crea_factura($id_ped){
+
+
+        /*
+            Usar fechas del día.
+
+            Como se muestra en el código no deben pasarse parámetros directamente sino usar variables intermedias.
+
+            Desde PHP se debe referenciar la clase como WSAFIPFEPHP. Por lo demás la clase tiene exactamente los mismos métodos y propiedades tal como se explica en esta documentación.
+        */
+        /*
+            <?php
+
+            $fe = new COM("WSAFIPFEPHP.FACTURA") or die("no se pudo crear clase WSAFIPFEPHP.factura");
+
+            $modo = 0;
+
+            $cuit = "aqui cuit sin separadores del emisor";
+
+            $certificado = "ruta y nombre del certificado *.pfx";
+
+            $licencia = " ";
+
+            $resultado = $fe->iniciar($modo, $cuit, $certificado, $licencia);
+
+            echo "resultado iniciar   {$fe->ultimomensajeerror}\n";
+
+            $resultado = $fe->obtenerticketacceso();
+
+            echo "resultado acceso   {$resultado}\n";
+
+            echo "detalle acceso   {$fe->ultimomensajeerror}\n";
+
+            $fe->FECabeceraCantReg = 1;
+
+            $fe->FECabeceraPresta_serv = 1;
+
+            $fe->indice = 0;
+
+            $fe->FEDetalleFecha_vence_pago = "20090630";
+
+            $fe->FEDetalleFecha_serv_desde = "20090630";
+
+            $fe->FEDetalleFecha_serv_hasta = "20090630";
+
+            $fe->FEDetalleImp_neto = 100;
+
+            $fe->FEDetalleImp_total  = 121;
+
+            $fe->FEDetalleFecha_cbte  = "20090630";
+
+            $fe->FEDetalleNro_doc  = "aqui cuit del cliente inscripto";
+
+            $fe->FEDetalleTipo_doc  = 80;
+
+            $puntoventa = 1;
+
+            $tipo = 1;
+
+            $identificador ="1";
+
+            $resultado = $fe->registrar($puntoventa, $tipo,$identificador);
+
+            echo "resultado iniciar   {$fe->ultimomensajeerror}\n";
+
+            echo "error AFIP  {$fe->permsg}\n";
+
+            echo "resultado repetido (reproceso)   {$fe->FERespuestaReproceso}\n";
+
+            echo "CAE   {$fe->FERespuestaDetalleCAE}\n";
+
+            echo "numero   {$fe->FERespuestaDetalleCbt_desde}\n";
+
+            echo "fin";
+
+            $fe = null;
+
+            ?>
+            
+        */
+ 
+        }
+
     //***************************************
     //                _____
     //               |  __ \
@@ -378,7 +466,7 @@ public function remitos()
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     
         $renglones=$this->obtener_lineas($id);
-       // dd('esto es mostrar el pedido');
+  
        // $totales=$this->obtener_totales_lineas($id);
     
         // Replace relationships' keys for labels and create READ links if a slug is provided.
@@ -408,7 +496,6 @@ public function remitos()
 
     public function ver_remito(Request $request, $id)
     {
-       // dd('llego a ver_remito');  
        // $slug = $this->getSlug($request);
         $slug = 'nota-pedidos';
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -443,7 +530,7 @@ public function remitos()
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     
         $renglones=$this->obtener_lineas($id);
-       // dd('esto es mostrar el pedido');
+
        // $totales=$this->obtener_totales_lineas($id);
     
         // Replace relationships' keys for labels and create READ links if a slug is provided.
@@ -551,7 +638,7 @@ public function remitos()
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         
        
-
+/*
 
         return $renglones=   DB::table('nota_pedidos')
         ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.id_pedido')
@@ -562,10 +649,36 @@ public function remitos()
                 ->on('of.id_pedido','=','r.id_pedido');
                })
         ->select('r.id','r.id_producto','rub.rubro','p.descripcion','r.cantidad','p.unidad','p.preciovta' ,'r.total_linea', 'iva', 'nota_pedidos.id_factura as factura', 'of.estado as estado_fabricacion')
-        ->where('nota_pedidos.id',$id_pedido)->get();
+        ->where('nota_pedidos.id',$id_pedido)->get();     
 
-       
+    */    
+    return $renglones=   DB::table('nota_pedidos')
+        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.id_pedido')
+        ->join('productos as p','r.id_producto','=','p.id')
+        ->join('rubros as rub','p.rubro_id','=','rub.id')
+        ->join('subrubros as s','p.subrubro_id','=','s.id')
+        ->leftjoin ('ordenes_fabricacion as of',function($join){
+            $join->on('of.id_producto','=','r.id_producto')
+                ->on('of.id_pedido','=','r.id_pedido');
+               })
+               ->select(DB::raw('nota_pedidos.id as id_pedido,
+               r.id,
+               rub.rubro,
+               s.descripcion_subrubro as subrubro,
+               r.cantidad,
+               r.id_producto,
+               r.total_linea / r.cantidad as precio,
+               r.total_linea,
+               p.descripcion,
+               p.unidad, 
+               of.estado as estado_fabricacion'
+               ))
+        ->where('nota_pedidos.id',$id_pedido)->get();     
+
     }
+
+    
+
     public function obtener_totales_NP($fecha_desde,$fecha_hasta)
     {
         return $total_importe_NP=   DB::table('nota_pedidos')
@@ -583,9 +696,8 @@ public function remitos()
     {
         // if tipo_presupuesto = Muebles o tipo_presupuesto = Productos
        //  Verificar si ya genero las ordenes de fabric ->  
-       // dd("Generamos ordenes de pedido al pedido".$id_pedido);
-
-         DB::insert('insert into ordenes_fabricacion ( fecha_orden, observaciones, estado,
+ 
+       DB::insert('insert into ordenes_fabricacion ( fecha_orden, observaciones, estado,
         fecha_entrada_proceso, fecha_salida_proceso, id_producto,cantidad, id_pedido)
         select  now(), null , "Pendiente", null, null, id_producto , cantidad, id_pedido
         from renglones_notapedidos inner join productos p on p.id = renglones_notapedidos.id_producto
@@ -593,7 +705,6 @@ public function remitos()
         where id_pedido =  '.$id_pedido. ' and r.categoria = "Elaboración Propia" ') ;
       
         $redirect = redirect()->back();
-       
 
         return $redirect->with([
             'message'    => __('voyager::generic.successfully_updated')." {}",
@@ -644,9 +755,11 @@ public function remitos()
        
 
         $data->id_vendedor=auth()->id();
-        $data->monto_iva=0;
-        $data->total=$request['total_general'];
         $data->totalgravado=$request['total_general']; 
+        $data->descuento=$request['descuento']; 
+        $data->monto_iva = $data->totalgravado  * 0.21 ; //0
+        $data->total=$request['total_general'] + $data->monto_iva - $data->descuento;
+        
         $data->save();
         
         
@@ -831,7 +944,7 @@ public function remitos()
             //$renglon_np->pedido_id=$id_pedido;
             $renglon_np->id_pedido=$id_pedido; 
             $renglon_np->cantidad=$r['cantidad'];
-            //$renglon_np->producto_id=$r['id_producto'];
+           // $renglon_np->precio=$r['precio'];
             $renglon_np->id_producto=$r['id_producto'];
             $renglon_np->total_linea=$r['total-linea'];
             $renglon_np->iva=21;

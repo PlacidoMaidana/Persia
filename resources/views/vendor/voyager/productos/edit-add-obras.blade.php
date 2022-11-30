@@ -16,6 +16,7 @@
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
+        - ITEMS O PRODUCTOS DE OBRAS 
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -27,7 +28,8 @@
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
-                      <form role="form"
+                 
+                    <form role="form"
                             class="form-edit-add"
                             action="{{ $edit ? route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) : route('voyager.'.$dataType->slug.'.store') }}"
                             method="POST" enctype="multipart/form-data">
@@ -35,7 +37,7 @@
                         @if($edit)
                             {{ method_field("PUT") }}
                         @endif
-                      
+
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
@@ -56,36 +58,10 @@
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                             @endphp
 
-                               
-                                
-                                   
+
+
                             @foreach($dataTypeRows as $row)
-                            <!-- GET THE DISPLAY OPTIONS -->
-                                   @php                                     
-                                       $display_options = $row->details->display ?? NULL;
-                                       if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
-                                           $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
-                                       }
-                                   @endphp
-                                   @if (isset($row->details->legend) && isset($row->details->legend->text))
-                                   <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
-                                   @endif
-
-                                   @if (( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'      )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Id Molde'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Id Base'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='moldes'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'    )||
-                                       ( $row->getTranslatedAttribute('display_name')=='Created At'  )
-                                       )
-                                        @php
-                                            continue;
-                                        @endphp
-                                    @endif   
-
+                                <!-- GET THE DISPLAY OPTIONS -->
                                 @php
                                     $display_options = $row->details->display ?? NULL;
                                     if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
@@ -96,8 +72,17 @@
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
 
-                                @if (($row->getTranslatedAttribute('display_name')=='Rubro Id')||($row->getTranslatedAttribute('display_name')=='Subrubro Id'))
-                                    
+                                @if (( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2  '  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento' )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'   )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2' )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Unidad Compra'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Id Molde'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Id Base'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Precio Compra' )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Created At'  )
+                                     )
                                         @php
                                             continue;
                                         @endphp
@@ -249,7 +234,6 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-
 
 
 @stop
