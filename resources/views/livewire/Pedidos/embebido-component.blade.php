@@ -28,7 +28,7 @@
        
         <input type="hidden" wire:model="id_producto" id="id_producto" name="id_producto" >
         <input type="hidden" wire:model="totalgravado" id="totalgravado" name="totalgravado" >
-        <input type="text" name="detalles_string" wire:model="detalles_string">
+        <input type="hidden" name="detalles_string" wire:model="detalles_string">
       
     </div>
     <div class="row ">
@@ -59,6 +59,7 @@
           <td scope="row">{{$item['id_producto']}}</td>
           <td scope="row">{{$item['producto']}}</td>
           <td>{{$item['cantidad']}}</td>
+          <td>{{$item['unidad']}}</td>
           <td>{{number_format($item['precio'], 2, '.', ',')}}</td>
           <td>{{number_format($item['total-linea'], 2, '.', ',')}}</td>
           <td><a wire:click.prevent="quitar({{$index}})"> Quitar</a></td>
