@@ -75,12 +75,21 @@
     </tbody>
     </table>
     <br>
+    <h4 >
+      Total gravado........................: {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
+      Descuento ..............................:   {{number_format($datosPedidos->descuento, 2, '.', ',')}}  <br>
+      IVA 21....................................: {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
+      Total.......................................: {{number_format($datosPedidos->total, 2, '.', ',')}}  <br>
 
+    </h4>
+    {{-- 
     Total sin IVA: {{$datosPedidos->totalgravado}} <br>
     Descuento: {{$datosPedidos->descuento}} <br>
     IVA: {{$datosPedidos->monto_iva}} <br>
     Total general: {{$datosPedidos->total}} <br>
     <br>
+    --}}
+
     <hr />
     <br>
     Observaciones: {{$datosPedidos->observaciones}} <br>
