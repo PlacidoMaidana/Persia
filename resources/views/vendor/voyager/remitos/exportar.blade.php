@@ -76,17 +76,11 @@
     Descuento: {{$datosPedidos->descuento}} <br>
     Total general: {{$datosPedidos->total}} <br>
     <br>
-    <hr />
-    <br>
-    Observaciones: {{$datosPedidos->observaciones}} <br>
-    <br>
-    <hr />
     <br>
     {{-- 
     Forma pago: {{$texto->Forma_pago_Productos}} <br>
     --}}
-    <img class="img-responsive" 
-    src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
+    
 </body>
 
 </html>

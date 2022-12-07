@@ -92,7 +92,10 @@
 
     <hr />
     <br>
-    Observaciones: {{$datosPedidos->observaciones}} <br>
+    Observaciones:
+     <pre>{{$datosPedidos->observaciones}}
+     </pre> 
+     <br>
     <br>
     <hr />
     <br>

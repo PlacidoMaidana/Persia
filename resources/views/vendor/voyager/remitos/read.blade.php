@@ -298,8 +298,6 @@
                                     <th>producto</th>
                                     <th>cantidad</th>
                                     <th>unidad</th>
-                                    <th>precio unitario</th>
-                                    <th>importe</th>
                                     <th>estado fabricacion</th>
                                                                                  
                                   </tr>
@@ -314,8 +312,6 @@
                                     <td scope="row">{{$item->descripcion}}</td>
                                     <td>{{$item->cantidad}}</td>
                                     <td>{{$item->unidad}}</td>
-                                    <td>{{number_format($item->preciovta, 2, '.', ',')}}</td>
-                                    <td>{{number_format($item->total_linea, 2, '.', ',')}}</td>
                                     <td scope="row">{{$item->estado_fabricacion}}</td>
                                     </tr>  
                                  @endforeach 

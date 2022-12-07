@@ -26,7 +26,8 @@
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
 
-    
+    <a id="pagos"   href="{{url('/pagos_compras/'.$id_compra)}}" class="btn btn-primary">Pagos</a>
+       
     @include('voyager::multilingual.language-selector')
 @stop
 

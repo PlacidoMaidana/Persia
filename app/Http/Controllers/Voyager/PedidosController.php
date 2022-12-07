@@ -862,7 +862,7 @@ public function remitos()
      */
     public function store(Request $request)
     {
-        dd(" ACA LLEGO PATITO");die;
+      
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
