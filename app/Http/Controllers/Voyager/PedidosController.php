@@ -572,6 +572,7 @@ public function remitos()
 
     public function edit(Request $request, $id)
     {
+       // dd("Esto es la primer pantalla para editar");die;
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -677,8 +678,6 @@ public function remitos()
 
     }
 
-    
-
     public function obtener_totales_NP($fecha_desde,$fecha_hasta)
     {
         return $total_importe_NP=   DB::table('nota_pedidos')
@@ -715,7 +714,11 @@ public function remitos()
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-        
+        //dd('function update'); 
+        //dd($request['detalles_string']);
+        $tabla_detalles=unserialize($request['detalles_string']);
+        //dd($tabla_detalles);
+        // die;
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -755,18 +758,23 @@ public function remitos()
        
 
         $data->id_vendedor=auth()->id();
-        $data->totalgravado=$request['total_general']; 
-        $data->descuento=$request['descuento']; 
-        $data->monto_iva = $data->totalgravado  * 0.21 ; //0
-        $data->total=$request['total_general'] + $data->monto_iva - $data->descuento;
+        $data->totalgravado = $request['totalgravado']; 
         
+      // dd($request['totalgravado']);
+      //  $data->gravadocondescuento = $data->totalgravado - $request['descuento']; 
+      //  $data->monto_iva = ($data->gravadocondescuento )  * 0.21 ; 
+        $data->monto_iva = ($request['totalgravado'] -  $request['descuento'] )  * 0.21 ; 
+        $data->total = $request['totalgravado'] -  $request['descuento'] + $data->monto_iva;
+       
         $data->save();
         
-        
+        //dd('function update');
+        //  dd($request['detalles_string']);
         $tabla_detalles=unserialize($request['detalles_string']);
+        //dd($tabla_detalles);  
         $this->eliminar_renglones_de_pedido($data->id);
         $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
-            
+          
 
         // Get fields with images to remove before updating and make a copy of $data
         $to_remove = $dataType->editRows->where('type', 'image')
@@ -854,7 +862,7 @@ public function remitos()
      */
     public function store(Request $request)
     {
-
+      
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -876,22 +884,14 @@ public function remitos()
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        
-        
-        
-
 
         $data->id_vendedor=auth()->id();
         $data->monto_iva=0;
         $data->total=$request['total_general'];
         $data->totalgravado=$request['total_general']; 
         $data->save();
-        
-
 
         event(new BreadDataAdded($dataType,  $data));
-
-        
 
         if (!$request->has('_tagging')) {
             if (auth()->user()->can('browse', $data)) {
@@ -910,7 +910,7 @@ public function remitos()
 
             
             $tabla_detalles=unserialize($request['detalles_string']);
-           
+           // dd($request['detalles_string']);
             $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
             
             
@@ -936,9 +936,9 @@ public function remitos()
 
     public function cargar_renglones_de_pedido($tabla_detalles,$id_pedido)
     {
-        
+       
+      // dd($tabla_detalles);  
         foreach ($tabla_detalles as $r) {
-            
              
             $renglon_np=new renglones_notapedido();
             //$renglon_np->pedido_id=$id_pedido;

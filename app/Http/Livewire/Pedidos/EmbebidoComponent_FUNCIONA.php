@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Pedidos;
 use App\Models\Producto;
-use App\Models\nota_pedido;
 use Livewire\Component;
 use TCG\Voyager\Alert;
 
@@ -11,16 +10,10 @@ class EmbebidoComponent extends Component
     public $id_producto;
     public $producto;
     public $cantidad;
-    public $unidad;
     public $precio;
     public $total_linea;
-
-    public $totalgravado=0;
     
-    public $descuento=0;
-    public $gravadocondescuento=0;
-    public $monto_iva=0;
-    public $total=0;
+    public $total_general=0;
 
     public $detalles=array();
     public $detalles_string;
@@ -33,12 +26,10 @@ class EmbebidoComponent extends Component
     public function mount($renglones)
     {
       //session()->flash('El producto', $renglones[0]->descripcion);
-           //dd($renglones[0]->id_pedido);
-           //  dd($pedido['descuento']);
+         //  dd($renglones[0]->descripcion);
+
             if (!is_null($renglones)) {
-               $id_pedido=($renglones[0]->id_pedido);
-               $pedido=nota_pedido::find($id_pedido);
-               $this->totalgravado=0;
+               $this->total_general=0;
                 foreach ($renglones as $key => $value) {
                    $prod=Producto::find($value->id_producto);
 
@@ -46,36 +37,35 @@ class EmbebidoComponent extends Component
                    'id_producto'=> $value->id_producto,
                    'producto'=> $value->descripcion,   
                    'cantidad'=> $value->cantidad,
-                   'unidad'=> $value->unidad,
-                   'precio'=> $value->precio, 
+                   'precio'=> $prod['preciovta'], //$renglones->precio,
                    'total-linea'=>$value->total_linea);
                    $this->detalles[]=$a;
                    $this->detalles_string=serialize($this->detalles);
-                   $this->totalgravado+=$value->total_linea;
-                   $this->descuento = $pedido['descuento'];
-                   $this->gravadocondescuento = $this->totalgravado -$pedido['descuento']; 
-                   $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-                   $this->total=$this->gravadocondescuento  +  $this->monto_iva;
-
+                   $this->total_general+=$value->total_linea;
                 }
             }
 
+            
     }
 
     public function render()
     {
-
+        
         return view('livewire.Pedidos.embebido-component',['detalles'=>$this->detalles])
         ->extends('layouts.app')//extends('voyager::master') //
         ->section('content');
+        
+      
+        
     }
 
     public function editar_renglones($renglones)
     {
-   
-      $this->totalgravado=0;
-      $id_pedido=($renglones[0]->id_pedido);
-      $pedido=nota_pedido::find($id_pedido);
+    
+      
+      
+      $this->total_general=0;
+     
       foreach ($renglones as $key => $value) {
          $prod=Producto::find($value['id_producto']);
        
@@ -83,16 +73,11 @@ class EmbebidoComponent extends Component
            'id_producto'=> $value['id_producto'],
            'producto'=> $value['descripcion'],   
            'cantidad'=> $value['cantidad'],
-           'unidad'=> $value['unidad'],
-           'precio'=> $value['precio'], 
+           'precio'=> $prod['preciocosto'], //$renglones->precio,
            'total-linea'=>$value['total_linea']);
          $this->detalles[]=$a; 
 
-         $this->totalgravado+=$value['total_linea'];
-         $this->gravadocondescuento = $this->totalgravado -$pedido['descuento']; 
-         $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-         $this->total=$this->gravadocondescuento  +  $this->monto_iva;
-
+         $this->total_general+=$value['total_linea'];
       }
     }
     
@@ -103,28 +88,27 @@ class EmbebidoComponent extends Component
         $this->cantidad=null;
         $this->precio =null;
         
+        
     }
+
+    
 
     public function addDetalles()
     {
-
-      $this->total_linea= floatval($this->cantidad) * floatval($this->precio);
+       
+       $this->total_linea= floatval($this->cantidad) * floatval($this->precio);
         
        $a=array('id_producto'=> $this->id_producto,
        'producto'=> $this->producto,   
        'cantidad'=> $this->cantidad,
-       'unidad'=> $this->unidad,
        'precio'=>  $this->precio,
        'total-linea' =>$this->total_linea);
        $this->detalles[]=$a;     
        $this->detalles_string=serialize($this->detalles);
-
-       $this->totalgravado+=$this->total_linea;
-       $this->gravadocondescuento = $this->totalgravado - $this->descuento; 
-       $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-       $this->total=$this->gravadocondescuento  +  $this->monto_iva;
-       //dd("Los renglones    ".$this->detalles_string);
+       $this->total_general+=$this->total_linea;
        //$this->resetImput();
+
+   
     }
 
    
@@ -132,17 +116,17 @@ class EmbebidoComponent extends Component
     public function quitar($index)
     {
        //dd($this->detalles[$index]);
-       
-       $this->totalgravado-=$this->detalles[$index]['total-linea'];
-       $this->gravadocondescuento = $this->totalgravado - $this->descuento; 
-       $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-       $this->total=$this->gravadocondescuento  +  $this->monto_iva;
+       $this->total_general-=$this->detalles[$index]['total-linea'];
        unset($this->detalles[$index]);
        $this->detalles_string=serialize($this->detalles);
+       
+      
+
     }
 
     public function seleccion_producto($id,$nombre,$precio)
     {
+      
       $this->id_producto =$id;
       $this->producto =$nombre;
       $this->precio =$precio;

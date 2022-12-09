@@ -198,6 +198,49 @@ Route::get('/exportar_ordenes_fabricacion', function () {
  ->toJson();   
 
 });
+//////////////////////////////////////////////////////////
+// GRILLA DE FACTURAS DE COMPRA
+//////////////////////////////////////////////////////////
+
+Route::get('/compraspendientesdepago', function () {     
+  return datatables()->of(DB::table('facturas_compras')
+  ->join('proveedores','facturas_compras.id_proveedor','=','proveedores.id')
+  ->where('facturas_compras.estado_pago','=', 'Pendiente')
+  ->select([  'facturas_compras.id as id',
+              'facturas_compras.fecha',
+              'proveedores.razonsocial as proveedor',
+              'facturas_compras.tipo_factura',
+              'facturas_compras.pto_venta',
+              'facturas_compras.nro_factura',
+              'facturas_compras.total_factura',
+              'facturas_compras.estado_pago'
+            ]))
+  ->addColumn('check','vendor/voyager/facturas-compras/check_compra')
+  ->addColumn('accion','vendor/voyager/facturas-compras/acciones_comprapendientes')
+  ->rawColumns(['check','accion'])     
+  ->toJson();   
+
+});
+
+Route::get('/comprascanceladas', function () {     
+  return datatables()->of(DB::table('facturas_compras')
+  ->join('proveedores','facturas_compras.id_proveedor','=','proveedores.id')
+  ->where('facturas_compras.estado_pago','!=', 'Pendiente')
+  ->select([  'facturas_compras.id as id',
+              'facturas_compras.fecha',
+              'proveedores.razonsocial as proveedor',
+              'facturas_compras.tipo_factura',
+              'facturas_compras.pto_venta',
+              'facturas_compras.nro_factura',
+              'facturas_compras.total_factura',
+              'facturas_compras.estado_pago'
+            ]))
+  ->addColumn('check','vendor/voyager/facturas-compras/check_compra')
+  ->addColumn('accion','vendor/voyager/facturas-compras/acciones_compracanceladas')
+  ->rawColumns(['check','accion'])     
+  ->toJson();
+
+});
 
 
 //////////////////////////////////////////////////////////
@@ -500,6 +543,23 @@ Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
  ->toJson();    
 
 }); 
+///////////////////////////////////////////////////
+//                PAGOS DE FACTURAS DE COMPRA
+////////////////////////////////////////////////////
+
+Route::get('/pagos_compras/{id_compra}', 'App\Http\Controllers\Voyager\MovFinancieroController@pagoscompras');
+
+Route::get('/pagos_facturascompras/{id_fcompra}', function ($id_fcompra) {
+     
+ return datatables()->of(DB::table('mov_financieros')
+ ->select(['mov_financieros.id as id', 'fecha', 'detalle','modalidad_pago', 'importe_egreso'])
+ ->where('id_factura_compra' , '=' ,$id_fcompra))
+ ->addColumn('check','vendor/voyager/mov-financieros/check')
+ ->addColumn('accion','vendor/voyager/mov-financieros/acciones_egresos')
+ ->rawColumns(['check','accion'])  
+ ->toJson();    
+
+}); 
 
 ///////////////////////////////////////////////////
 //                  MOVIMIENTOS FINANCIEROS 
@@ -610,6 +670,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //+------------------------------------------------------------------+
 Route::get('/admin/mov-financieros/{id_movimiento}/edit_cobranzas', 'App\Http\Controllers\Voyager\MovFinancieroController@edit_cobranzas');
 Route::get('/admin/mov-financieros/create_cobranzas/{id_pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@cobranzas_create');
+ 
+//+------------------------------------------------------------------+
+//|                   Rutas de acción de pagos facturas compra                   |
+//+------------------------------------------------------------------+
+Route::get('/admin/mov-financieros/{id_movimiento}/edit_pagos', 'App\Http\Controllers\Voyager\MovFinancieroController@edit_pagos');
+Route::get('/admin/mov-financieros/create_pagos/{id_compra}', 'App\Http\Controllers\Voyager\MovFinancieroController@pagos_create');
  
 //Route::get('admin/movimientos_financieros/create','App\Http\Controllers\Voyager\MovFinancieroController@cobranzas_create');
 //Route::get('pagos/{id}/edit','App\Http\Controllers\ClienteBrebeController@nuevo');

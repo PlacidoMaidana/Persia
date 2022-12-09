@@ -231,6 +231,33 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         ));
 
     }
+    //***************************************
+    //               _______
+    //              |  _ _  |
+    //              |  _ _| |
+    //              |  _ _ _|
+    //              | | 
+    //              |_|
+    //
+    //      PAGOS DE FACTURAS DE COMPRA
+    //
+    //****************************************
+
+    public function pagoscompras($id_compra)
+    {
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+        $pagos= DB::table('mov_financieros')
+         ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_egreso'])
+         ->where('id_factura_compra' , '=' ,$id_compra);
+
+        return view("vendor.voyager.mov-financieros.pagos_fcompra", compact(
+            'pagos','id_compra','dataType','isSoftDeleted',           
+        ));
+
+    }
 
 
 
@@ -470,6 +497,60 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
 ///
+/// 
+public function edit_pagos(Request $request, $id)
+{
+    
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+         $view = "vendor.voyager.movimientos_financieros.edit-add-pagos";
+       
+    }
+
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+}
+///
+
+///
 public function Ingresos(Request $request , $id)
 {
   //  $slug = $this->getSlug($request);      
@@ -683,7 +764,7 @@ public function Otros_movfinancieros(Request $request , $id)
 
         }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra'));
     }
 
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
@@ -729,6 +810,48 @@ public function Otros_movfinancieros(Request $request , $id)
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido'));
     }
 
+//<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    //                                PAGOS CREATE    
+    //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    public function pagos_create(Request $request,$id_compra)
+    {
+        
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+
+
+        
+        // Check permission
+        $this->authorize('add', app($dataType->model_name));
+
+        $dataTypeContent = (strlen($dataType->model_name) != 0)
+                            ? new $dataType->model_name()
+                            : false;
+
+        foreach ($dataType->addRows as $key => $row) {
+            $dataType->addRows[$key]['col_width'] = $row->details->width ?? 100;
+        }
+
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'add');
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'add', $isModelTranslatable);
+
+        $view = 'voyager::bread.edit-add';
+
+        if (view()->exists("voyager::$slug.edit-add")) {
+          //  $view = "voyager::$slug.edit-add";  
+          $view = "vendor.voyager.mov-financieros.edit-add-pagos";
+        }
+
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra'));
+    }
 
   
 
@@ -771,8 +894,7 @@ public function Otros_movfinancieros(Request $request , $id)
        event(new BreadDataAdded($dataType,  $data));
 
        
-     //   return redirect()->route('/CobranzasPedido/{$id_nota_pedido}');
-     //  return redirect()->route('/CobranzasPedido/{id_pedido}')->with($data);
+     
      if (!$request->has('_tagging')) {
         if (auth()->user()->can('browse', $data)) {
             $redirect = redirect()->route("voyager.{$dataType->slug}.index");

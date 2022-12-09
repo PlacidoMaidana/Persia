@@ -268,7 +268,7 @@
                                     <td scope="row">{{$item->id_producto}}</td>
                                     <td scope="row">{{$item->descripcion}}</td>
                                     <td>{{$item->cantidad}}</td>
-                                    <td>{{number_format($item->preciovta, 2, '.', ',')}}</td>
+                                    <td>{{number_format($item->precio, 2, '.', ',')}}</td>
                                     <td>{{number_format($item->total_linea, 2, '.', ',')}}</td>
                                   </tr>  
                                  @endforeach 

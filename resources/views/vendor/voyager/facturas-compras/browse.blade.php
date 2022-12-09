@@ -1,5 +1,6 @@
 {{-- @extends('voyager::master') --}}
 @extends('layouts.voyager2')
+
 @section('page_title', __('voyager::generic.viewing').' '.$dataType->getTranslatedAttribute('display_name_plural'))
 
 @section('page_header')
@@ -7,15 +8,15 @@
         <h1 class="page-title">
             <i class="{{ $dataType->icon }}"></i> {{ $dataType->getTranslatedAttribute('display_name_plural') }}
         </h1>
-        {{-- 
         @can('add', app($dataType->model_name))
             <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
                 <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
             </a>
+           
         @endcan
-        --}}
         @can('delete', app($dataType->model_name))
             @include('voyager::partials.bulk-delete')
+            <a id="operar" href="javascript:;" class="btn btn-danger delete"> Borrar seleccionados</a>
         @endcan
         @can('edit', app($dataType->model_name))
             @if(!empty($dataType->order_column) && !empty($dataType->order_display_column))
@@ -76,101 +77,84 @@
                                 @endif
                             </form>
                         @endif
-             {{-- ESTO ES NUEVO --}}
 
-         <div class="panel panel-default" style="width: 100%">
+
+                    {{-- <div class="container"> --}}
+                        
+                        <div class="panel panel-default" style="width: 100%">
                           <div class="panel-heading panel-heading-nav">
                             <ul class="nav nav-tabs">
                               <li role="presentation" class="active">
-                                <a href="#one" aria-controls="one" role="tab" data-toggle="tab">Egresos</a>
-                              </li>
-                              <li role="presentation" >
-                                <a href="#two" aria-controls="two" role="tab" data-toggle="tab">Ingresos</a>
+                                <a href="#one" aria-controls="one" role="tab" data-toggle="tab">Pendientes de Pago</a>
                               </li>
                               <li role="presentation">
-                                <a href="#three" aria-controls="three" role="tab" data-toggle="tab">Otros Movimientos</a>
+                                <a href="#two" aria-controls="two" role="tab" data-toggle="tab">Canceladas</a>
                               </li>
                               
                             </ul>
                           </div>
                           <div class="panel-body" style="width: 100%">
                             <div class="tab-content">
-                                @can('add', app($dataType->model_name))
-                                <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
-                                    <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
-                                    Egreso
-                                </a>
-                                @endcan
-
                               <div role="tabpanel" class="tab-pane fade in active" id="one">
-                                <table id="Egresos" class="table table-striped table-bordered dt-responsive "  >
+                                <table id="pendientesdepago" class="table table-striped table-bordered dt-responsive nowrap"   >
                                     <thead>
                                       <tr >
                                           <th class="dt-not-orderable">
                                               <input type="checkbox" class="select_all">
                                           </th>
                                           <th>id</th>
-                                          <th>Tipo Movimiento</th>
                                           <th>Fecha</th>
-                                          <th>Modalidad de pago</th>
-                                          <th>Tipo1</th>
-                                          <th>Tipo2</th>
-                                          <th>Detalle</th>
-                                          <th>Importe</th>
-                                          <th>Operador</th>
+                                          <th>proveedor</th>
+                                          <th>Tipo</th>
+                                          <th>pto vta</th>
+                                          <th>Numero</th>
+                                          <th>Total</th>
+                                          <th>estado pago</th>
                                           <th>accion</th>
                                         </tr>
-                                    </thead>  
+                                    </thead>
+                                    
                                 </table>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="two">
-                                <table id="Ingresos" class="table table-striped table-bordered dt-responsive "   >
-                                    <thead>
-                                        <tr>
-                                            <th class="dt-not-orderable">
-                                                <input type="checkbox" class="select_all">
-                                           </th>
-                                           <th>id</th>
-                                           <th>Pedido</th>
-                                           <th>Cliente</th>
-                                           <th>Tipo Movimiento</th>
-                                           <th>Fecha</th>
-                                           <th>Modalidad de pago</th>
-                                           <th>Detalle</th>
-                                           <th>Importe</th>
-                                           <th>Operador</th>
-                                           <th>accion</th>
-                                      </tr>
-                                     </thead>
-                                 
-                                    </table>
-                              </div>
-
-                              <div role="tabpanel" class="tab-pane fade" id="three">
-                                <table id="Otros_movfinancieros" class="table table-striped table-bordered dt-responsive "   >
+                                <table id="canceladas" class="table table-striped table-bordered dt-responsive nowrap"   >
                                     <thead>
                                         <tr>
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
                                             </th>
                                             <th>id</th>
-                                            <th>Tipo Movimiento</th>
                                             <th>Fecha</th>
-                                            <th>Modalidad de pago</th>
-                                            <th>Detalle</th>
-                                            <th>Importe Ingreso</th>
-                                            <th>Importe Egreso</th>
-                                            <th>Operador</th>
+                                            <th>proveedor</th>
+                                            <th>Tipo</th>
+                                            <th>pto vta</th>
+                                            <th>Numero</th>
+                                            <th>Total</th>
+                                            <th>estado pago</th>
                                             <th>accion</th>
                                       </tr>
                                      </thead>
+                                 
                                     </table>
-                              </div>  
+                              </div>
+                               
                               </div>
                             </div>
                           </div>
                         {{-- </div> --}}
- 
+
+                  
+                    
+
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Totales</h5>
+        <p class="card-text">el total de todo</p>
+    </div>
+</div>
+
+
                         @if ($isServerSide)
                             <div class="pull-left">
                                 <div role="status" class="show-res" aria-live="polite">{{ trans_choice(
@@ -300,70 +284,55 @@
         });
     </script>
 
+
 <script>
     $(document).ready(function() {
-        $('#Egresos').dataTable( {
+        $('#pendientesdepago').dataTable( {
              "serverSide": true,
-             "ajax":"{{url('Egresos')}}",                
+             "ajax":"{{url('compraspendientesdepago')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
-                     {data: 'id', name: 'mov_financieros.id', width: '5%'},
-                     {data: 'tipo_movimiento', name: 'mov_financieros.tipo_movimiento', width: '5%'},
-                     {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
-                     {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
-                     {data: 'tipo1', name: 'Tipos_gastos.tipo1', width: '10%'},
-                     {data: 'tipo2', name: 'Tipos_gastos.tipo2', width: '10%'},
-                     {data: 'detalle', name: 'mov_financieros.detalle', width: '10%'},
-                     {data: 'importe_egreso', name: 'mov_financieros.importe_egreso', width: '10%'},
-                     {data: 'name', name: 'users.name', width: '10%'},
+                     {data: 'id', name: 'facturas_compras.id', width: '5%'},
+                     {data: 'fecha', name: 'facturas_compras.fecha', width: '5%'},
+                     {data: 'proveedor', name: 'proveedores.razonsocial', width: '5%'},
+                     {data: 'tipo_factura', name: 'facturas_compras.tipo_factura', width: '10%'},
+                     {data: 'pto_venta', name: 'facturas_compras.pto_venta', width: '10%'},
+                     {data: 'nro_factura', name: 'facturas_compras.nro_factura', width: '10%'},
+                     {data: 'total_factura', name: 'facturas_compras.total_factura', width: '10%'},
+                     {data: 'estado_pago', name: 'facturas_compras.estado_pago', width: '10%'},
                      {data: 'accion', width: '10%'},
+        
                       ]           
         } );
     } );
-</script> 
+
+
+ </script> 
 <script>
     $(document).ready(function() {
-        $('#Ingresos').dataTable( {
+        $('#canceladas').dataTable( {
              "serverSide": true,
-             "ajax":"{{url('Ingresos')}}",                
+             "ajax":"{{url('comprascanceladas')}}",                
              "columns":[
                 {data: 'check', width: '5%'},
-                     {data: 'id', name: 'mov_financieros.id', width: '5%'},
-                     {data: 'pedido', name: 'mov_financieros.id_nota_pedido', width: '5%'},
-                     {data: 'cliente', name: 'clientes.nombre', width: '5%'},
-                     {data: 'tipo_movimiento', name: 'mov_financieros.tipo_movimiento', width: '5%'},
-                     {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
-                     {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
-                     {data: 'detalle', name: 'mov_financieros.detalle', width: '10%'},
-                     {data: 'importe_ingreso', name: 'mov_financieros.importe_ingreso', width: '10%'},
-                     {data: 'name', name: 'users.name', width: '10%'},
+                     {data: 'id', name: 'facturas_compras.id', width: '5%'},
+                     {data: 'fecha', name: 'facturas_compras.fecha', width: '5%'},
+                     {data: 'proveedor', name: 'proveedores.razonsocial', width: '5%'},
+                     {data: 'tipo_factura', name: 'facturas_compras.tipo_factura', width: '10%'},
+                     {data: 'pto_venta', name: 'facturas_compras.pto_venta', width: '10%'},
+                     {data: 'nro_factura', name: 'facturas_compras.nro_factura', width: '10%'},
+                     {data: 'total_factura', name: 'facturas_compras.total_factura', width: '10%'},
+                     {data: 'estado_pago', name: 'facturas_compras.estado_pago', width: '10%'},
                      {data: 'accion', width: '10%'},
+                
                       ]           
         } );
     } );
- </script> 
-<script>
-    $(document).ready(function() {
-        $('#Otros_movfinancieros').dataTable( {
-             "serverSide": true,
-             "ajax":"{{url('Otros_movfinancieros')}}",                
-             "columns":[
-                {data: 'check', width: '5%'},
-                     {data: 'id', name: 'mov_financieros.id', width: '5%'},
-                     {data: 'tipo_movimiento', name: 'mov_financieros.tipo_movimiento', width: '5%'},
-                     {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
-                     {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
-                     {data: 'detalle', name: 'mov_financieros.detalle', width: '10%'},
-                     {data: 'importe_ingreso', name: 'mov_financieros.importe_ingreso', width: '10%'},
-                     {data: 'importe_egreso', name: 'mov_financieros.importe_egreso', width: '10%'},
-                     {data: 'name', name: 'users.name', width: '10%'},
-                     {data: 'accion', width: '10%'},
-                      ]                  
-        } );
-    } );
- </script> 
 
 
+ </script> 
+
+ 
 <script>
      function borrar(id) {
             // alert(id);
@@ -378,7 +347,9 @@
         var $bulkDeleteCount = $('#bulk_delete_count');
         var $bulkDeleteDisplayName = $('#bulk_delete_display_name');
         var $bulkDeleteInput = $('#bulk_delete_input');
-   
+        // Reposition modal to prevent z-index issues
+        // $bulkDeleteModal.appendTo('body');
+        // Bulk delete listener
         $bulkDeleteBtn.click(function () {
             var ids = [];
             var $checkedBoxes = $('input[type=checkbox]:checked').not('.select_all');
@@ -412,10 +383,4 @@
     </script>
 
 
-
 @stop
-
-
-
-
-

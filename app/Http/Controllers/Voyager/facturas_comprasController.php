@@ -344,9 +344,8 @@ public function edit(Request $request, $id)
  if (view()->exists("voyager::$slug.edit-add")) {
      $view = "voyager::$slug.edit-add";
  }
-
-// return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','totales'));
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+$id_compra=$id;
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra'));
 }
 
 public function obtener_lineas($id_factura)
@@ -514,8 +513,8 @@ public function create(Request $request)
  }
 
  $totales=$request['total_general'] ; //$this->obtener_totales_lineas($id);
- 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','totales'));
+ $id_compra=0 ; 
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','totales','id_compra' ));
 }
 
 /**
