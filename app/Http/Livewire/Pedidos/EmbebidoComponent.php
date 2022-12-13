@@ -53,7 +53,7 @@ class EmbebidoComponent extends Component
                    $this->detalles_string=serialize($this->detalles);
                    $this->totalgravado+=$value->total_linea;
                    $this->descuento = $pedido['descuento'];
-                   $this->gravadocondescuento = $this->totalgravado -$pedido['descuento']; 
+                   $this->gravadocondescuento = $this->totalgravado + $pedido['descuento']; 
                    $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
                    $this->total=$this->gravadocondescuento  +  $this->monto_iva;
 
@@ -89,7 +89,7 @@ class EmbebidoComponent extends Component
          $this->detalles[]=$a; 
 
          $this->totalgravado+=$value['total_linea'];
-         $this->gravadocondescuento = $this->totalgravado -$pedido['descuento']; 
+         $this->gravadocondescuento = $this->totalgravado + $pedido['descuento']; 
          $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
          $this->total=$this->gravadocondescuento  +  $this->monto_iva;
 
@@ -120,7 +120,7 @@ class EmbebidoComponent extends Component
        $this->detalles_string=serialize($this->detalles);
 
        $this->totalgravado+=$this->total_linea;
-       $this->gravadocondescuento = $this->totalgravado - $this->descuento; 
+       $this->gravadocondescuento = $this->totalgravado + $this->descuento; 
        $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
        $this->total=$this->gravadocondescuento  +  $this->monto_iva;
        //dd("Los renglones    ".$this->detalles_string);
@@ -134,7 +134,7 @@ class EmbebidoComponent extends Component
        //dd($this->detalles[$index]);
        
        $this->totalgravado-=$this->detalles[$index]['total-linea'];
-       $this->gravadocondescuento = $this->totalgravado - $this->descuento; 
+       $this->gravadocondescuento = $this->totalgravado + $this->descuento; 
        $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
        $this->total=$this->gravadocondescuento  +  $this->monto_iva;
        unset($this->detalles[$index]);

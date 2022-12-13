@@ -345,6 +345,7 @@ public function edit(Request $request, $id)
      $view = "voyager::$slug.edit-add";
  }
 $id_compra=$id;
+
  return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra'));
 }
 

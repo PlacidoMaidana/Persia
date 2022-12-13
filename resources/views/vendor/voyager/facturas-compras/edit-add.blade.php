@@ -25,8 +25,8 @@
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
-
-    <a id="pagos"   href="{{url('/pagos_compras/'.$id_compra)}}" class="btn btn-primary">Pagos</a>
+  
+    <a id="pagos"   href="{{url('/pagos_compras/'.$id_compra)}}" class="btn btn-primary">registro Pagos</a>
        
     @include('voyager::multilingual.language-selector')
 @stop
@@ -67,7 +67,7 @@
                                     @php
                                         $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                                     @endphp
-        
+                               
                                     @for ($i = 0; $i < count($dataTypeRows); $i++)
                                     
                                              @php
@@ -80,68 +80,7 @@
                                              @if (isset($row->details->legend) && isset($row->details->legend->text))
                                                  <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                              @endif
-{{--
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Subtotal')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif   
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Exento')
-                                             @php
-                                                 continue;
-                                             @endphp
-                                             @endif   
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Iva 10 5')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif   
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Iva 21')
-                                             @php
-                                                 continue;
-                                             @endphp
-                                             @endif                                               
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Iva 27')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif   
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Iva')
-                                             @php
-                                                 continue;
-                                             @endphp
-                                             @endif   
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Monto Perc Iibb')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif   
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Monto Percepcion Iva')
-                                             @php
-                                                 continue;
-                                             @endphp
-                                             @endif  
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Monto Percep Ganancias')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif  
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Otros Impuestos')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif  
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Total Impuestos')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif  
-                                             @if ( $row->getTranslatedAttribute('display_name') =='Total Factura')
-                                               @php
-                                                   continue;
-                                               @endphp
-                                             @endif  
---}}
+
                                              @if ($row->getTranslatedAttribute('display_name')=='proveedor')
                                                 {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                                                 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Boton + proveedor          <<<<<<<<<<<<<<<<<<<<<<<<<
@@ -183,8 +122,7 @@
                                                             + proveedor
                                                           </button>
                                                         {{-- <a href="{{url('admin/clientes/create2/si')}}" class="btn btn-light">+ proveedor</a> --}}
-                                                    
-                                                    
+
                                                     </label>
                                                     @include('voyager::multilingual.input-hidden-bread-edit-add')
                                                     @if (isset($row->details->view))
@@ -362,6 +300,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
      <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script> --}}
   
+
     <script>
         var params = {};
         var $file;

@@ -15,6 +15,7 @@
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
         - Pagos de la factura de Compra
+       
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -24,8 +25,7 @@
     <div class="page-content edit-add container-fluid">
         <div class="row">
             <div class="col-md-6">
-
-                
+               
 
                 <div class="panel panel-bordered">
                     <!-- form start -->
@@ -69,11 +69,16 @@
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
                                     <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
-                                @if (( $row->getTranslatedAttribute('display_name')=='Tipo Movimiento'  )||
-                                   ( $row->getTranslatedAttribute('display_name')=='Importe Ingreso'    )||
-                                   ( $row->getTranslatedAttribute('display_name')=='Id Nota Pedido'  )||
-                                   ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
-                   )
+                                @if (( $row->getTranslatedAttribute('display_name')=='Id Nota Pedido'  )||
+                                ( $row->getTranslatedAttribute('display_name')=='Tipo Movimiento'  )||
+                                ( $row->getTranslatedAttribute('display_name')=='Importe Ingreso'  )||
+                                ( $row->getTranslatedAttribute('display_name')=='Nro Recibo'  )||
+                                ( $row->getTranslatedAttribute('display_name')=='Pto Vta'    )||
+                                ( $row->getTranslatedAttribute('display_name')=='Operador'    )||
+                                ( $row->getTranslatedAttribute('display_name')=='Tipo gasto'  )||
+                                ( $row->getTranslatedAttribute('display_name')=='proveedores'  )||
+                                ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
+                                 )
                                   @php
                                      continue;
                                   @endphp
@@ -104,11 +109,14 @@
 
                         </div><!-- panel-body -->
 
-                     
-
-                        <input type="hidden" name="id_factura_compra" value="{{$id_compra}}">
-                        <input type="hidden" name="tipo_movimiento" value="Gastos/Egresos">
                        
+                        <input type="hidden" name="id_usuario" value="{{$usuario}}">
+                        <input type="hidden" name="id_factura_compra" value="{{$id_compra}}">
+                        <input type="hidden" name="id_nota_pedido" value=0>
+                        <input type="hidden" name="tipo_movimiento" value="Gastos/Egresos">
+                        <input type="hidden" name="id_tipo_gasto" value="{{$id_tipo_gasto}}">
+                        <input type="hidden" name="id_proveedor" value="{{$id_proveedor}}">
+               
         
 
 

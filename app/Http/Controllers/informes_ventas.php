@@ -16,25 +16,18 @@ class informes_ventas extends Controller
     public function en_rango_de_fechas($from,$to)
     {
 
-       return $datos = datatables()->of(DB::table('renglones_notapedidos')
-           ->join('nota_pedidos as np','np.id','=','renglones_notapedidos.id_pedido')
-           ->leftjoin('facturas_ventas as f','f.id','=','renglones_notapedidos.id_factura')
-           ->join('productos as p','p.id','=','renglones_notapedidos.id_producto')
-           ->join('rubros as r','r.id','=','p.rubro_id')
-           ->join('subrubros as sr','sr.id','=','p.subrubro_id')
-           ->join('clientes as c','c.id','=','np.id_cliente')
-           ->whereBetween('np.created_at',array($from,$to) )
-           ->select(['f.tipo_factura',
-                     'f.pto_venta', 
-                     'f.nro_factura', 
-                     'np.fecha',
-                     'c.cuit',
+       return $datos = datatables()->of(DB::table('nota_pedidos')
+           ->join('clientes as c','c.id','=','nota_pedidos.id_cliente')
+           ->leftjoin('empleados as v','v.id','=','nota_pedidos.id_vendedor')
+           ->whereBetween('nota_pedidos.created_at',array($from,$to) )
+           ->select(['nota_pedidos.fecha',
+                     'nota_pedidos.tipo_presupuesto', 
                      'c.nombre',
-                     'r.rubro',
-                     'sr.descripcion_subrubro',
-                     'p.descripcion',
-                     'renglones_notapedidos.cantidad',
-                     'renglones_notapedidos.total_linea'  ]))
+                     'c.cuit',
+                     'nota_pedidos.estado',
+                     'nota_pedidos.estado_pago',
+                     'v.apellidoynombre',
+                     'nota_pedidos.total'  ]))
             ->toJson();  
      
     }

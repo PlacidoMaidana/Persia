@@ -17,24 +17,20 @@ class informes_compras extends Controller
     public function en_rango_de_fechas($from,$to)
     {
 
-       return $datos = datatables()->of(DB::table('detalles_facturas_compras')
-           ->join('facturas_compras as f','f.id','=','detalles_facturas_compras.id_factura_compra')
-           ->join('productos as p','p.id','=','detalles_facturas_compras.id_producto')
-           ->join('rubros as r','r.id','=','p.rubro_id')
-           ->join('subrubros as sr','sr.id','=','p.subrubro_id')
-           ->join('proveedores as c','c.id','=','f.id_proveedor')
-           ->whereBetween('f.created_at',array($from,$to) )
-           ->select(['f.tipo_factura',
-                     'f.pto_venta', 
-                     'f.nro_factura', 
-                     'f.fecha',
-                     'c.cuit',
+       return $datos = datatables()->of(DB::table('facturas_compras')
+           ->join('proveedores as c','c.id','=','facturas_compras.id_proveedor')
+           ->join('tipos_gastos as tg','tg.id','=','facturas_compras.id_tipo_gasto')
+           ->whereBetween('facturas_compras.created_at',array($from,$to) )
+           ->select(['facturas_compras.fecha',
                      'c.razonsocial',
-                     'r.rubro',
-                     'sr.descripcion_subrubro',
-                     'p.descripcion',
-                     'detalles_facturas_compras.cantidad',
-                     'detalles_facturas_compras.total_linea'  ])) 
+                     'c.cuit',
+                     'facturas_compras.tipo_factura',
+                     'facturas_compras.pto_venta', 
+                     'facturas_compras.nro_factura', 
+                     'facturas_compras.total_factura', 
+                     'facturas_compras.estado_pago', 
+                     'tg.tipo1', 
+                     'tg.tipo2'  ])) 
          
             ->toJson();  
      

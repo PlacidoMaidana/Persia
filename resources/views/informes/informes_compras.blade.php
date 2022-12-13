@@ -27,17 +27,16 @@
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
     <thead>
       <tr>
+        <th>fecha</th>
+        <th>proveedor</th>
+        <th>cuit</th>
         <th>tipo_factura</th>
         <th>pto_venta</th>
         <th>nro_factura</th>
-        <th>fecha</th>
-        <th>cuit</th>
-        <th>proveedor</th>
-        <th>rubro</th>
-        <th>subrubro</th>
-        <th>producto</th>
-        <th>cantidad</th>
-        <th>total_linea</th>
+        <th>total factura</th>
+        <th>estado pago</th>
+        <th>tipo gasto 1</th>
+        <th>tipo gasto 2</th>
       </tr>
      </thead>
      
@@ -76,17 +75,16 @@
     "paging": true,
     "searching": true,
     "columns":[
-            {data: 'tipo_factura', name:'f.tipo_factura', width: '5%'},
-            {data: 'pto_venta', name: 'f.pto_venta', width: '5%'},
-            {data: 'nro_factura', name: 'f.nro_factura', width: '10%'},
-            {data: 'fecha', name: 'f.fecha', width: '5%'},
-            {data: 'cuit', name: 'c.cuit', width: '10%'},
+            {data: 'fecha', name: 'facturas_compras.fecha', width: '5%'},
             {data: 'razonsocial', name: 'c.razonsocial', width: '10%'},
-            {data: 'rubro', name: 'r.rubro', width: '10%'},
-            {data: 'descripcion_subrubro', name:'sr.descripcion_subrubro', width: '10%'},
-            {data: 'descripcion', name: 'p.descripcion', width: '10%'},
-            {data: 'cantidad', name: 'detalles_facturas_compras.cantidad', width: '10%'},
-            {data: 'total_linea', name: 'detalles_facturas_compras.total_linea', width: '10%'},
+            {data: 'cuit', name: 'c.cuit', width: '10%'},
+            {data: 'tipo_factura', name:'facturas_compras.tipo_factura', width: '5%'},
+            {data: 'pto_venta', name: 'facturas_compras.pto_venta', width: '5%'},
+            {data: 'nro_factura', name: 'facturas_comprasf.nro_factura', width: '10%'},
+            {data: 'total_factura', name: 'facturas_compras.total_factura', width: '10%'},
+            {data: 'estado_pago', name: 'facturas_compras.estado_pago', width: '10%'},
+            {data: 'tipo1', name: 'tg.tipo1', width: '10%'},
+            {data: 'tipo2', name: 'tg.tipo2', width: '10%'},
              ]        
 });
 
