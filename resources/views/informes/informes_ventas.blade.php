@@ -22,8 +22,11 @@
       <button  type="button" id="informe_vtas"  onclick="filtrar()" class="btn btn-sm btn-primary" >Filtrar ventas</button>
     </div>    
 </div>
-<a href="informes_ventas/export/" class="btn btn-sm btn-primary">Excel</a>
-
+<div class="row ">
+  <div class="col-md-2  ">
+    <button  type="button" id="ver ventas"  onclick="excelExport()" class="btn btn-sm btn-primary" >Excel</button>
+  </div>    
+</div>
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
     <thead>
       <tr>
@@ -87,4 +90,9 @@
   }
 </script>
 
+<script>
+   function excelExport()   {
+    window.location.href = 'http://127.0.0.1:8000/informes_ventas/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+   }
+</script>
 @stop

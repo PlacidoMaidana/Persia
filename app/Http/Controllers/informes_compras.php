@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Yajra\Datatables\ButtonsServiceProvider;
+use App\Exports\informe_comprasExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
 class informes_compras extends Controller
 {
@@ -35,7 +38,15 @@ class informes_compras extends Controller
             ->toJson();  
      
     }
+    public function export($desde,$hasta) 
+    {
+      $aa = new Informe_comprasExport();
+      $aa->desde=$desde;
+      $aa->hasta=$hasta;
+       return Excel::download($aa, 'informe_compras.xlsx');
+      //dd($aa)  ;
 
+    } 
     
 }
 
