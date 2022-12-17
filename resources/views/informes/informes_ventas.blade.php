@@ -68,7 +68,7 @@
 
   function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='http://127.0.0.1:8000/informevtas_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    var filtro ='/informevtas_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
   
     $('#example').dataTable( {
     "serverSide": true,
@@ -92,7 +92,7 @@
 
 <script>
    function excelExport()   {
-    window.location.href = 'http://127.0.0.1:8000/informes_ventas/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    window.location.href = '/informes_ventas/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 @stop

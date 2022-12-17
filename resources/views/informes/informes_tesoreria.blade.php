@@ -98,7 +98,7 @@
 
 <script>
    function excelExport()   {
-    window.location.href = 'http://127.0.0.1:8000/informes_tesoreria/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    window.location.href = '/informes_tesoreria/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 @stop

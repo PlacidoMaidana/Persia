@@ -71,11 +71,11 @@
     </table>
     <h4 class="card-title">
    
-        Total gravado........................: {{number_format($totalgravado, 2, '.', ',')}} <br>
-        Descuento............................: {{number_format($descuento, 2, '.', ',')}} <br>
+        Total gravado .......................: {{number_format($totalgravado, 2, '.', ',')}} <br>
+        Recargo / Descuento (+ / -) .......: {{number_format($descuento, 2, '.', ',')}} <br>
         Gravado con descuento .....: {{number_format($gravadocondescuento, 2, '.', ',')}}  <br>
-        IVA 21......................................: {{number_format($monto_iva, 2, '.', ',')}}  <br>
-        Total.......................................: {{number_format($total, 2, '.', ',')}}  <br>
+        IVA 21 ......................................: {{number_format($monto_iva, 2, '.', ',')}}  <br>
+        Total ......................................: {{number_format($total, 2, '.', ',')}}  <br>
 
       </h4>
 
