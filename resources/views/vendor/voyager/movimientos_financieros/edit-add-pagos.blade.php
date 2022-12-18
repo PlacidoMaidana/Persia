@@ -15,6 +15,7 @@
         <i class="{{ $dataType->icon }}"></i>  
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
         - REGISTRO DE EGRESOS
+
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -102,8 +103,11 @@
                             @endforeach
 
                         </div><!-- panel-body -->
-
+                        
+                        
+                        <input type="hidden" name="id_usuario" value="{{$usuario}}">
                         <input type="hidden" name="id_nota_pedido" value=0>
+                        <input type="hidden" name="id_factura_compra" value=0>
                         <input type="hidden" name="tipo_movimiento" value="Gastos/Egresos">
                     
                         <div class="panel-footer">

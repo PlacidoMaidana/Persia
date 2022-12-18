@@ -252,7 +252,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $pagos= DB::table('mov_financieros')
          ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_egreso'])
          ->where('id_factura_compra' , '=' ,$id_compra);
-
+        $id_compra_pago=$id_compra;
         return view("vendor.voyager.mov-financieros.pagos_fcompra", compact(
             'pagos','id_compra','dataType','isSoftDeleted',           
         ));
@@ -342,6 +342,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 
     public function edit(Request $request, $id)
     {
+        $usuario=auth()->id();
         $slug = $this->getSlug($request);
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
@@ -384,7 +385,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
             $view = "voyager::$slug.edit-add";
         }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
     }
 
     // POST BR(E)AD
@@ -443,6 +444,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
 /// 
     public function edit_cobranzas(Request $request, $id)
     {
+        $usuario=auth()->id();
       //  $slug = $this->getSlug($request);      
         $slug = "movimientos_financieros";
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -494,13 +496,13 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
            
         }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
     }
 ///
 /// 
 public function edit_pagos(Request $request, $id)
 {
-    
+    $usuario=auth()->id();
     $slug = "movimientos_financieros";
     $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
     $isSoftDeleted = false;
@@ -546,7 +548,7 @@ public function edit_pagos(Request $request, $id)
        
     }
 
-    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
 }
 ///
 
@@ -733,6 +735,7 @@ public function Otros_movfinancieros(Request $request , $id)
 
     public function create(Request $request)
     {
+        $usuario=auth()->id();
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -763,16 +766,16 @@ public function Otros_movfinancieros(Request $request , $id)
             $view = "voyager::$slug.edit-add";
 
         }
-
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra'));
+        // dd($usuario);
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
     }
 
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
     //                                COBRANZAS CREATE    
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
-    public function cobranzas_create(Request $request,$id_pedido)
+    public function cobranzas_create(Request $request,$id_pedido )
     {
-        
+        $usuario=auth()->id();
         $slug = "movimientos_financieros";
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         $isSoftDeleted = false;
@@ -807,7 +810,7 @@ public function Otros_movfinancieros(Request $request , $id)
           $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
         }
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido','usuario'));
     }
 
 //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
@@ -815,13 +818,11 @@ public function Otros_movfinancieros(Request $request , $id)
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
     public function pagos_create(Request $request,$id_compra)
     {
-        
+        $usuario=auth()->id();
         $slug = "movimientos_financieros";
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         $isSoftDeleted = false;
         $model = app($dataType->model_name);
-
-
         
         // Check permission
         $this->authorize('add', app($dataType->model_name));
@@ -849,8 +850,11 @@ public function Otros_movfinancieros(Request $request , $id)
           //  $view = "voyager::$slug.edit-add";  
           $view = "vendor.voyager.mov-financieros.edit-add-pagos";
         }
-
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra'));
+        $reg_compras = DB::table('facturas_compras')->where('id', $id_compra)->first();
+        $id_tipo_gasto=$reg_compras->id_tipo_gasto;
+        $id_proveedor=$reg_compras->id_proveedor;
+       // dd('pagos compras',$usuario,$id_tipo_gasto,$id_proveedor);
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra','usuario','id_tipo_gasto','id_proveedor'));
     }
 
   
@@ -864,11 +868,12 @@ public function Otros_movfinancieros(Request $request , $id)
      *
      * @return \Illuminate\Http\RedirectResponse
      */
+
     public function store(Request $request)
     {
         
         $slug = $this->getSlug($request);
-
+        //dd($request['id_usuario'],$request['id_factura_compra'] );
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         // Check permission
@@ -881,20 +886,20 @@ public function Otros_movfinancieros(Request $request , $id)
        //+-------------------------------------------------------------------------+
        //+     Agregando el id_nota_pedido  tipo_movimiento                        +
        //+-------------------------------------------------------------------------+
-            if (!empty($request['id_nota_pedido'])) {
+       
+            if (!empty($request['id_nota_pedido']) or !empty($request['id_factura_compra']) ) {
               $data->id_nota_pedido=$request['id_nota_pedido'];
-              $data->tipo_movimiento=$request['tipo_movimiento'];
-            
-              $data->save();
+              $data->id_factura_compra=$request['id_factura_compra'];
+              $data->id_tipo_gasto=$request['id_tipo_gasto']; 
+              $data->id_proveedor=$request['id_proveedor']; 
             }
-       
-       
-
-
+              $data->tipo_movimiento=$request['tipo_movimiento'];
+              $data->id_usuario=$request['id_usuario'];
+              
+              $data->save();
+              
        event(new BreadDataAdded($dataType,  $data));
 
-       
-     
      if (!$request->has('_tagging')) {
         if (auth()->user()->can('browse', $data)) {
             $redirect = redirect()->route("voyager.{$dataType->slug}.index");

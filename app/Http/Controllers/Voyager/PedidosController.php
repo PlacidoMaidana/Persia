@@ -763,8 +763,8 @@ public function remitos()
       // dd($request['totalgravado']);
       //  $data->gravadocondescuento = $data->totalgravado - $request['descuento']; 
       //  $data->monto_iva = ($data->gravadocondescuento )  * 0.21 ; 
-        $data->monto_iva = ($request['totalgravado'] -  $request['descuento'] )  * 0.21 ; 
-        $data->total = $request['totalgravado'] -  $request['descuento'] + $data->monto_iva;
+        $data->monto_iva = ($request['totalgravado'] +  $request['descuento'] )  * 0.21 ; 
+        $data->total = $request['totalgravado'] +  $request['descuento'] + $data->monto_iva;
        
         $data->save();
         

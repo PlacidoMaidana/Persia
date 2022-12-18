@@ -1,7 +1,8 @@
 
  <td class="no-sort no-click bread-actions">
-<a href="{{url('/admin/ordenes_fabricacion/'.$id_orden_fabricacion.'/edit')}}" > <i class="voyager-search"></i> {{$descripcion}} </a>
- {{--<a href="{{url('/pagar_pedidos/'.$id_pedido)}}" > <i class="voyager-check"></i> Pagar {{$id_pedido}}</a> --}}
+ {{--
+    <a href="{{url('/admin/ordenes_fabricacion/'.$id_orden_fabricacion.'/edit')}}" > <i class="voyager-search"></i> {{$descripcion}} </a>
+<a href="{{url('/pagar_pedidos/'.$id_pedido)}}" > <i class="voyager-check"></i> Pagar {{$id_pedido}}</a> --}}
  {{-- aqui podriamos cargar la informacion requerida para la creacion del movimiento financiero a variables de session --}}
 {{--
 

@@ -19,6 +19,8 @@
            {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     --}}
            Nuevo Egreso
+      
+       
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -74,9 +76,11 @@
                                      ( $row->getTranslatedAttribute('display_name')=='Tipo Movimiento'  )||
                                      ( $row->getTranslatedAttribute('display_name')=='Importe Ingreso'  )||
                                      ( $row->getTranslatedAttribute('display_name')=='Nro Recibo'  )||
-                                     ( $row->getTranslatedAttribute('display_name')=='Pto Vta'    )||
+                                     ( $row->getTranslatedAttribute('display_name')=='Pto Vta'   )||
+
                                      ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
-                                )
+                                   )
+                                  
                                    @php
                                        continue;
                                    @endphp
@@ -105,7 +109,9 @@
                             @endforeach
 
                         </div><!-- panel-body -->
+                        <input type="hidden" name="id_usuario" value="{{$usuario}}">
                         <input type="hidden" name="id_nota_pedido" value=0>
+                        <input type="hidden" name="id_factura_compra" value=0>
                         <input type="hidden" name="tipo_movimiento" value="Gastos/Egresos">
                     
                         <div class="panel-footer">

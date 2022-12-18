@@ -22,22 +22,22 @@
       <button  type="button" id="informe_vtas"  onclick="filtrar()" class="btn btn-sm btn-primary" >Filtrar ventas</button>
     </div>    
 </div>
-<a href="informes_ventas/export/" class="btn btn-sm btn-primary">Excel</a>
-
+<div class="row ">
+  <div class="col-md-2  ">
+    <button  type="button" id="ver ventas"  onclick="excelExport()" class="btn btn-sm btn-primary" >Excel</button>
+  </div>    
+</div>
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
     <thead>
       <tr>
-        <th>tipo_factura</th>
-        <th>pto_venta</th>
-        <th>nro_factura</th>
         <th>fecha</th>
-        <th>cuit</th>
+        <th>tipo presupuesto</th>
         <th>cliente</th>
-        <th>rubro</th>
-        <th>subrubro</th>
-        <th>producto</th>
-        <th>cantidad</th>
-        <th>total_linea</th>
+        <th>cuit</th>
+        <th>estado</th>
+        <th>estado pago</th>
+        <th>vendedor</th>
+        <th>total</th>
       </tr>
      </thead>
      
@@ -68,7 +68,7 @@
 
   function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='http://127.0.0.1:8000/informevtas_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    var filtro ='/informevtas_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
   
     $('#example').dataTable( {
     "serverSide": true,
@@ -76,21 +76,23 @@
     "paging": true,
     "searching": true,
     "columns":[
-            {data: 'tipo_factura', name:'f.tipo_factura', width: '5%'},
-            {data: 'pto_venta', name: 'f.pto_venta', width: '5%'},
-            {data: 'nro_factura', name: 'f.nro_factura', width: '10%'},
-            {data: 'fecha', name: 'np.fecha', width: '5%'},
-            {data: 'cuit', name: 'c.cuit', width: '10%'},
+            {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
+            {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
             {data: 'nombre', name: 'c.nombre', width: '10%'},
-            {data: 'rubro', name: 'r.rubro', width: '10%'},
-            {data: 'descripcion_subrubro', name:'sr.descripcion_subrubro', width: '10%'},
-            {data: 'descripcion', name: 'p.descripcion', width: '10%'},
-            {data: 'cantidad', name: 'renglones_notapedidos.cantidad', width: '10%'},
-            {data: 'total_linea', name: 'renglones_notapedidos.total_linea', width: '10%'},
+            {data: 'cuit', name: 'c.cuit', width: '10%'},
+            {data: 'estado', name: 'nota_pedidos.estado',width: '10%'},
+            {data: 'estado_pago', name: 'nota_pedidos.estado_pago',width: '10%'},
+            {data: 'apellidoynombre', name:'v.apellidoynombre',width: '10%'},
+            {data: 'total', name: 'nota_pedidos.total', width: '10%'},
              ]        
 });
    
   }
 </script>
 
+<script>
+   function excelExport()   {
+    window.location.href = '/informes_ventas/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+   }
+</script>
 @stop
