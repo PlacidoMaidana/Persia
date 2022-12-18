@@ -19,10 +19,10 @@ class informes_flujofinanciero extends Controller
  
     public function en_rango_de_fechas($anio)
     {
-     
+    
       return $egresosmes = datatables()->of(DB::table('mov_financieros')
       ->join ('tipos_gastos','mov_financieros.id_tipo_gasto','=','tipos_gastos.id')
-      -> where ('mov_financieros.tipo_movimiento', '=' ,'Gastos/Egresos')
+      -> where ('mov_financieros.tipo_movimiento','=','Gastos/Egresos')
       //-> where (DB::raw('year(mov_financieros.fecha)', '=' ,$anio))
       ->select(['id_tipo_gasto', 'tipos_gastos.tipo1', 'tipos_gastos.tipo2', 
                DB::raw('SUM(IF(MONTH(fecha)=1, importe_egreso, NULL)) AS Ene'),
@@ -40,7 +40,7 @@ class informes_flujofinanciero extends Controller
             
                ->groupBy('id_tipo_gasto','tipos_gastos.tipo1', 'tipos_gastos.tipo2'))
             ->toJson();  
-      
+           
     }
     
     
