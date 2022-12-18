@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    
+    <link rel="stylesheet" href="css/grid2.css">
     <style>
 		table {
 			border:1px solid #b3adad;
@@ -32,6 +32,20 @@
     
     {{-- <img class="img-responsive" 
     src="{{asset("images\cabeza.jpg")}}"  alt=""> --}}
+
+    <div class="container">
+
+      <div class="filas">
+          <div class="cabeza">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex, cupiditate.</div>
+          <div class="cuerpo">Lorem ipsum dolor sit amet.</div>
+          <div class="pie">Lorem ipsum dolor sit amet.</div>
+      </div>
+      </div>
+      
+
+
+
+
 
     <img class="img-responsive" 
     src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
