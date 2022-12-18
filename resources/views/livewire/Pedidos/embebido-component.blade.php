@@ -87,6 +87,7 @@
 <script>
   function elegir(id,nom,precio)
   { 
+    
    $('#productos').modal('hide');   
    Livewire.emit('actualiza', id, nom,precio);    
   

@@ -1,0 +1,83 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html{
+    height: 100%;
+    width: 100%;
+}
+body{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    min-height: 100%;
+}
+.container {
+    font-family: arial;
+    font-size: 10px;
+    margin: 80px;
+    width: 700px;
+    height: 800px;
+    /*outline: dashed 1px black;*/
+  }
+
+
+  p {
+    /* Center horizontally*/
+    text-align: center;
+  }
+
+.filas{
+    display: grid;
+    grid-template-rows: 181px 438px 181px;
+}
+.grid{
+    display: grid;
+    grid-template-columns: 10% 90%;
+}
+.lateral {
+        background-color: #C32927;
+        background-image: url("../images/remitos/lateral-2.gif");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        /*padding: 1em;*/
+        /*width: 250px;*/
+        height: 100%;       
+        
+  }
+.grid div{
+    background-color: #ffffff;
+    background-image: url("../images/remitos/cuerpo.gif");
+    /*padding: 1em;*/
+}
+.grid div:hover {
+    border: 1px solid #F87405;
+}
+.cuerpo {
+    background-color: #ffffff;
+    background-image: url("../images/remitos/cuerpo.gif");
+    background-size: 100% 100%;
+    width: 77%;
+    padding-left: 110px;
+
+    /*padding: 1em;*/
+}
+
+.cabeza{
+    background-color: #FCB923;
+    background-image: url("../images/remitos/cabeza.gif");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 1em;
+    width: 90%;
+    height:100px;
+}
+.pie{
+    background-color: #FCB923;
+    background-image: url("../images/remitos/pie.gif");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    padding: 1em;
+    width: 90%;
+    height:100px;
+}
