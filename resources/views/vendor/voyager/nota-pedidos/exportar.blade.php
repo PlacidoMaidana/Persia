@@ -98,7 +98,10 @@
 
                <hr />
                <br>
-               Observaciones:
+               <p>
+
+
+                Observaciones:
                 <pre>{{$datosPedidos->observaciones}}
                 </pre> 
                 <br>
@@ -108,6 +111,9 @@
                Forma pago: {{$texto->Forma_pago_Productos}} <br>
               
 
+
+               </p>
+               
               
 
           </div>
