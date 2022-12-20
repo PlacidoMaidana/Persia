@@ -9,13 +9,8 @@
 
 <div class="form-group col-md-2 ">
     <label for="">Año</label>
-    <input type="year" id="fecha_hasta" class="form-control" placeholder="" aria-describedby="helpId">
+    <input type="year" id="anio" class="form-control" placeholder="" aria-describedby="helpId">
     <small id="helpId" class="text-muted">Año</small>
-</div>
-<div class="form-group col-md-2 ">
-  <label for="">filtro</label>
-  <input type="year" id="fecha_hasta" class="form-control" placeholder="" aria-describedby="helpId">
-  <small id="helpId" class="text-muted">filtro</small>
 </div>
 
 <div class="row ">
@@ -76,8 +71,8 @@
 
   function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='/informeflujofinanciero_rango_de_fechas/'+$("#anio").val();
-  
+    var filtro ='/informeflujofinanciero_rango_de_fechas/'+ $("#anio").val();
+    
     $('#example').dataTable( {
     "serverSide": true,
     "ajax":filtro,

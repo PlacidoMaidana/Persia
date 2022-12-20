@@ -15,6 +15,7 @@
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
         - Cobranzas de la Nota de Pedido
+        
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop
@@ -73,6 +74,7 @@
                                    ( $row->getTranslatedAttribute('display_name')=='Importe Egreso'    )||
                                    ( $row->getTranslatedAttribute('display_name')=='Tipo gasto'  )||
                                    ( $row->getTranslatedAttribute('display_name')=='Id Nota Pedido'  )||
+                                   ( $row->getTranslatedAttribute('display_name')=='proveedores'  )||
                                    ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
                    )
                                   @php
@@ -105,12 +107,12 @@
 
                         </div><!-- panel-body -->
 
-                     
-
+                        <input type="hidden" name="id_usuario" value="{{$usuario}}">
                         <input type="hidden" name="id_nota_pedido" value="{{$id_pedido}}">
                         <input type="hidden" name="tipo_movimiento" value="Cobranza/Ingresos">
-                       
-        
+                        <input type="hidden" name="id_proveedor" value=0>
+                        <input type="hidden" name="id_tipo_gasto" value=0>
+                     
 
 
                         <div class="panel-footer">

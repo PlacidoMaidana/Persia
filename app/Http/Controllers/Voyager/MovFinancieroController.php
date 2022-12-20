@@ -773,7 +773,7 @@ public function Otros_movfinancieros(Request $request , $id)
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
     //                                COBRANZAS CREATE    
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
-    public function cobranzas_create(Request $request,$id_pedido )
+    public function cobranzas_create(Request $request,$id_pedido)
     {
         $usuario=auth()->id();
         $slug = "movimientos_financieros";
@@ -809,7 +809,7 @@ public function Otros_movfinancieros(Request $request , $id)
           //  $view = "voyager::$slug.edit-add";  
           $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
         }
-
+      // dd('cobranzas',$usuario);
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido','usuario'));
     }
 
@@ -873,7 +873,7 @@ public function Otros_movfinancieros(Request $request , $id)
     {
         
         $slug = $this->getSlug($request);
-        //dd($request['id_usuario'],$request['id_factura_compra'] );
+       
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         // Check permission
@@ -895,6 +895,7 @@ public function Otros_movfinancieros(Request $request , $id)
             }
               $data->tipo_movimiento=$request['tipo_movimiento'];
               $data->id_usuario=$request['id_usuario'];
+             // dd($request['id_usuario']);
               
               $data->save();
               
