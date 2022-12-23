@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 
 
-class iva_compras extends Controller
+class iva_comprasController extends Controller
 {
      public function index()
      {

@@ -72,9 +72,9 @@
 
   function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='/informeproduccion_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
-  
-    $('#example').dataTable( {
+    var filtro = "{{url('/informeproduccion_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+   
+    $('#example').DataTable( {
     "serverSide": true,
     "ajax":filtro,
     "paging": true,
@@ -97,8 +97,8 @@
   }
 </script>
 <script>
-   function excelExport()   {
-    window.location.href = '/informes_produccion/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+   function excelExport()   {    
+    window.location.href = "{{url('/informes_produccion/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 @stop

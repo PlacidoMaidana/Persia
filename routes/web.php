@@ -46,23 +46,23 @@ Route::get('/admin/remitos/{id_pedido}/ver_remito', 'App\Http\Controllers\Voyage
 
 
 Route::get('/Remitos','App\Http\Controllers\Voyager\PedidosController@remitos');
-Route::get('/IVAcompras','App\Http\Controllers\iva_compras@index');
+Route::get('/IVAcompras','App\Http\Controllers\iva_comprasController@index');
 Route::get('/IVAventas','App\Http\Controllers\iva_ventas@index');
 Route::get('/Informeventas','App\Http\Controllers\informes_ventas@index');
 Route::get('/Informecompras','App\Http\Controllers\informes_compras@index');
 Route::get('/Informeproduccion','App\Http\Controllers\informes_produccion@index');
 Route::get('/Informetesoreria','App\Http\Controllers\informes_tesoreria@index');
 Route::get('/informe_productos', 'App\Http\Controllers\informesProductos@index');
-Route::get('/informe_flujofinanciero', 'App\Http\Controllers\informes_flujofinanciero@index');
+Route::get('/informe_flujofinanciero', 'App\Http\Controllers\informes_flujofinancieroController@index');
 
 Route::get('/ivavtas_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_ventas@en_rango_de_fechas');//ruta que devuelve datos
-Route::get('/ivacomprasen_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_compras@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/ivacomprasen_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_comprasController@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informevtas_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_ventas@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informecompras_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_compras@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informeproduccion_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_produccion@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informetesoreria_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_tesoreria@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/vtasproductos_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\informesProductos@en_rango_de_fechas');//ruta que devuelve datos
-Route::get('/informeflujofinanciero_rango_de_fechas/{anio}','App\Http\Controllers\informes_flujofinanciero@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/informeflujofinanciero_rango_de_fechas/{anio}','App\Http\Controllers\informes_flujofinancieroController@en_rango_de_fechas');//ruta que devuelve datos
 
 Route::get('productos/export/{from}/{to}', 'App\Http\Controllers\informesProductos@export');
 Route::get('informes_compras/export/{from}/{to}', 'App\Http\Controllers\informes_compras@export');
@@ -71,7 +71,7 @@ Route::get('informes_produccion/export/{from}/{to}', 'App\Http\Controllers\infor
 Route::get('informes_tesoreria/export/{from}/{to}', 'App\Http\Controllers\informes_tesoreria@export');
 Route::get('iva_compras/export/{from}/{to}', 'App\Http\Controllers\Iva_compras@export');
 Route::get('iva_ventas/export/{from}/{to}', 'App\Http\Controllers\iva_ventas@export');
-Route::get('informes_flujofinanciero/export/{anio}', 'App\Http\Controllers\informes_flujofinanciero@export');
+Route::get('informes_flujofinanciero/export/{anio}', 'App\Http\Controllers\informes_flujofinancieroController@export');
 ///////////////////////////////////////////
 //
 //////////////////////////////////////////////
@@ -683,7 +683,3 @@ Route::get('/admin/mov-financieros/create_pagos/{id_compra}', 'App\Http\Controll
  
 //Route::get('admin/movimientos_financieros/create','App\Http\Controllers\Voyager\MovFinancieroController@cobranzas_create');
 //Route::get('pagos/{id}/edit','App\Http\Controllers\ClienteBrebeController@nuevo');
-
-
-
-

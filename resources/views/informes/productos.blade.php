@@ -75,8 +75,8 @@
 
  <script>
  function filtrar() {
-  var filtro ='/vtasproductos_en_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
- 
+  var filtro ="{{url('/vtasproductos_en_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+  
         $('#example').dataTable( {
           "serverSide":true,
           "ajax":filtro,
@@ -95,8 +95,8 @@
 
 </script>
 <script>
-   function excelExport()   {
-    window.location.href = '/productos/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+   function excelExport()   {   
+    window.location.href =  "{{url('/productos/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 @stop

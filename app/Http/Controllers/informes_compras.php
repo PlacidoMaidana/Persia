@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Yajra\Datatables\ButtonsServiceProvider;
-use App\Exports\informe_comprasExport;
+use App\Exports\Informe_comprasExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromCollection;
 

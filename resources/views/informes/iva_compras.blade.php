@@ -75,8 +75,10 @@
     <script>
     function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='/ivacomprasen_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
-    
+    //var filtro ='/ivacomprasen_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    var filtro ="{{url('/ivacomprasen_rango_de_fechas/')}}"+"/"+ $("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+
+    alert(filtro);
     $('#example').dataTable( {
     "serverSide": true,
     "ajax":filtro,
@@ -103,7 +105,8 @@
 </script>
 <script>
    function excelExport()   {
-    window.location.href = '/iva_compras/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    window.location.href ="{{url('/iva_compras/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+  //   window.location.href = '/iva_compras/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 @stop

@@ -70,9 +70,10 @@
 
   function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='/informecompras_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    var filtro ="{{url('/informecompras_rango_de_fechas/')}}"+"/"+ +$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
   
-    $('#example').dataTable( {
+
+    $('#example').DataTable( {
     "serverSide": true,
     "ajax":filtro,
     "paging": true,
@@ -96,7 +97,8 @@
 
 <script>
    function excelExport()   {
-    window.location.href = '/informes_compras/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    
+    window.location.href = "{{url('/informes_compras/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 

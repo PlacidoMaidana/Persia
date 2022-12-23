@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Exports\informe_flujofinancieroExport;
+use App\Exports\Informe_flujofinancieroExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 
-class informes_flujofinanciero extends Controller
+class informes_flujofinancieroController extends Controller
 {
      public function index()
      {

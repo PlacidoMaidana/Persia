@@ -65,8 +65,9 @@
 
     <script>
     function filtrar() {
-     var filtro ='/ivavtas_en_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
-    
+     //var filtro ='/ivavtas_en_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+     var filtro ="{{url('/ivavtas_en_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+
     $('#example').dataTable( {
     "serverSide": true,
     "ajax":filtro,
@@ -87,7 +88,7 @@
 </script>
 <script>
    function excelExport()   {
-    window.location.href = '/iva_ventas/export/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+        window.location.href = "{{url('/iva_ventas/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 

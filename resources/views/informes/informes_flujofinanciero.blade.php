@@ -71,8 +71,9 @@
 
   function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='/informeflujofinanciero_rango_de_fechas/'+ $("#anio").val();
-    
+    // var filtro ='/informeflujofinanciero_rango_de_fechas/'+ $("#anio").val();
+    var filtro ="{{url('/informeflujofinanciero_rango_de_fechas/')}}"+"/"+ $("#anio").val();
+        
     $('#example').dataTable( {
     "serverSide": true,
     "ajax":filtro,
@@ -102,7 +103,7 @@
 
 <script>
    function excelExport()   {
-    window.location.href = '/informes_flujofinanciero/export/'+$("#anio").val();
+    window.location.href ="{{url('/informes_flujofinanciero/export/')}}"+"/"+$("#anio").val();
    }
 </script>
 @stop
