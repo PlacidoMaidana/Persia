@@ -622,7 +622,8 @@ public function Ingresos(Request $request , $id)
 ////
 public function Egresos(Request $request , $id)
 {
-  //  $slug = $this->getSlug($request);      
+  //  $slug = $this->getSlug($request);  
+    $usuario=auth()->id();    
     $slug = "movimientos_financieros";
     $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
     $isSoftDeleted = false;
@@ -671,7 +672,7 @@ public function Egresos(Request $request , $id)
         $view = "vendor.voyager.movimientos_financieros.edit-add-pagos";
     }
 
-    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
    
 }
 ////

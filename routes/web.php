@@ -606,8 +606,10 @@ Route::get('/Egresos', function () {
   return datatables()->of(DB::table('mov_financieros')
   ->join('tipos_gastos','tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
   ->join('users','users.id','=','mov_financieros.id_usuario') 
+  ->join('proveedores','proveedores.id','=','mov_financieros.id_proveedor') 
   ->where('mov_financieros.tipo_movimiento','=', 'Gastos/Egresos')
   ->select([  'mov_financieros.id as id',
+              'proveedores.razonsocial',
               'mov_financieros.tipo_movimiento',
               'mov_financieros.fecha',
               'mov_financieros.modalidad_pago',

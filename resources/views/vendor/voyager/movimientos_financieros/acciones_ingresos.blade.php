@@ -1,5 +1,5 @@
 <td class="no-sort no-click bread-actions">
-    <a href="{{url('/admin/movimientos_financieros/'.$id.'/ingresos')}}" > <i class="voyager-search"></i>Editar: {{$detalle}} </a> 
+    <a href="{{url('/admin/movimientos_financieros/'.$id.'/ingresos')}}" class="btn btn-primary"> <i class="voyager-search"></i> Editar </a> 
    
     {{--<a href="{{url('/admin/mov-financieros/'.$id.'/edit_cobranzas')}}" > <i class="voyager-search"></i>Editar: {{$detalle}} </a>--}}
                                                                                                                                                                        

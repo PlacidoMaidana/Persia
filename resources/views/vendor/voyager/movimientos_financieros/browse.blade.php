@@ -111,7 +111,7 @@
                                               <input type="checkbox" class="select_all">
                                           </th>
                                           <th>id</th>
-                                          <th>Tipo Movimiento</th>
+                                          <th>Proveedor</th>
                                           <th>Fecha</th>
                                           <th>Modalidad de pago</th>
                                           <th>Tipo1</th>
@@ -134,7 +134,6 @@
                                            <th>id</th>
                                            <th>Pedido</th>
                                            <th>Cliente</th>
-                                           <th>Tipo Movimiento</th>
                                            <th>Fecha</th>
                                            <th>Modalidad de pago</th>
                                            <th>Detalle</th>
@@ -309,7 +308,7 @@
              "columns":[
                      {data: 'check', width: '5%'},
                      {data: 'id', name: 'mov_financieros.id', width: '5%'},
-                     {data: 'tipo_movimiento', name: 'mov_financieros.tipo_movimiento', width: '5%'},
+                     {data: 'razonsocial', name: 'proveedores.razonsocial', width: '5%'},
                      {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
                      {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
                      {data: 'tipo1', name: 'Tipos_gastos.tipo1', width: '10%'},
@@ -332,7 +331,6 @@
                      {data: 'id', name: 'mov_financieros.id', width: '5%'},
                      {data: 'pedido', name: 'mov_financieros.id_nota_pedido', width: '5%'},
                      {data: 'cliente', name: 'clientes.nombre', width: '5%'},
-                     {data: 'tipo_movimiento', name: 'mov_financieros.tipo_movimiento', width: '5%'},
                      {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
                      {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
                      {data: 'detalle', name: 'mov_financieros.detalle', width: '10%'},
