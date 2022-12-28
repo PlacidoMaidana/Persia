@@ -78,7 +78,7 @@
     //var filtro ='/ivacomprasen_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
     var filtro ="{{url('/ivacomprasen_rango_de_fechas/')}}"+"/"+ $("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
 
-    alert(filtro);
+    //alert(filtro);
     $('#example').dataTable( {
     "serverSide": true,
     "ajax":filtro,

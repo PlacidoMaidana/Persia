@@ -289,11 +289,16 @@ public function remitos()
 
 
         public function createremitosPDF($id_ped){
-
-            //$texto="esto es el texto de la nota";
+         
+            // verifico que se haya pagado toda la NP antes de emitir el Remito
+             $suma_cobranza = DB::table('mov_financieros')-> where ('mov_financieros.id_nota_pedido','=',$id_ped)->sum('importe_ingreso');
+            
+            // verifico que se haya empaquetay controlado toda la produccion vinculada al pedido antes de emitir el Remito   
+             $cant_ordfab_pendientes = DB::table('ordenes_fabricacion')-> where ('id_pedido','=',$id_ped)-> where ('estado','=','Empaquetado y controlado')->count('id');
+             $cant_ordfab = DB::table('ordenes_fabricacion')-> where ('id_pedido','=',$id_ped)->count('id');
+                  
             $texto= DB::table('formaspago')
-            //->where('nota_pedidos.id', $id_ped)
-             ->where('formaspago.id', 1)
+            ->where('formaspago.id', 1)
             ->select([ 'formaspago.Forma_pago_Productos',
                       'formaspago.Forma_pago_Obras',
                       'formaspago.Forma_pago_Muebles'
@@ -313,10 +318,46 @@ public function remitos()
                       'nota_pedidos.id_factura',
                       'nota_pedidos.observaciones',
                       'nota_pedidos.descuento',
+                      'nota_pedidos.nro_remito',
+                      'nota_pedidos.fecha_entrega',
                       'nota_pedidos.estado'
                 ])           
             ->first();
+           //  dd( $suma_cobranza , $datosPedidos->total);
+            if ($suma_cobranza != $datosPedidos->total)
+                {
+                    $redirect = redirect()->back();        
+                    return $redirect->with([
+                        'message'    => __('Asegurese que el cliente pague la totalidad del pedido antes de emitir el remito'),
+                        'alert-type' => 'error',
+                    ]);
+                   
+                }
+           // dd( $cant_ordfab_pendientes , $cant_ordfab);
+            if ( $cant_ordfab_pendientes != $cant_ordfab)
+                {
+                // dd( $cant_ordfab_pendientes , $cant_ordfab);
+                //echo 'Asegurese que el cliente empaquete y controle todas las ordenes del pedido antes de emitir el remito';
+               
+                $redirect = redirect()->back();        
+                return $redirect->with([
+                    'message'    => __('Asegurese que el cliente empaquete y controle todas las ordenes del pedido antes de emitir el remito'),
+                    'alert-type' => 'error',
+                ]);
+
+                 }
+            if ($datosPedidos->nro_remito==0)  
+            {
+                $ultimo_remito = DB::table('nota_pedidos')->max('nro_remito');
+                $Pedidos_remito = DB::table('nota_pedidos')
+                  ->where('id',$id_ped)
+                  ->update(['nro_remito' => $ultimo_remito+1,'fecha_entrega' => today(),'estado'=> 'Entregado']);
+                $ordenesfab_remito = DB::table('ordenes_fabricacion')
+                  ->where('id_pedido',$id_ped)
+                  ->update(['estado'=> 'Entregado']);
+            }
             
+ 
             $detallesPedidos= DB::table('nota_pedidos')
             ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')
             ->join('productos','renglones_notapedidos.id_producto','=','productos.id')
@@ -326,10 +367,33 @@ public function remitos()
             'renglones_notapedidos.cantidad',
             'renglones_notapedidos.id_producto',
             'renglones_notapedidos.total_linea',
+            'productos.unidad',
             'productos.descripcion'
             ])
             ->get();
              
+           
+
+            $datosPedidos= DB::table('nota_pedidos')
+            ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+            ->where('nota_pedidos.id', $id_ped)
+            ->select([ 'nota_pedidos.id as id_pedido',
+                      'nota_pedidos.fecha',
+                      'clientes.nombre',
+                      'clientes.id as id_cliente',
+                      'nota_pedidos.totalgravado',
+                      'nota_pedidos.total',
+                      'nota_pedidos.monto_iva',
+                      'nota_pedidos.id_factura',
+                      'nota_pedidos.observaciones',
+                      'nota_pedidos.descuento',
+                      'nota_pedidos.nro_remito',
+                      'nota_pedidos.fecha_entrega',
+                      'nota_pedidos.estado'
+                ])           
+            ->first();
+
+
               $pdf = PDF::loadView("vendor.voyager.remitos.exportar",
               compact('id_ped','texto','datosPedidos','detallesPedidos'));
               return $pdf->stream('remito.pdf');
@@ -707,7 +771,7 @@ public function remitos()
 
         return $redirect->with([
             'message'    => __('voyager::generic.successfully_updated')." {}",
-            'alert-type' => 'success',
+            'alert-type' => 'error',
         ]);
     }
 

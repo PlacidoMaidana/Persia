@@ -606,7 +606,7 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
     public function cargar_renglones_de_producto($tabla_detalles,$id_producto)
     {
         //dd($tabla_detalles);
-        if (count($tabla_detalles) > 0 ) 
+        if (!empty($tabla_detalles))  
         {
         foreach ($tabla_detalles as $r) {
             $renglon_producto=new Dosificacion();

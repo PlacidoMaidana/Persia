@@ -77,6 +77,7 @@
                                 @if (( $row->getTranslatedAttribute('display_name')=='Tipo Movimiento'  )||
                                      ( $row->getTranslatedAttribute('display_name')=='Importe Egreso'    )||
                                      ( $row->getTranslatedAttribute('display_name')=='Tipo gasto'  )||
+                                     ( $row->getTranslatedAttribute('display_name')=='proveedores'  )||
                                      ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
                            )
                                   @php

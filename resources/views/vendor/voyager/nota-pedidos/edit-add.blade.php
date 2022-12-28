@@ -244,6 +244,7 @@
                                                                        <th>rubro</th>
                                                                        <th>subrubro</th>
                                                                        <th>preciovta</th>
+                                                                       <th>unidad</th>
                                                                        <th>seleccionar</th>
 
                                                                    </tr>
@@ -638,6 +639,7 @@
                          {data: 'rubro', name: 'r.rubro', width: '30px'},
                          {data: 'subrubro', name: 's.descripcion_subrubro', width: '205px'},
                          {data: 'preciovta', name: 'productos.preciovta', width: '205px'},
+                         {data: 'unidad', name: 'productos.unidad', width: '205px'},
                          {data: 'seleccionar', name: 'seleccionar', width: '150px'},
                                                   
                           ]           

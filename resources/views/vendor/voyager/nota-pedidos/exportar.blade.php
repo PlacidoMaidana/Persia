@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/grid2.css">
-    <title>Remito</title>
+    <title>Presupuesto</title>
     
     <style>
 		table {
@@ -41,14 +41,15 @@
 
           </div>
           <div class="cuerpo">
-                   <h1>PRESUPUESTO</h1> 
+               <h1>PRESUPUESTO</h1> 
                <h3>Fecha: {{$datosPedidos->fecha}} </h3> 
                <h3>Cliente: {{$datosPedidos->nombre}}</h3> 
+               <br>
                <hr />
-
+               <br>
                Pedido Nro: {{$datosPedidos->id_pedido}} <br>
                Estado: {{$datosPedidos->estado}} <br>  
-
+               <br>  
                <hr style="color: rgb(84, 83, 83); background-color: rgb(101, 100, 100); width:100% higth:2px ;" />
                Sr/:  <br>
                Por medio de la presente le envió el presupuesto solicitado.		<br>
@@ -83,10 +84,10 @@
                <br>
                <h4 >
                  Total gravado........................: {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
-                 Descuento ..............................:   {{number_format($datosPedidos->descuento, 2, '.', ',')}}  <br>
+                 Recargo/Descuento (+/-) ..................:   {{number_format($datosPedidos->descuento, 2, '.', ',')}}  <br>
                  IVA 21....................................: {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
                  Total.......................................: {{number_format($datosPedidos->total, 2, '.', ',')}}  <br>
-
+                 <br>
                </h4>
                {{-- 
                Total sin IVA: {{$datosPedidos->totalgravado}} <br>
@@ -101,14 +102,12 @@
                <p>
 
 
-                Observaciones:
-                <pre>{{$datosPedidos->observaciones}}
-                </pre> 
-                <br>
+               OBSERVACIONES:     {{$datosPedidos->observaciones}}
+               <br>
                <br>
                <hr />
                <br>
-               Forma pago: {{$texto->Forma_pago_Productos}} <br>
+               FORMA DE PAGO: {{$texto->Forma_pago_Productos}} <br>
               
 
 

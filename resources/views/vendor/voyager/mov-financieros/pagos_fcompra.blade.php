@@ -8,7 +8,7 @@
 @section('page_header')
     <div class="container-fluid">
         <h1 class="page-title">
-            <i class="{{ $dataType->icon }}"></i> {{ $dataType->getTranslatedAttribute('display_name_plural') }}
+           Pagos del Comprobante
         </h1>
         @can('add', app($dataType->model_name))
             <a href="{{url('/admin/mov-financieros/create_pagos/'.$id_compra)}} " class="btn btn-success btn-add-new">
@@ -103,6 +103,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    
 @stop
 
 @section('css')
@@ -133,7 +134,16 @@
     } );
 </script> 
 
+       {{-- Scripts para borrar --}}
+       <script>
 
+        $(document).on('click', '.delete', function() {
+        
+        
+           $('#delete_form')[0].action = '{{url("/CobranzasPedido/__id")}}'.replace('__id', $(this).data('id'));
+           $('#delete_modal').modal('show');
+        });
+    </script>
 
 
 

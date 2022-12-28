@@ -85,11 +85,11 @@
 
 
 <script>
-  function elegir(id,nom,precio)
+  function elegir(id,nom,precio,unidad)
   { 
-    
+    //alert("La unidad"+unidad);
    $('#productos').modal('hide');   
-   Livewire.emit('actualiza', id, nom,precio);    
+   Livewire.emit('actualiza', id, nom,precio,unidad);    
   
    }
 </script>

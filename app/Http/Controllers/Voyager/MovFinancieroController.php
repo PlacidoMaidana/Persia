@@ -431,7 +431,18 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         event(new BreadDataUpdated($dataType, $data));
 
         if (auth()->user()->can('browse', app($dataType->model_name))) {
-            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
+            //$redirect = redirect()->route("voyager.{$dataType->slug}.index");
+
+            if (!empty($request['id_nota_pedido'])&& ($request['tipo_movimiento']== "Cobranza/Ingresos") ) {
+                return redirect(url('/CobranzasPedido/'.$request['id_nota_pedido']));
+               }else
+               {
+                if (!empty($request['id_factura_compra'])&& ($request['tipo_movimiento']== "Gastos/Egresos") ) {
+                    return redirect(url('/pagos_compras/'.$request['id_factura_compra']));
+                  
+                }else
+                   { $redirect = redirect()->route("voyager.{$dataType->slug}.index");}
+               }
         } else {
             $redirect = redirect()->back();
         }
@@ -871,7 +882,7 @@ public function Otros_movfinancieros(Request $request , $id)
 
     public function store(Request $request)
     {
-        
+        //dd($request);
         $slug = $this->getSlug($request);
        
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -903,12 +914,21 @@ public function Otros_movfinancieros(Request $request , $id)
 
      if (!$request->has('_tagging')) {
         if (auth()->user()->can('browse', $data)) {
-            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
-        } else {
-            if (!empty($request['id_nota_pedido'])) {
-            return redirect(route('CobranzasPedido/'))->with('id_pedido',$request['id_nota_pedido']);
-            }else{ $redirect = redirect()->back();}
            
+           if (!empty($request['id_nota_pedido'])&& ($request['tipo_movimiento']== "Cobranza/Ingresos") ) {
+            return redirect(url('/CobranzasPedido/'.$request['id_nota_pedido']));
+           }else
+           {
+            if (!empty($request['id_factura_compra'])&& ($request['tipo_movimiento']== "Gastos/Egresos") ) {
+                return redirect(url('/pagos_compras/'.$request['id_factura_compra']));
+              
+            }else
+               { $redirect = redirect()->route("voyager.{$dataType->slug}.index");}
+           }
+               
+        } else {
+            $redirect = redirect()->back();
+                       
         }
 
         return $redirect->with([
@@ -919,6 +939,7 @@ public function Otros_movfinancieros(Request $request , $id)
        return response()->json(['success' => true, 'data' => $data]);
     }
     }
+
 
     //***************************************
     //                _____
@@ -934,7 +955,8 @@ public function Otros_movfinancieros(Request $request , $id)
 
     public function destroy(Request $request, $id)
     {
-        $slug = $this->getSlug($request);
+        $slug ='movimientos_financieros'; //$this->getSlug($request);
+
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 

@@ -8,7 +8,7 @@
 @section('page_header')
     <div class="container-fluid">
         <h1 class="page-title">
-            <i class="{{ $dataType->icon }}"></i> {{ $dataType->getTranslatedAttribute('display_name_plural') }}
+            Cobranzas del pedido
         </h1>
         @can('add', app($dataType->model_name))
             <a href="{{url('/admin/mov-financieros/create_cobranzas/'.$pedido)}} " class="btn btn-success btn-add-new">
@@ -90,6 +90,8 @@
         </div>
     </div>
 
+
+
     {{-- Single delete modal --}}
     <div class="modal modal-danger fade" tabindex="-1" id="delete_modal" role="dialog">
         <div class="modal-dialog">
@@ -118,7 +120,37 @@
 @stop
 
 @section('javascript')
-    
+    <!-- DataTables -->
+    @if(!$dataType->server_side && config('dashboard.data_tables.responsive'))
+        <script src="{{ voyager_asset('lib/js/dataTables.responsive.min.js') }}"></script>
+    @endif
+    <script>
+        
+        var deleteFormAction;
+        $('td').on('click', '.delete', function (e) {
+            $('#delete_form')[0].action = '{{ route('voyager.'.$dataType->slug.'.destroy', '__id') }}'.replace('__id', $(this).data('id'));
+            $('#delete_modal').modal('show');
+        });
+
+       
+    </script>
+
+ 
+        {{-- Scripts para borrar --}}
+        <script>
+
+            $(document).on('click', '.delete', function() {
+            
+            
+               $('#delete_form')[0].action = '{{url("/CobranzasPedido/__id")}}'.replace('__id', $(this).data('id'));
+               $('#delete_modal').modal('show');
+            });
+        </script>
+
+
+
+
+
 
 
 <script>

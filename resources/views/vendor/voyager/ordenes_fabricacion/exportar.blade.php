@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    
+    <title>Orden de Fabricacion</title>
     
     <style>
 		table {
@@ -35,7 +36,7 @@
 
     <img class="img-responsive" 
     src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
-
+    <h2>ORDEN DE FABRICACION</h2> 
     <h3>Fecha: {{$datosOrden->fecha}} </h3> 
     <h3>Cliente: {{$datosOrden->nombre}}</h3> 
     <hr />

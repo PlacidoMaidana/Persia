@@ -141,11 +141,12 @@ class EmbebidoComponent extends Component
        $this->detalles_string=serialize($this->detalles);
     }
 
-    public function seleccion_producto($id,$nombre,$precio)
+    public function seleccion_producto($id,$nombre,$precio,$unidad)
     {
       $this->id_producto =$id;
       $this->producto =$nombre;
       $this->precio =$precio;
+      $this->unidad =$unidad;
     }
     
    

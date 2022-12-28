@@ -104,7 +104,7 @@ Route::get('/productos_elegir', function () {
     return datatables()->of(DB::table('productos')
     ->join('rubros as r','productos.rubro_id','=','r.id')
     ->join('subrubros as s','productos.subrubro_id','=','s.id')
-    ->select(['productos.id as id', 'descripcion', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'preciovta']))
+    ->select(['productos.id as id', 'descripcion', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'preciovta','unidad']))
     ->addColumn('seleccionar','vendor/voyager/nota-pedidos/boton_seleccionar')
     ->rawColumns(['seleccionar'])   
     ->toJson();    
@@ -535,6 +535,7 @@ Route::get('/admin/productos/{id_producto}/editobras', 'App\Http\Controllers\Voy
 ////////////////////////////////////////////////////
 
 Route::get('/CobranzasPedido/{pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@CobranzasPedido');
+Route::delete('/CobranzasPedido/{pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@destroy');
 
 Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
      
@@ -552,6 +553,7 @@ Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
 ////////////////////////////////////////////////////
 
 Route::get('/pagos_compras/{id_compra}', 'App\Http\Controllers\Voyager\MovFinancieroController@pagoscompras');
+Route::delete('/pagos_compras/{id_compra}', 'App\Http\Controllers\Voyager\MovFinancieroController@destroy');
 
 Route::get('/pagos_facturascompras/{id_fcompra}', function ($id_fcompra) {
      
