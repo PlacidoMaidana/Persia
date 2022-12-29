@@ -94,7 +94,7 @@
                             <div class="panel-body" style="width: 100%">
                               <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane fade in active" id="one">
-                                  <table id="ordenes_fabricacion_activas"  class="table table-striped table-bordered dt-responsive"   >
+                                  <table id="ordenes_fabricacion_activas"  class="table  table-bordered dt-responsive"   >
                                       <thead>
                                         <tr >
                                             <th class="dt-not-orderable">
