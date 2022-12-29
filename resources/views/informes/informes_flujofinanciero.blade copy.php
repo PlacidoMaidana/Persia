@@ -25,10 +25,10 @@
 </div>
 
 <div class="form-group col-md-12 ">
-    <table id="movimientos" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+    <table id="egresos" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
         <thead>
           <tr>
-            <th>Ingreso-Egreso </th>
+            <th>  Tipo  Gasto </th>
             <th>Tipo1</th>
             <th>Tipo2</th>
             <th>Enero</th> 
@@ -49,7 +49,30 @@
     </table>
 </div>
 
-
+<div class="form-group col-md-12 ">
+  <table id="ingresos" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+    <thead>
+      <tr>
+        <th>Tipo presupuesto</th>
+        <th>Tipo1</th>
+        <th>Tipo2</th>
+        <th>Enero</th> 
+        <th>Febrero</th> 
+        <th>Marzo</th>
+        <th>Abril</th>
+        <th>Mayo</th>
+        <th>Junio</th>
+        <th>Julio</th>
+        <th>Agosto</th>
+        <th>Septiembre</th> 
+        <th>Octubre</th>
+        <th>Noviembre</th>
+        <th>Diciembre</th>
+      </tr>
+    </thead>
+    
+</table>
+</div>
 @stop
 
 @section('css')
@@ -76,13 +99,13 @@
     // var filtro ='/informeflujofinanciero_rango_de_fechas/'+ $("#anio").val();
     var filtro ="{{url('/informeflujofinanciero_rango_de_fechas/')}}"+"/"+ $("#anio").val();
         
-    $('#movimientos').dataTable( {
+    $('#egresos').dataTable( {
     "serverSide": true,
     "ajax":filtro,
     "paging": true,
     "searching": true,
     "columns":[
-            {data:'tipo',name: 'tipo', width: '5%'},
+            { data:'id_tipo_gasto',name: 'id_tipo_gasto', width: '5%'},
             {data: 'tipo1',name: 'tipo1', width: '5%'},
             {data: 'tipo2',name: 'tipo2', width: '5%'},
             {data: 'Ene',name: 'Ene', width: '5%'},
@@ -99,7 +122,33 @@
             {data: 'Dic',name: 'Dic', width: '5%'}
              ]        
 });
- 
+ var filtroi ="{{url('/informeflujofinancieroi_rango_de_fechas/')}}"+"/"+ $("#anio").val();
+        
+    $('#ingresos').dataTable( {
+    "serverSide": true,
+    "ajax":filtro,
+    "paging": true,
+    "searching": true,
+    "columns":[
+            {data:'tipo_presupuesto',name: 'tipo_presupuesto', width: '5%'},
+            {data: 'tipo1',name: 'tipo1', width: '5%'},
+            {data: 'tipo2',name: 'tipo2', width: '5%'},
+            {data: 'Ene',name: 'Ene', width: '5%'},
+            {data: 'Feb',name: 'Feb', width: '5%'},
+            {data: 'Mar',name: 'Mar', width: '5%'},
+            {data: 'Abr',name: 'Abr', width: '5%'},
+            {data: 'May',name: 'May', width: '5%'},
+            {data: 'Jun',name: 'Jun', width: '5%'},
+            {data: 'Jul',name: 'Jul', width: '5%'},
+            {data: 'Ago',name: 'Ago', width: '5%'},
+            {data: 'Sep',name: 'Sep', width: '5%'},
+            {data: 'Octu',name: 'Octu', width: '5%'},
+            {data: 'Nov',name: 'Nov', width: '5%'},
+            {data: 'Dic',name: 'Dic', width: '5%'}
+             ]        
+});   
+
+
 
   }
 </script>

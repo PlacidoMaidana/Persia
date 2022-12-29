@@ -324,9 +324,6 @@ public function remitos()
                       'nota_pedidos.estado'
                 ])           
             ->first();
-
-        if ($datosPedidos->nro_remito==0)  
-        {
            //  dd( $suma_cobranza , $datosPedidos->total);
             if ($suma_cobranza != $datosPedidos->total)
                 {
@@ -350,7 +347,8 @@ public function remitos()
                 ]);
 
                  }
-
+            if ($datosPedidos->nro_remito==0)  
+            {
                 $ultimo_remito = DB::table('nota_pedidos')->max('nro_remito');
                 $Pedidos_remito = DB::table('nota_pedidos')
                   ->where('id',$id_ped)
@@ -358,7 +356,7 @@ public function remitos()
                 $ordenesfab_remito = DB::table('ordenes_fabricacion')
                   ->where('id_pedido',$id_ped)
                   ->update(['estado'=> 'Entregado']);
-         }
+            }
             
  
             $detallesPedidos= DB::table('nota_pedidos')
@@ -374,7 +372,9 @@ public function remitos()
             'productos.descripcion'
             ])
             ->get();
-         
+             
+           
+
             $datosPedidos= DB::table('nota_pedidos')
             ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
             ->where('nota_pedidos.id', $id_ped)

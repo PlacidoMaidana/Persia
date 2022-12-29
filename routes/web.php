@@ -104,6 +104,7 @@ Route::get('/productos_elegir', function () {
     return datatables()->of(DB::table('productos')
     ->join('rubros as r','productos.rubro_id','=','r.id')
     ->join('subrubros as s','productos.subrubro_id','=','s.id')
+    ->where('r.categoria','!=', 'Materia Prima')
     ->select(['productos.id as id', 'descripcion', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'preciovta','unidad']))
     ->addColumn('seleccionar','vendor/voyager/nota-pedidos/boton_seleccionar')
     ->rawColumns(['seleccionar'])   
@@ -347,7 +348,7 @@ Route::get('/comprascanceladas', function () {
  /////////////////////////////////////////////////////////////////
  Route::get('remitos/export/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@createremitosPDF');
 
- Route::get('/remitos', function () {     
+ Route::get('/remitos_abiertos', function () {     
   return datatables()->of(DB::table('nota_pedidos')
   ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
   ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
@@ -366,6 +367,24 @@ Route::get('/comprascanceladas', function () {
     ->toJson();   
   });
 
+  Route::get('/remitos_cerrados', function () {     
+    return datatables()->of(DB::table('nota_pedidos')
+    ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+    ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+    ->where('nota_pedidos.estado','=', 'Entregado')
+    ->select([  'nota_pedidos.id as id_pedido',
+                'nota_pedidos.fecha',
+                'clientes.nombre',
+                'clientes.id as id_cliente',
+                'empleados.apellidoynombre as vendedor',
+                'nota_pedidos.total',
+                'nota_pedidos.estado'
+              ]))   
+      ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+      ->addColumn('accion','vendor/voyager/remitos/acciones_remitos')
+      ->rawColumns(['check','accion'])   
+      ->toJson();   
+    });
  ////////////////////
 
 
