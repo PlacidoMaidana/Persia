@@ -379,7 +379,7 @@ Route::get('/comprascanceladas', function () {
 /////////////////////////////////////////////////////////////
 
    Route::get('/ordenes_fabricacion_activas', function () {     
-    return datatables()->of(DB::table('ordenes_fabricacion')
+  return datatables()->of(DB::table('ordenes_fabricacion')
   ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
   ->join('rubros','productos.rubro_id','=','rubros.id')
   ->join('subrubros','productos.subrubro_id','=','subrubros.id')
@@ -400,7 +400,36 @@ Route::get('/comprascanceladas', function () {
                   ordenes_fabricacion.fecha_entrada_proceso,
                   ordenes_fabricacion.fecha_salida_proceso,
                   ordenes_fabricacion.estado'
-                    )))
+       )))
+       ->setRowAttr([
+        'style' => 'background-color: #EFEE06;',      
+         ]) 
+       ->setRowAttr([
+        'style' => function($item){          
+          switch ($item->estado) {
+            case 'Pendiente':
+              return 'background-color: #EFEE06;color:#000000';
+              break;
+            case 'En Proceso':
+              return 'background-color: #EFBB07;color:#000000';
+              break; 
+            case 'Terminado':
+              return 'background-color: #F5BFBD;color:#000000';
+              break; 
+            case 'Empaquetado y controlado':
+              return 'background-color: #B8E2D4;color:#000000';
+              break;   
+            
+            default:
+              # code...
+              break;
+          }
+
+      
+
+        }
+    ])        
+                     
   ->addColumn('check','vendor/voyager/ordenes_fabricacion/check_ordenes_fabricacion')
   ->addColumn('accion','vendor/voyager/ordenes_fabricacion/acciones_ordenes_fabricacion')
   ->rawColumns(['check','accion'])     
