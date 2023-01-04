@@ -133,6 +133,8 @@
                                            </th>
                                            <th>id</th>
                                            <th>Pedido</th>
+                                           <th>Pto Vta</th>
+                                           <th>Nro Recibo</th>
                                            <th>Cliente</th>
                                            <th>Fecha</th>
                                            <th>Modalidad de pago</th>
@@ -330,6 +332,8 @@
                 {data: 'check', width: '5%'},
                      {data: 'id', name: 'mov_financieros.id', width: '5%'},
                      {data: 'pedido', name: 'mov_financieros.id_nota_pedido', width: '5%'},
+                     {data: 'pto_vta', name: 'mov_financieros.pto_vta', width: '10%'},
+                     {data: 'nro_recibo', name: 'mov_financieros.nro_recibo', width: '10%'},
                      {data: 'cliente', name: 'clientes.nombre', width: '5%'},
                      {data: 'fecha', name: 'mov_financieros.fecha', width: '10%'},
                      {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},

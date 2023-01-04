@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Voyager;
 
+use App\Models\Factura_Compra;
 use App\Models\MovFinanciero;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,6 +17,8 @@ use TCG\Voyager\Events\BreadDataUpdated;
 use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
+use PDF;
+use Yajra\DataTables\WithExportQueue;
 
 class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
@@ -385,13 +388,14 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
             $view = "voyager::$slug.edit-add";
         }
 
+    
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
     }
 
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-     
+      // dd('aqui graba');
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -424,6 +428,27 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $original_data = clone($data);
 
         $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
+
+       // grabar factura de compras ******
+            $id_fc=$request['id_factura_compra'];
+           //  dd($request['id_factura_compra']);
+            $fcompra = Factura_Compra::FindOrFail($id_fc); //id de factura de compra
+       
+                        $fcompra->tipo_factura = $request['tipo_factura'];
+                        $fcompra->pto_venta = $request['pto_vta'];
+                        $fcompra->nro_factura = $request['nro_factura'];
+                        $fcompra->id_proveedor = $request['id_proveedor'];
+                        $fcompra->fecha = $request['fecha_factura'];
+                        $fcompra->observaciones = $request['observaciones'];
+                        $fcompra->id_tipo_gasto =  $request['id_tipo_gasto'];
+                    // $fcompra->fecha_carga = now();
+                        $fcompra->subtotal = $request['subtotal'];
+                        $fcompra->iva = $request['iva'];
+                        $fcompra->otros_impuestos = $request['otros_impuestos'];
+                        $fcompra->total_factura = $request['total_factura'];
+                    // $fcompra->estado_pago = "Cancelada";
+                        $fcompra->save();
+ 
 
         // Delete Images
         $this->deleteBreadImages($original_data, $to_remove);
@@ -672,7 +697,23 @@ public function Egresos(Request $request , $id)
         $view = "vendor.voyager.movimientos_financieros.edit-add-pagos";
     }
 
-    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
+         $datos_fcompra= DB::table ('mov_financieros')
+         -> join ('facturas_compras','mov_financieros.id_factura_compra','=','facturas_compras.id')
+         -> join ('proveedores','facturas_compras.id_proveedor','=','proveedores.id')
+         -> join ('tipos_gastos','facturas_compras.id_tipo_gasto','=','tipos_gastos.id')
+         -> where('mov_financieros.id' , '=' ,$id)
+         -> select(['mov_financieros.id_factura_compra','facturas_compras.tipo_factura', 'facturas_compras.pto_venta', 
+         'facturas_compras.nro_factura', 'facturas_compras.fecha','facturas_compras.observaciones',
+         'facturas_compras.subtotal','facturas_compras.iva','facturas_compras.otros_impuestos',
+         'facturas_compras.total_factura','facturas_compras.id_tipo_gasto', 'facturas_compras.id_proveedor',
+         'tipos_gastos.tipo1','tipos_gastos.tipo2','proveedores.razonsocial'  ])           
+        ->first();
+
+        
+        //return $datos_fcompra ;
+
+  
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario','datos_fcompra'));
    
 }
 ////
@@ -731,6 +772,33 @@ public function Otros_movfinancieros(Request $request , $id)
     return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
 }
 
+public function recibo_cobranza($id){
+
+    //$texto="esto es el texto de la nota";
+   
+    $datoscobranza= DB::table('mov_financieros')
+    ->join('nota_pedidos','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
+    ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+    ->where('mov_financieros.id', $id)
+    ->select(['nota_pedidos.id as id_pedido',
+              'mov_financieros.fecha',
+              'mov_financieros.pto_vta',
+              'mov_financieros.nro_recibo',
+              'clientes.nombre',
+              'mov_financieros.importe_ingreso',
+              'mov_financieros.modalidad_pago',
+              'mov_financieros.detalle'
+              
+        ])           
+    ->first();
+    
+
+     
+      $pdf = PDF::loadView("vendor.voyager.mov-financieros.recibo",
+      compact('id','datoscobranza'));
+      return $pdf->stream('recibo.pdf');
+
+ }
 
     //***************************************
     //
@@ -778,7 +846,7 @@ public function Otros_movfinancieros(Request $request , $id)
             $view = "voyager::$slug.edit-add";
 
         }
-        // dd($usuario);
+         //dd($usuario);
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
     }
 
@@ -816,13 +884,16 @@ public function Otros_movfinancieros(Request $request , $id)
         $this->eagerLoadRelations($dataTypeContent, $dataType, 'add', $isModelTranslatable);
 
         $view = 'voyager::bread.edit-add';
-
+        
+        $ult_recibo=DB::table('mov_financieros')->max('nro_recibo');
+        $nro_recibo=$ult_recibo+1;
         if (view()->exists("voyager::$slug.edit-add")) {
           //  $view = "voyager::$slug.edit-add";  
           $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
         }
-      // dd('cobranzas',$usuario);
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido','usuario'));
+     
+     
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido','usuario','nro_recibo'));
     }
 
 //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
@@ -896,7 +967,7 @@ public function Otros_movfinancieros(Request $request , $id)
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
 
        //+-------------------------------------------------------------------------+
-       //+     Agregando el id_nota_pedido  tipo_movimiento                        +
+       //+     Graba el movimiento (egreso) y la factura de Compra                       +
        //+-------------------------------------------------------------------------+
        
             if (!empty($request['id_nota_pedido']) or !empty($request['id_factura_compra']) ) {
@@ -910,7 +981,27 @@ public function Otros_movfinancieros(Request $request , $id)
              // dd($request['id_usuario']);
               
               $data->save();
+              /////// Graba la factura de Compra
               
+              $fcompra = new Factura_Compra();
+              $fcompra->tipo_factura = $request['tipo_factura'];
+              $fcompra->pto_venta = $request['pto_vta'];
+              $fcompra->nro_factura = $request['nro_factura'];
+              $fcompra->id_proveedor = $request['id_proveedor'];
+              $fcompra->fecha = $request['fecha_factura'];
+              $fcompra->observaciones = $request['observaciones'];
+              $fcompra->id_tipo_gasto =  $request['id_tipo_gasto'];
+              $fcompra->fecha_carga = now();
+              $fcompra->subtotal = $request['subtotal'];
+              $fcompra->iva = $request['iva'];
+              $fcompra->otros_impuestos = $request['otros_impuestos'];
+              $fcompra->total_factura = $request['total_factura'];
+              $fcompra->estado_pago = "Cancelada";
+              $fcompra->save();
+              $data->id_factura_compra =$fcompra->id;
+              $data->save();
+
+          
        event(new BreadDataAdded($dataType,  $data));
 
      if (!$request->has('_tagging')) {

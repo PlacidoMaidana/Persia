@@ -824,19 +824,14 @@ public function remitos()
 
         $data->id_vendedor=auth()->id();
         $data->totalgravado = $request['totalgravado']; 
-        
-      // dd($request['totalgravado']);
-      //  $data->gravadocondescuento = $data->totalgravado - $request['descuento']; 
-      //  $data->monto_iva = ($data->gravadocondescuento )  * 0.21 ; 
         $data->monto_iva = ($request['totalgravado'] +  $request['descuento'] )  * 0.21 ; 
-        $data->total = $request['totalgravado'] +  $request['descuento'] + $data->monto_iva;
-       
+        if ($data->modalidad_venta=="Contado") {
+                $data->total = $request['totalgravado'] +  $request['descuento'] ;
+            }else{
+                $data->total = $request['totalgravado'] +  $request['descuento'] + $data->monto_iva;
+            }
         $data->save();
-        
-        //dd('function update');
-        //  dd($request['detalles_string']);
-        $tabla_detalles=unserialize($request['detalles_string']);
-        //dd($tabla_detalles);  
+     
         $this->eliminar_renglones_de_pedido($data->id);
         $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
           
@@ -949,11 +944,14 @@ public function remitos()
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
         $data->id_vendedor=auth()->id();
-        $data->monto_iva=0;
-        $data->total=$request['total_general'];
-        $data->totalgravado=$request['total_general']; 
+        $data->totalgravado = $request['totalgravado']; 
+        $data->monto_iva = ($request['totalgravado'] +  $request['descuento'] )  * 0.21 ; 
+        if ($data->modalidad_venta=="Contado") {
+                $data->total = $request['totalgravado'] +  $request['descuento'] ;
+            }else{
+                $data->total = $request['totalgravado'] +  $request['descuento'] + $data->monto_iva;
+            }
         $data->save();
 
         event(new BreadDataAdded($dataType,  $data));

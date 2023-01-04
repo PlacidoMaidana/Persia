@@ -217,28 +217,18 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
         //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<          >><<<<<<<<<<   <<<<<>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<>>>>>>>><<>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>
 
-        public function createPDF($id_orden){
+        public function createPDF($id){
 
            $texto="Detalle de la Orden de fabricación";
-           // $texto= DB::table('formaspago')
-           // ->where('formaspago.id', 1)
-           // ->select([ 'formaspago.Forma_pago_Productos',
-           //           'formaspago.Forma_pago_Obras',
-           //           'formaspago.Forma_pago_Muebles'
-           //          ])           
-           // ->first();
- 
-
-        
-      
-  
+               
 
             $datosOrden= DB::table('ordenes_fabricacion')
                 ->join('nota_pedidos','ordenes_fabricacion.id_pedido','=','nota_pedidos.id')
                 ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
                 ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
-                ->where('ordenes_fabricacion.estado','!=', 'Entregado')
-                ->select([  'ordenes_fabricacion.id as id_orden',
+                ->where('ordenes_fabricacion.id','=', $id)
+                ->select([ 'ordenes_fabricacion.id_pedido',
+                    'ordenes_fabricacion.id',
                     'ordenes_fabricacion.fecha_orden as fecha',
                     'clientes.nombre',
                     'clientes.id as id_cliente',
@@ -249,11 +239,12 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
                 ])           
             ->first();
             
-            $detallesOrden= DB::table('ordenes_fabricacion')
+            $detallesbase= DB::table('ordenes_fabricacion')
             ->join('dosificaciones','ordenes_fabricacion.id_producto','=','dosificaciones.id_producto')
             ->join('productos','dosificaciones.id_insumo_producto','=','productos.id')
-            ->where('ordenes_fabricacion.id', $id_orden)
-            ->select(['ordenes_fabricacion.id as id_orden',
+            ->where('ordenes_fabricacion.id', $id)
+            ->where('dosificaciones.base_liston','=','Base')
+            ->select(['ordenes_fabricacion.id',
             'dosificaciones.cant_unid_produc as cantidad',
             'dosificaciones.id_insumo_producto as id_producto',
             'dosificaciones.unidad_consumo_produccion as unidad',
@@ -261,9 +252,24 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
                
             ])
             ->get();
+           
+           
+
+            $detalleslistones= DB::table('ordenes_fabricacion')
+            ->join('dosificaciones','ordenes_fabricacion.id_producto','=','dosificaciones.id_producto')
+            ->join('productos','dosificaciones.id_insumo_producto','=','productos.id')
+            ->where('ordenes_fabricacion.id', $id)
+            ->where('dosificaciones.base_liston','!=','Base')
+            ->select(['dosificaciones.id_insumo_producto','productos.descripcion',
+             DB::raw('MAX(unidad_consumo_produccion) as unidad'),
+             DB::raw('SUM(IF(dosificaciones.base_liston= '.'"Liston 1"'.', cant_unid_produc, NULL)) as liston_1'),
+             DB::raw('SUM(IF(dosificaciones.base_liston= '.'"Liston 2"'.', cant_unid_produc, NULL)) as liston_2'),
+             DB::raw('SUM(IF(dosificaciones.base_liston= '.'"Liston 3"'.', cant_unid_produc, NULL)) as liston_3')])
+             ->groupBy('dosificaciones.id_insumo_producto','productos.descripcion', 'unidad')
+            ->get();
              
               $pdf = PDF::loadView("vendor.voyager.ordenes_fabricacion.exportar",
-              compact('id_orden','texto','datosOrden','detallesOrden'));
+              compact('id','texto','datosOrden','detallesbase','detalleslistones'));
               return $pdf->stream('orden_fabricacion.pdf');
  
          } 

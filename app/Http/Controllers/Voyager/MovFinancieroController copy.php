@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Voyager;
 
-use App\Models\nota_pedido;
+use App\Models\Factura_Compra;
+use App\Models\MovFinanciero;
 use Exception;
-use App\Models\renglones_notapedido;
-use App\Models\Formaspago;
-use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,16 +17,12 @@ use TCG\Voyager\Events\BreadDataUpdated;
 use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
-
 use PDF;
 use Yajra\DataTables\WithExportQueue;
 
-class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
+class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseController
 {
-
-    
     use BreadRelationshipParser;
-    
 
     //***************************************
     //               ____
@@ -44,7 +38,6 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
     public function index(Request $request)
     {
-        
         // GET THE SLUG, ex. 'posts', 'pages', etc.
         $slug = $this->getSlug($request);
 
@@ -86,7 +79,7 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
 
                 if ($request->get('showSoftDeleted')) {
                     $showSoftDeleted = true;
-                    $query = $query->withTbuscarashed();
+                    $query = $query->withTrashed();
                 }
             }
 
@@ -212,276 +205,67 @@ class PedidosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseControl
             'showCheckboxColumn'
         ));
     }
-////////////////////////////////////////
-//       REMITOS
-//////////////////////////////////////////
-
-public function remitos()
-{
-
-   return view('vendor.voyager.remitos.browse');
-}
-
-    //<<<<<<<<<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<       <>>>>>><<<<<         <>>>>>><<<<><<              <>>>>>>>>>>>
-        //<<<<<<<<<<<<    <<<<<>    >>><<<<<    <<<<    >>><<<>><<<    <<<<<>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<   <<<<<>>>    >><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<   <<<<<>>>    >><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<   <<<<<>>>    >><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<               <<<<<<<   <<<<<>>>    <<<<<<<<             <<<<<>>>>>>>>
-        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<   <<<<<>>>    >><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<   <<<<<>    >>>><<<<<<   <<<<<>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<   <<<<<>>>>><<>><<<<<          >><<<<<<<<<<   <<<<<>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<>>>>>>>><<>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>
-
-        public function createPDF($id_ped){
-
-           //$texto="esto es el texto de la nota";
-           $texto= DB::table('formaspago')
-           //->where('nota_pedidos.id', $id_ped)
-            ->where('formaspago.id', 1)
-           ->select([ 'formaspago.Forma_pago_Productos',
-                     'formaspago.Forma_pago_Obras',
-                     'formaspago.Forma_pago_Muebles'
-                    ])           
-           ->first();
-
-           $datosPedidos= DB::table('nota_pedidos')
-           ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-           ->where('nota_pedidos.id', $id_ped)
-           ->select([ 'nota_pedidos.id as id_pedido',
-                     'nota_pedidos.fecha',
-                     'clientes.nombre',
-                     'clientes.id as id_cliente',
-                     'nota_pedidos.totalgravado',
-                     'nota_pedidos.total',
-                     'nota_pedidos.monto_iva',
-                     'nota_pedidos.id_factura',
-                     'nota_pedidos.observaciones',
-                     'nota_pedidos.descuento',
-                     'nota_pedidos.estado'
-               ])           
-           ->first();
-           
-           $detallesPedidos= DB::table('nota_pedidos')
-           ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')
-           ->join('productos','renglones_notapedidos.id_producto','=','productos.id')
-           ->join('rubros as r','productos.rubro_id','=','r.id')
-           ->join('subrubros as s','productos.subrubro_id','=','s.id')
-           ->where('nota_pedidos.id', $id_ped)
-           ->select(DB::raw('nota_pedidos.id as id_pedido,
-           renglones_notapedidos.id,
-           s.descripcion_subrubro as subrubro,
-           renglones_notapedidos.cantidad,
-           renglones_notapedidos.id_producto,
-           renglones_notapedidos.total_linea / renglones_notapedidos.cantidad as punit,
-           renglones_notapedidos.total_linea,
-           productos.descripcion,
-           productos.unidad' 
-           ) )
-           ->get();
-            
-             $pdf = PDF::loadView("vendor.voyager.nota-pedidos.exportar",
-             compact('id_ped','texto','datosPedidos','detallesPedidos'));
-             return $pdf->stream('invoice.pdf');
-
-        }
 
 
-        public function createremitosPDF($id_ped){
-         
-            // verifico que se haya pagado toda la NP antes de emitir el Remito
-             $suma_cobranza = DB::table('mov_financieros')-> where ('mov_financieros.id_nota_pedido','=',$id_ped)->sum('importe_ingreso');
-            
-            // verifico que se haya empaquetay controlado toda la produccion vinculada al pedido antes de emitir el Remito   
-             $cant_ordfab_pendientes = DB::table('ordenes_fabricacion')-> where ('id_pedido','=',$id_ped)-> where ('estado','=','Empaquetado y controlado')->count('id');
-             $cant_ordfab = DB::table('ordenes_fabricacion')-> where ('id_pedido','=',$id_ped)->count('id');
-                  
-            $texto= DB::table('formaspago')
-            ->where('formaspago.id', 1)
-            ->select([ 'formaspago.Forma_pago_Productos',
-                      'formaspago.Forma_pago_Obras',
-                      'formaspago.Forma_pago_Muebles'
-                     ])           
-            ->first();
- 
-            $datosPedidos= DB::table('nota_pedidos')
-            ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-            ->where('nota_pedidos.id', $id_ped)
-            ->select([ 'nota_pedidos.id as id_pedido',
-                      'nota_pedidos.fecha',
-                      'clientes.nombre',
-                      'clientes.id as id_cliente',
-                      'nota_pedidos.totalgravado',
-                      'nota_pedidos.total',
-                      'nota_pedidos.monto_iva',
-                      'nota_pedidos.id_factura',
-                      'nota_pedidos.observaciones',
-                      'nota_pedidos.descuento',
-                      'nota_pedidos.nro_remito',
-                      'nota_pedidos.fecha_entrega',
-                      'nota_pedidos.estado'
-                ])           
-            ->first();
-           //  dd( $suma_cobranza , $datosPedidos->total);
-            if ($suma_cobranza != $datosPedidos->total)
-                {
-                    $redirect = redirect()->back();        
-                    return $redirect->with([
-                        'message'    => __('Asegurese que el cliente pague la totalidad del pedido antes de emitir el remito'),
-                        'alert-type' => 'error',
-                    ]);
-                   
-                }
-           // dd( $cant_ordfab_pendientes , $cant_ordfab);
-            if ( $cant_ordfab_pendientes != $cant_ordfab)
-                {
-                // dd( $cant_ordfab_pendientes , $cant_ordfab);
-                //echo 'Asegurese que el cliente empaquete y controle todas las ordenes del pedido antes de emitir el remito';
-               
-                $redirect = redirect()->back();        
-                return $redirect->with([
-                    'message'    => __('Asegurese que el cliente empaquete y controle todas las ordenes del pedido antes de emitir el remito'),
-                    'alert-type' => 'error',
-                ]);
+    //***************************************
+    //               _____
+    //              |  _ _ |
+    //              | |
+    //              | |
+    //              | |_ _ 
+    //              |______|
+    //
+    //      COBRANZAS DEL PEDIDO
+    //
+    //****************************************
 
-                 }
-            if ($datosPedidos->nro_remito==0)  
-            {
-                $ultimo_remito = DB::table('nota_pedidos')->max('nro_remito');
-                $Pedidos_remito = DB::table('nota_pedidos')
-                  ->where('id',$id_ped)
-                  ->update(['nro_remito' => $ultimo_remito+1,'fecha_entrega' => today(),'estado'=> 'Entregado']);
-                $ordenesfab_remito = DB::table('ordenes_fabricacion')
-                  ->where('id_pedido',$id_ped)
-                  ->update(['estado'=> 'Entregado']);
-            }
-            
- 
-            $detallesPedidos= DB::table('nota_pedidos')
-            ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')
-            ->join('productos','renglones_notapedidos.id_producto','=','productos.id')
-            ->where('nota_pedidos.id', $id_ped)
-            ->select(['nota_pedidos.id as id_pedido',
-            'renglones_notapedidos.id',
-            'renglones_notapedidos.cantidad',
-            'renglones_notapedidos.id_producto',
-            'renglones_notapedidos.total_linea',
-            'productos.unidad',
-            'productos.descripcion'
-            ])
-            ->get();
-             
-           
+    public function CobranzasPedido($pedido)
+    {
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+        $cobranzas= DB::table('mov_financieros')
+         ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
+         ->where('id_nota_pedido' , '=' ,$pedido);
 
-            $datosPedidos= DB::table('nota_pedidos')
-            ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-            ->where('nota_pedidos.id', $id_ped)
-            ->select([ 'nota_pedidos.id as id_pedido',
-                      'nota_pedidos.fecha',
-                      'clientes.nombre',
-                      'clientes.id as id_cliente',
-                      'nota_pedidos.totalgravado',
-                      'nota_pedidos.total',
-                      'nota_pedidos.monto_iva',
-                      'nota_pedidos.id_factura',
-                      'nota_pedidos.observaciones',
-                      'nota_pedidos.descuento',
-                      'nota_pedidos.nro_remito',
-                      'nota_pedidos.fecha_entrega',
-                      'nota_pedidos.estado'
-                ])           
-            ->first();
+        return view("vendor.voyager.mov-financieros.cobranzas_pedido", compact(
+            'cobranzas', 'pedido','dataType','isSoftDeleted',           
+        ));
+
+    }
+    //***************************************
+    //               _______
+    //              |  _ _  |
+    //              |  _ _| |
+    //              |  _ _ _|
+    //              | | 
+    //              |_|
+    //
+    //      PAGOS DE FACTURAS DE COMPRA
+    //
+    //****************************************
+
+    public function pagoscompras($id_compra)
+    {
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+        $pagos= DB::table('mov_financieros')
+         ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_egreso'])
+         ->where('id_factura_compra' , '=' ,$id_compra);
+        $id_compra_pago=$id_compra;
+        return view("vendor.voyager.mov-financieros.pagos_fcompra", compact(
+            'pagos','id_compra','dataType','isSoftDeleted',           
+        ));
+
+    }
 
 
-              $pdf = PDF::loadView("vendor.voyager.remitos.exportar",
-              compact('id_ped','texto','datosPedidos','detallesPedidos'));
-              return $pdf->stream('remito.pdf');
- 
-        }
-        public function crea_factura($id_ped){
 
 
-        /*
-            Usar fechas del día.
 
-            Como se muestra en el código no deben pasarse parámetros directamente sino usar variables intermedias.
-
-            Desde PHP se debe referenciar la clase como WSAFIPFEPHP. Por lo demás la clase tiene exactamente los mismos métodos y propiedades tal como se explica en esta documentación.
-        */
-        /*
-            <?php
-
-            $fe = new COM("WSAFIPFEPHP.FACTURA") or die("no se pudo crear clase WSAFIPFEPHP.factura");
-
-            $modo = 0;
-
-            $cuit = "aqui cuit sin separadores del emisor";
-
-            $certificado = "ruta y nombre del certificado *.pfx";
-
-            $licencia = " ";
-
-            $resultado = $fe->iniciar($modo, $cuit, $certificado, $licencia);
-
-            echo "resultado iniciar   {$fe->ultimomensajeerror}\n";
-
-            $resultado = $fe->obtenerticketacceso();
-
-            echo "resultado acceso   {$resultado}\n";
-
-            echo "detalle acceso   {$fe->ultimomensajeerror}\n";
-
-            $fe->FECabeceraCantReg = 1;
-
-            $fe->FECabeceraPresta_serv = 1;
-
-            $fe->indice = 0;
-
-            $fe->FEDetalleFecha_vence_pago = "20090630";
-
-            $fe->FEDetalleFecha_serv_desde = "20090630";
-
-            $fe->FEDetalleFecha_serv_hasta = "20090630";
-
-            $fe->FEDetalleImp_neto = 100;
-
-            $fe->FEDetalleImp_total  = 121;
-
-            $fe->FEDetalleFecha_cbte  = "20090630";
-
-            $fe->FEDetalleNro_doc  = "aqui cuit del cliente inscripto";
-
-            $fe->FEDetalleTipo_doc  = 80;
-
-            $puntoventa = 1;
-
-            $tipo = 1;
-
-            $identificador ="1";
-
-            $resultado = $fe->registrar($puntoventa, $tipo,$identificador);
-
-            echo "resultado iniciar   {$fe->ultimomensajeerror}\n";
-
-            echo "error AFIP  {$fe->permsg}\n";
-
-            echo "resultado repetido (reproceso)   {$fe->FERespuestaReproceso}\n";
-
-            echo "CAE   {$fe->FERespuestaDetalleCAE}\n";
-
-            echo "numero   {$fe->FERespuestaDetalleCbt_desde}\n";
-
-            echo "fin";
-
-            $fe = null;
-
-            ?>
-            
-        */
- 
-        }
 
     //***************************************
     //                _____
@@ -494,9 +278,9 @@ public function remitos()
     //  Read an item of our Data Type B(R)EAD
     //
     //****************************************
+
     public function show(Request $request, $id)
     {
-          
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -522,18 +306,7 @@ public function remitos()
             // If Model doest exist, get data from table name
             $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
         }
-        //<<<<<<<<<<<<<<        <<<<<<<<          <<<<<<<                 <<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<  <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<<   <<<<<          <<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    
-        $renglones=$this->obtener_lineas($id);
-  
-       // $totales=$this->obtener_totales_lineas($id);
-    
+
         // Replace relationships' keys for labels and create READ links if a slug is provided.
         $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
 
@@ -554,75 +327,10 @@ public function remitos()
         if (view()->exists("voyager::$slug.read")) {
             $view = "voyager::$slug.read";
         }
-        
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones'));
-        
+
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
     }
 
-    public function ver_remito(Request $request, $id)
-    {
-       // $slug = $this->getSlug($request);
-        $slug = 'nota-pedidos';
-        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-
-        $isSoftDeleted = false;
-
-        if (strlen($dataType->model_name) != 0) {
-            $model = app($dataType->model_name);
-            $query = $model->query();
-
-            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
-            if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
-                $query = $query->withTrashed();
-            }
-            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
-                $query = $query->{$dataType->scope}();
-            }
-            $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
-            if ($dataTypeContent->deleted_at) {
-                $isSoftDeleted = true;
-            }
-        } else {
-            // If Model doest exist, get data from table name
-            $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
-        }
-        //<<<<<<<<<<<<<<        <<<<<<<<          <<<<<<<                 <<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<  <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<<   <<<<<          <<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    
-        $renglones=$this->obtener_lineas($id);
-
-       // $totales=$this->obtener_totales_lineas($id);
-    
-        // Replace relationships' keys for labels and create READ links if a slug is provided.
-        $dataTypeContent = $this->resolveRelations($dataTypeContent, $dataType, true);
-
-        // If a column has a relationship associated with it, we do not want to show that field
-        $this->removeRelationshipField($dataType, 'read');
-
-        // Check permission
-        $this->authorize('read', $dataTypeContent);
-
-        // Check if BREAD is Translatable
-        $isModelTranslatable = is_bread_translatable($dataTypeContent);
-
-        // Eagerload Relations
-        $this->eagerLoadRelations($dataTypeContent, $dataType, 'read', $isModelTranslatable);
-
-        $view = 'voyager::bread.read';
-
-        if (view()->exists("voyager::$slug.read")) {
-           // $view = "voyager::$slug.read";
-            $view = "vendor.voyager.remitos.read";
-        }
-        
-        return view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones', 'id'));
-        
-    }
     //***************************************
     //                ______
     //               |  ____|
@@ -637,9 +345,8 @@ public function remitos()
 
     public function edit(Request $request, $id)
     {
-       // dd("Esto es la primer pantalla para editar");die;
+        $usuario=auth()->id();
         $slug = $this->getSlug($request);
-
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         if (strlen($dataType->model_name) != 0) {
@@ -659,9 +366,6 @@ public function remitos()
             $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
         }
 
-        $renglones=$this->obtener_lineas($id);
-         
-        
         foreach ($dataType->editRows as $key => $row) {
             $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
         }
@@ -683,107 +387,15 @@ public function remitos()
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
-         
-         
 
-       $id_filtro_pedido=$id;
-       return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido'));
-    }
-
-    public function obtener_lineas($id_pedido)
-    {
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<                 <<<<<<<<<           <<<<<<       <<<<<<<<    <<<<<<<<<<<<<<<<
-        //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<         <<<<<<    <<<<<<<<<<<<<<<<
-        //<<<<     <<<<<<<<   <<<<<<<<<<     <<<<<<<<<<<<     <<    <<<<    <<<<<<<<<<<<<<<<
-        //<<<<             <<<<<<<<<<<<<           <<<<<<     <<<    <<    <<<<<<<<<<<<<<<<<
-        //<<<<     <<<<<<     <<<<<<<<<<     <<<<<<<<<<<<     <<<<   <<<    <<<<<<<<<<<<<<<<
-        //<<<<     <<<<<<<<    <<<<<<<<<     <<<<<<<<<<<<     <<<<<  <<<    <<<<<<<<<<<<<<<<
-        //<<<<     <<<<<<<<<   <<<<<<<<<           <<<<<<     <<<<<         <<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        
-       
-/*
-
-        return $renglones=   DB::table('nota_pedidos')
-        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.id_pedido')
-        ->join('productos as p','r.id_producto','=','p.id')
-        ->join('rubros as rub','p.rubro_id','=','rub.id')
-        ->leftjoin ('ordenes_fabricacion as of',function($join){
-            $join->on('of.id_producto','=','r.id_producto')
-                ->on('of.id_pedido','=','r.id_pedido');
-               })
-        ->select('r.id','r.id_producto','rub.rubro','p.descripcion','r.cantidad','p.unidad','p.preciovta' ,'r.total_linea', 'iva', 'nota_pedidos.id_factura as factura', 'of.estado as estado_fabricacion')
-        ->where('nota_pedidos.id',$id_pedido)->get();     
-
-    */    
-    return $renglones=   DB::table('nota_pedidos')
-        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.id_pedido')
-        ->join('productos as p','r.id_producto','=','p.id')
-        ->join('rubros as rub','p.rubro_id','=','rub.id')
-        ->join('subrubros as s','p.subrubro_id','=','s.id')
-        ->leftjoin ('ordenes_fabricacion as of',function($join){
-            $join->on('of.id_producto','=','r.id_producto')
-                ->on('of.id_pedido','=','r.id_pedido');
-               })
-               ->select(DB::raw('nota_pedidos.id as id_pedido,
-               r.id,
-               rub.rubro,
-               s.descripcion_subrubro as subrubro,
-               r.cantidad,
-               r.id_producto,
-               r.total_linea / r.cantidad as precio,
-               r.total_linea,
-               p.descripcion,
-               p.unidad, 
-               of.estado as estado_fabricacion'
-               ))
-        ->where('nota_pedidos.id',$id_pedido)->get();     
-
-    }
-
-    public function obtener_totales_NP($fecha_desde,$fecha_hasta)
-    {
-        return $total_importe_NP=   DB::table('nota_pedidos')
-        ->whereBetween('nota_pedidos.fecha',array($fecha_desde,$fecha_hasta) ) ->where('estado', '=', 'Pendiente')->sum('nota_pedidos.total');
-
-    }
-    public function obtener_totales_lineas($id_pedido)
-    {
-        return $total=   DB::table('nota_pedidos')
-        ->join('renglones_notapedidos as r','nota_pedidos.id','=','r.pedido_id')
-        ->join('productos as p','r.producto_id','=','p.id')        
-        ->where('nota_pedidos.id',$id_pedido)->sum('r.total_linea');
-    }
-    public function generaordenesfabricacion($id_pedido)
-    {
-        // if tipo_presupuesto = Muebles o tipo_presupuesto = Productos
-       //  Verificar si ya genero las ordenes de fabric ->  
- 
-       DB::insert('insert into ordenes_fabricacion ( fecha_orden, observaciones, estado,
-        fecha_entrada_proceso, fecha_salida_proceso, id_producto,cantidad, id_pedido)
-        select  now(), null , "Pendiente", null, null, id_producto , cantidad, id_pedido
-        from renglones_notapedidos inner join productos p on p.id = renglones_notapedidos.id_producto
-        inner join rubros r on r.id = p.rubro_id
-        where id_pedido =  '.$id_pedido. ' and r.categoria = "Elaboración Propia" ') ;
-      
-        $redirect = redirect()->back();
-
-        return $redirect->with([
-            'message'    => __('voyager::generic.successfully_updated')." {}",
-            'alert-type' => 'error',
-        ]);
+    
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
     }
 
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-        //dd('function update'); 
-        //dd($request['detalles_string']);
-        $tabla_detalles=unserialize($request['detalles_string']);
-        //dd($tabla_detalles);
-        // die;
+     
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -808,39 +420,6 @@ public function remitos()
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
 
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<       <>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    <<<<<>    >>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<               <<<<<>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-       
-
-        $data->id_vendedor=auth()->id();
-        $data->totalgravado = $request['totalgravado']; 
-        
-      // dd($request['totalgravado']);
-      //  $data->gravadocondescuento = $data->totalgravado - $request['descuento']; 
-      //  $data->monto_iva = ($data->gravadocondescuento )  * 0.21 ; 
-        $data->monto_iva = ($request['totalgravado'] +  $request['descuento'] )  * 0.21 ; 
-        $data->total = $request['totalgravado'] +  $request['descuento'] + $data->monto_iva;
-       
-        $data->save();
-        
-        //dd('function update');
-        //  dd($request['detalles_string']);
-        $tabla_detalles=unserialize($request['detalles_string']);
-        //dd($tabla_detalles);  
-        $this->eliminar_renglones_de_pedido($data->id);
-        $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
-          
-
         // Get fields with images to remove before updating and make a copy of $data
         $to_remove = $dataType->editRows->where('type', 'image')
             ->filter(function ($item, $key) use ($request) {
@@ -856,7 +435,18 @@ public function remitos()
         event(new BreadDataUpdated($dataType, $data));
 
         if (auth()->user()->can('browse', app($dataType->model_name))) {
-            $redirect = redirect()->route("voyager.{$dataType->slug}.index");
+            //$redirect = redirect()->route("voyager.{$dataType->slug}.index");
+
+            if (!empty($request['id_nota_pedido'])&& ($request['tipo_movimiento']== "Cobranza/Ingresos") ) {
+                return redirect(url('/CobranzasPedido/'.$request['id_nota_pedido']));
+               }else
+               {
+                if (!empty($request['id_factura_compra'])&& ($request['tipo_movimiento']== "Gastos/Egresos") ) {
+                    return redirect(url('/pagos_compras/'.$request['id_factura_compra']));
+                  
+                }else
+                   { $redirect = redirect()->route("voyager.{$dataType->slug}.index");}
+               }
         } else {
             $redirect = redirect()->back();
         }
@@ -866,6 +456,324 @@ public function remitos()
             'alert-type' => 'success',
         ]);
     }
+/// 
+    public function edit_cobranzas(Request $request, $id)
+    {
+        $usuario=auth()->id();
+      //  $slug = $this->getSlug($request);      
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+
+        // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+        // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+        if (strlen($dataType->model_name) != 0) {
+            $model = app($dataType->model_name);
+            $query = $model->query();
+
+                // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+            if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+                $query = $query->withTrashed();
+            }
+            if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+                $query = $query->{$dataType->scope}();
+            }
+            $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+        } else {
+            // If Model doest exist, get data from table name
+            $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+        }
+
+        foreach ($dataType->editRows as $key => $row) {
+            $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+        }
+
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'edit');
+
+        // Check permission
+         $this->authorize('edit', $dataTypeContent);
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+        $view = 'voyager::bread.edit-add';
+
+        if (view()->exists("voyager::$slug.edit-add")) {
+           // $view = "voyager::$slug.edit-add";
+           // $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
+            $view = "vendor.voyager.movimientos_financieros.edit-add-cobranzas";
+           
+        }
+
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
+    }
+///
+/// 
+public function edit_pagos(Request $request, $id)
+{
+    $usuario=auth()->id();
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+         $view = "vendor.voyager.movimientos_financieros.edit-add-pagos";
+       
+    }
+
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
+}
+///
+
+///
+public function Ingresos(Request $request , $id)
+{
+  //  $slug = $this->getSlug($request);      
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+    // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+       // $view = "voyager::$slug.edit-add";
+        $view = "vendor.voyager.movimientos_financieros.edit-add-cobranzas";
+        
+    }
+
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+  
+}
+////
+public function Egresos(Request $request , $id)
+{
+  //  $slug = $this->getSlug($request);  
+    $usuario=auth()->id();    
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+    // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+       // $view = "voyager::$slug.edit-add";
+        $view = "vendor.voyager.movimientos_financieros.edit-add-pagos";
+    }
+
+         $datos_fcompra= DB::table ('mov_financieros')
+         -> join ('facturas_compras','mov_financieros.id_factura_compra','=','facturas_compras.id')
+         -> where('mov_financieros.id' , '=' ,$id)
+         -> select(['facturas_compras.tipo_factura', 'facturas_compras.pto_venta', 
+         'facturas_compras.nro_factura', 'facturas_compras.fecha','facturas_compras.observaciones',
+         'facturas_compras.subtotal','facturas_compras.iva','facturas_compras.otros_impuestos','facturas_compras.total_factura'])           
+        ->first();
+
+        
+        // return $datos_fcompra ;
+
+  
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario','datos_fcompra'));
+   
+}
+////
+public function Otros_movfinancieros(Request $request , $id)
+{
+  //  $slug = $this->getSlug($request);      
+    $slug = "movimientos_financieros";
+    $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+    $isSoftDeleted = false;
+    $model = app($dataType->model_name);
+
+    // $slug = "mov-financieros" ; // Cuando se accede a los metodos de un contralador Voyager sin el bonton de Voyager
+    // $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+
+    if (strlen($dataType->model_name) != 0) {
+        $model = app($dataType->model_name);
+        $query = $model->query();
+
+            // Use withTrashed() if model uses SoftDeletes and if toggle is selected
+        if ($model && in_array(SoftDeletes::class, class_uses_recursive($model))) {
+            $query = $query->withTrashed();
+        }
+        if ($dataType->scope && $dataType->scope != '' && method_exists($model, 'scope'.ucfirst($dataType->scope))) {
+            $query = $query->{$dataType->scope}();
+        }
+        $dataTypeContent = call_user_func([$query, 'findOrFail'], $id);
+    } else {
+        // If Model doest exist, get data from table name
+        $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+    }
+
+    foreach ($dataType->editRows as $key => $row) {
+        $dataType->editRows[$key]['col_width'] = isset($row->details->width) ? $row->details->width : 100;
+    }
+
+    // If a column has a relationship associated with it, we do not want to show that field
+    $this->removeRelationshipField($dataType, 'edit');
+
+    // Check permission
+     $this->authorize('edit', $dataTypeContent);
+
+    // Check if BREAD is Translatable
+    $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+    // Eagerload Relations
+    $this->eagerLoadRelations($dataTypeContent, $dataType, 'edit', $isModelTranslatable);
+
+    $view = 'voyager::bread.edit-add';
+
+    if (view()->exists("voyager::$slug.edit-add")) {
+       // $view = "voyager::$slug.edit-add";
+       $view = "vendor.voyager.movimientos_financieros.edit-add-otrosmovfinancieros";
+       
+    }
+
+    return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+}
+
+public function recibo_cobranza($id){
+
+    //$texto="esto es el texto de la nota";
+   
+    $datoscobranza= DB::table('mov_financieros')
+    ->join('nota_pedidos','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
+    ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+    ->where('mov_financieros.id', $id)
+    ->select(['nota_pedidos.id as id_pedido',
+              'mov_financieros.fecha',
+              'mov_financieros.pto_vta',
+              'mov_financieros.nro_recibo',
+              'clientes.nombre',
+              'mov_financieros.importe_ingreso',
+              'mov_financieros.modalidad_pago',
+              'mov_financieros.detalle'
+              
+        ])           
+    ->first();
+    
+
+     
+      $pdf = PDF::loadView("vendor.voyager.mov-financieros.recibo",
+      compact('id','datoscobranza'));
+      return $pdf->stream('recibo.pdf');
+
+ }
 
     //***************************************
     //
@@ -882,6 +790,7 @@ public function remitos()
 
     public function create(Request $request)
     {
+        $usuario=auth()->id();
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -910,13 +819,105 @@ public function remitos()
 
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
+
+        }
+        // dd($usuario);
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
+    }
+
+    //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    //                                COBRANZAS CREATE    
+    //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    public function cobranzas_create(Request $request,$id_pedido)
+    {
+        $usuario=auth()->id();
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+
+
+        
+        // Check permission
+        $this->authorize('add', app($dataType->model_name));
+
+        $dataTypeContent = (strlen($dataType->model_name) != 0)
+                            ? new $dataType->model_name()
+                            : false;
+
+        foreach ($dataType->addRows as $key => $row) {
+            $dataType->addRows[$key]['col_width'] = $row->details->width ?? 100;
         }
 
-        $id_filtro_pedido=0 ; //$id;
-        $renglones = null;
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido'));
-      //  return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'add');
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'add', $isModelTranslatable);
+
+        $view = 'voyager::bread.edit-add';
+        
+        $ult_recibo=DB::table('mov_financieros')->max('nro_recibo');
+        $nro_recibo=$ult_recibo+1;
+        if (view()->exists("voyager::$slug.edit-add")) {
+          //  $view = "voyager::$slug.edit-add";  
+          $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
+        }
+     
+     
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido','usuario','nro_recibo'));
     }
+
+//<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    //                                PAGOS CREATE    
+    //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
+    public function pagos_create(Request $request,$id_compra)
+    {
+        $usuario=auth()->id();
+        $slug = "movimientos_financieros";
+        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
+        $isSoftDeleted = false;
+        $model = app($dataType->model_name);
+        
+        // Check permission
+        $this->authorize('add', app($dataType->model_name));
+
+        $dataTypeContent = (strlen($dataType->model_name) != 0)
+                            ? new $dataType->model_name()
+                            : false;
+
+        foreach ($dataType->addRows as $key => $row) {
+            $dataType->addRows[$key]['col_width'] = $row->details->width ?? 100;
+        }
+
+        // If a column has a relationship associated with it, we do not want to show that field
+        $this->removeRelationshipField($dataType, 'add');
+
+        // Check if BREAD is Translatable
+        $isModelTranslatable = is_bread_translatable($dataTypeContent);
+
+        // Eagerload Relations
+        $this->eagerLoadRelations($dataTypeContent, $dataType, 'add', $isModelTranslatable);
+
+        $view = 'voyager::bread.edit-add';
+
+        if (view()->exists("voyager::$slug.edit-add")) {
+          //  $view = "voyager::$slug.edit-add";  
+          $view = "vendor.voyager.mov-financieros.edit-add-pagos";
+        }
+        $reg_compras = DB::table('facturas_compras')->where('id', $id_compra)->first();
+        $id_tipo_gasto=$reg_compras->id_tipo_gasto;
+        $id_proveedor=$reg_compras->id_proveedor;
+       // dd('pagos compras',$usuario,$id_tipo_gasto,$id_proveedor);
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra','usuario','id_tipo_gasto','id_proveedor'));
+    }
+
+  
+
+
 
     /**
      * POST BRE(A)D - Store data.
@@ -925,97 +926,92 @@ public function remitos()
      *
      * @return \Illuminate\Http\RedirectResponse
      */
+
     public function store(Request $request)
     {
-      
+        //dd($request);
         $slug = $this->getSlug($request);
-
+       
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 
         // Check permission
         $this->authorize('add', app($dataType->model_name));
 
         // Validate fields with ajax
-      
-
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
-       
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
-        
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<    ACTUALIZANDO LOS TOTALES      >>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-        $data->id_vendedor=auth()->id();
-        $data->monto_iva=0;
-        $data->total=$request['total_general'];
-        $data->totalgravado=$request['total_general']; 
-        $data->save();
-
-        event(new BreadDataAdded($dataType,  $data));
-
-        if (!$request->has('_tagging')) {
-            if (auth()->user()->can('browse', $data)) {
-                $redirect = redirect()->route("voyager.{$dataType->slug}.index");
-            } else {
-                $redirect = redirect()->back();
-            }
-
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<          CARGANDO LAS LINEAS             <<<<<<<<<<<<<<<<<<<<<>>>>>>>
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-            
-            $tabla_detalles=unserialize($request['detalles_string']);
-           // dd($request['detalles_string']);
-            $this->cargar_renglones_de_pedido( $tabla_detalles,$data->id);
-            
-            
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-           
-
-            return  $redirect->with([
-                'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
-                'alert-type' => 'success',
-            ]);
-        } else {
-            return response()->json(['success' => true, 'data' => $data]);
-        }
-    }
-
-    public function eliminar_renglones_de_pedido($id_pedido)
-    {
-        DB::table('renglones_notapedidos')->where('id_pedido', '=', $id_pedido)->delete();
-    }
-
-    public function cargar_renglones_de_pedido($tabla_detalles,$id_pedido)
-    {
+       //+-------------------------------------------------------------------------+
+       //+     Graba el movimiento (egreso) y la factura de Compra                       +
+       //+-------------------------------------------------------------------------+
        
-      // dd($tabla_detalles);  
-        foreach ($tabla_detalles as $r) {
-             
-            $renglon_np=new renglones_notapedido();
-            //$renglon_np->pedido_id=$id_pedido;
-            $renglon_np->id_pedido=$id_pedido; 
-            $renglon_np->cantidad=$r['cantidad'];
-           // $renglon_np->precio=$r['precio'];
-            $renglon_np->id_producto=$r['id_producto'];
-            $renglon_np->total_linea=$r['total-linea'];
-            $renglon_np->iva=21;
-            $renglon_np->save();              
+            if (!empty($request['id_nota_pedido']) or !empty($request['id_factura_compra']) ) {
+              $data->id_nota_pedido=$request['id_nota_pedido'];
+              $data->id_factura_compra=$request['id_factura_compra'];
+              $data->id_tipo_gasto=$request['id_tipo_gasto']; 
+              $data->id_proveedor=$request['id_proveedor']; 
+            }
+              $data->tipo_movimiento=$request['tipo_movimiento'];
+              $data->id_usuario=$request['id_usuario'];
+             // dd($request['id_usuario']);
+              
+              $data->save();
+              /////// Graba la factura de Compra
+              //$fcompra = Factura_Compra::firstOrNew(array('id' => $data->id_factura_compra));
+              $fcompra = new Factura_Compra();
+              $fcompra->tipo_factura = $request['tipo_factura'];
+              $fcompra->pto_venta = $request['pto_vta'];
+              $fcompra->nro_factura = $request['nro_factura'];
+              $fcompra->id_proveedor = 1; // $request['id_proveedor'];
+              $fcompra->fecha = $request['fecha_factura'];
+              $fcompra->observaciones = $request['observaciones'];
+              $fcompra->id_tipo_gasto = 1; //$data->id_tipo_gasto;
+              $fcompra->fecha_carga = now();
+              $fcompra->subtotal = $request['subtotal'];
+              $fcompra->iva = $request['iva'];
+              $fcompra->otros_impuestos = $request['otros_impuestos'];
+              $fcompra->total_factura = $request['total_factura'];
+              $fcompra->save();
+              $data->id_factura_compra =$fcompra->id;
+              $data->save();
 
+
+              /*
+              DB::insert('insert into facturas_compras ( tipo_factura,pto_venta,nro_factura,
+              id_proveedor,fecha, observaciones, id_tipo_gasto,fecha_carga,
+              subtotal,iva_10_5,iva_21,iva_27,otros_impuestos,total_factura)
+              values(tipo_factura,pto_venta,nro_factura,
+              $data->id_proveedor, observaciones,$data->id_tipo_gasto,now()
+              subtotal,iva_10_5,iva_21,iva_27,otros_impuestos,total_factura ') ;
+               */
+       event(new BreadDataAdded($dataType,  $data));
+
+     if (!$request->has('_tagging')) {
+        if (auth()->user()->can('browse', $data)) {
+           
+           if (!empty($request['id_nota_pedido'])&& ($request['tipo_movimiento']== "Cobranza/Ingresos") ) {
+            return redirect(url('/CobranzasPedido/'.$request['id_nota_pedido']));
+           }else
+           {
+            if (!empty($request['id_factura_compra'])&& ($request['tipo_movimiento']== "Gastos/Egresos") ) {
+                return redirect(url('/pagos_compras/'.$request['id_factura_compra']));
+              
+            }else
+               { $redirect = redirect()->route("voyager.{$dataType->slug}.index");}
+           }
+               
+        } else {
+            $redirect = redirect()->back();
+                       
         }
+
+        return $redirect->with([
+            'message'    => __('voyager::generic.successfully_added_new')." {$dataType->getTranslatedAttribute('display_name_singular')}",
+            'alert-type' => 'success',
+        ]);
+    } else {
+       return response()->json(['success' => true, 'data' => $data]);
+    }
     }
 
 
@@ -1033,7 +1029,8 @@ public function remitos()
 
     public function destroy(Request $request, $id)
     {
-        $slug = $this->getSlug($request);
+        $slug ='movimientos_financieros'; //$this->getSlug($request);
+
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
 

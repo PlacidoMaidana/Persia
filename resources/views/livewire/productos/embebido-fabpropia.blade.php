@@ -29,7 +29,9 @@
           <select name="base_liston" wire:model="base_liston" class="form-control  form-select"  aria-label="Default select example">
             <option selected value="-"> </option>
             <option value="Base">Base</option>
-            <option value="Liston">Liston</option>
+            <option value="Liston 1">Liston 1</option>
+            <option value="Liston 2">Liston 2</option>
+            <option value="Liston 3">Liston 3</option>
             
           </select>
         </div>

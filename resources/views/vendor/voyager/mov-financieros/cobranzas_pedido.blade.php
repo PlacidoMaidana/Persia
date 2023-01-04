@@ -62,8 +62,9 @@
                                           <th class="dt-not-orderable">
                                               <input type="checkbox" class="select_all">
                                           </th>
-                                          <th>id</th>
                                           <th>fecha</th>
+                                          <th>Pto Vta</th>
+                                          <th>Nro Recibo</th>
                                           <th>detalle</th>
                                           <th>importe ingreso</th>
                                           
@@ -78,7 +79,7 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Totales</h5>
-        <p class="card-text">el total de todo</p>
+        <p class="card-text"> ..</p>
     </div>
 </div>
 
@@ -160,8 +161,9 @@
              "ajax":"{{url('/cobranzas_notapedido/'.$pedido)}}",                
              "columns":[
                      {data: 'check', width: '5%'},
-                     {data: 'id', name: 'id', width: '5%'},
                      {data: 'fecha', name: 'fecha', width: '5%'},
+                     {data: 'pto_vta', name: 'fecha', width: '5%'},
+                     {data: 'nro_recibo', name: 'fecha', width: '5%'},
                      {data: 'detalle', name: 'detalle', width: '10%'},
                      {data: 'importe_ingreso', name: 'importe_ingreso', width: '10%'},
                      {data: 'accion', width: '10%'},

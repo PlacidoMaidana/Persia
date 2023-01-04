@@ -122,6 +122,25 @@ Route::get('/productos_elegir', function () {
     ->toJson();    
  
  });
+ Route::get('/proveedores_elegir', function () {
+     
+  return datatables()->of(DB::table('proveedores')
+  ->select(['id','razonsocial','direccion','nombre_comercial','telefono','cuit' ]))
+  ->addColumn('seleccionar','vendor/voyager/proveedores/boton_seleccionar')
+  ->rawColumns(['seleccionar'])   
+  ->toJson();    
+
+});
+
+Route::get('/tipogasto_elegir', function () {
+     
+  return datatables()->of(DB::table('tipos_gastos')
+  ->select(['id','tipo1','tipo2']))
+  ->addColumn('seleccionar','vendor/voyager/tiposgastos/boton_seleccionar')
+  ->rawColumns(['seleccionar'])   
+  ->toJson();    
+
+});
 
  Route::get('/subrubro_elegir', function () {     
     //  $d =DB::table('subrubros as s')
@@ -405,9 +424,8 @@ Route::get('/comprascanceladas', function () {
   ->leftjoin('moldes','moldes.id','=','productos.id_molde')
   ->where('ordenes_fabricacion.estado','!=', 'Entregado')
   ->select( DB::raw('
-
-                  ordenes_fabricacion.id_pedido as id_pedido,
-                  ordenes_fabricacion.id as id_orden_fabricacion,
+                  ordenes_fabricacion.id,
+                  ordenes_fabricacion.id_pedido,
                   productos.descripcion,
                   rubros.rubro,
                   subrubros.descripcion_subrubro,
@@ -463,9 +481,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
 ->leftjoin('moldes','moldes.id','=','productos.id_molde')
 ->where('ordenes_fabricacion.estado','=', 'Entregado')
 ->select( DB::raw('
-
-                ordenes_fabricacion.id_pedido as id_pedido,
-                ordenes_fabricacion.id as id_orden_fabricacion,
+                ordenes_fabricacion.id,
+                ordenes_fabricacion.id_pedido,
                 productos.descripcion,
                 rubros.rubro,
                 subrubros.descripcion_subrubro,
@@ -588,7 +605,7 @@ Route::delete('/CobranzasPedido/{pedido}', 'App\Http\Controllers\Voyager\MovFina
 Route::get('/cobranzas_notapedido/{id_notapedido}', function ($id_notapedido) {
      
  return datatables()->of(DB::table('mov_financieros')
- ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
+ ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso','pto_vta','nro_recibo'])
  ->where('id_nota_pedido' , '=' ,$id_notapedido))
  ->addColumn('check','vendor/voyager/mov-financieros/check')
  ->addColumn('accion','vendor/voyager/mov-financieros/acciones_ingresos')
@@ -631,6 +648,8 @@ Route::get('/pagos_facturascompras/{id_fcompra}', function ($id_fcompra) {
   ->where('mov_financieros.tipo_movimiento','=', 'Cobranza/Ingresos')
   ->select([  'mov_financieros.id as id',
               'mov_financieros.id_nota_pedido as pedido',
+              'mov_financieros.pto_vta',
+              'mov_financieros.nro_recibo',
               'clientes.nombre as cliente',
               'mov_financieros.tipo_movimiento',
               'mov_financieros.fecha',
@@ -652,9 +671,10 @@ Route::get('/admin/movimientos_financieros/{id}/egresos', 'App\Http\Controllers\
 
 Route::get('/Egresos', function () {     
   return datatables()->of(DB::table('mov_financieros')
-  ->join('tipos_gastos','tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
+  ->join ('facturas_compras','mov_financieros.id_factura_compra','=','facturas_compras.id')
+  ->join('tipos_gastos','tipos_gastos.id','=','facturas_compras.id_tipo_gasto')
   ->join('users','users.id','=','mov_financieros.id_usuario') 
-  ->join('proveedores','proveedores.id','=','mov_financieros.id_proveedor') 
+  ->join('proveedores','proveedores.id','=','facturas_compras.id_proveedor') 
   ->where('mov_financieros.tipo_movimiento','=', 'Gastos/Egresos')
   ->select([  'mov_financieros.id as id',
               'proveedores.razonsocial',
@@ -726,7 +746,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //+------------------------------------------------------------------+
 Route::get('/admin/mov-financieros/{id_movimiento}/edit_cobranzas', 'App\Http\Controllers\Voyager\MovFinancieroController@edit_cobranzas');
 Route::get('/admin/mov-financieros/create_cobranzas/{id_pedido}', 'App\Http\Controllers\Voyager\MovFinancieroController@cobranzas_create');
- 
+Route::get('/admin/mov-financieros/{id_movimiento}/recibo_cobranza', 'App\Http\Controllers\Voyager\MovFinancieroController@recibo_cobranza'); 
 //+------------------------------------------------------------------+
 //|                   Rutas de acción de pagos facturas compra                   |
 //+------------------------------------------------------------------+

@@ -281,7 +281,7 @@
         });
     </script>
 
-
+ordenes_fabricacion_activas
 {{-- ***ENVEBIDO ***--}}
 
 <script>
@@ -292,7 +292,7 @@
              "columns":[
                      {data: 'check', width: '5%'},
                      {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
-                     {data: 'id_orden_fabricacion', name: 'ordenes_fabricacion.id', width: '5%'},
+                     {data: 'id', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},
                      {data: 'descripcion_subrubro', name: 'subrubros.descripcion_subrubro', width: '5%'},
@@ -320,7 +320,7 @@
              "columns":[
                      {data: 'check', width: '5%'},
                      {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
-                     {data: 'id_orden_fabricacion', name: 'ordenes_fabricacion.id', width: '5%'},
+                     {data: 'id', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},
                      {data: 'descripcion_subrubro', name: 'subrubros.descripcion_subrubro', width: '5%'},

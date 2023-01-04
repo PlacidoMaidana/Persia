@@ -13,8 +13,8 @@
 @section('page_header')
     <h1 class="page-title">
         <i class="{{ $dataType->icon }}"></i>
-        {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
-        - Cobranzas de la Nota de Pedido
+        
+        Recibo Cobranza de la Nota de Pedido
         
     </h1>
     @include('voyager::multilingual.language-selector')
@@ -41,9 +41,15 @@
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
-
+                       <br> 
+                       Pto venta:
+                       <input name="pto_vta" placeholder= "Pto Vta" value=1 readonly>
+                       Nro Recibo:
+                       <input name="nro_recibo" placeholder="Nro Recibo" value="{{$nro_recibo}}" readonly>
+                       <br> 
+                       <hr>
                         <div class="panel-body">
-
+                          
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger">
                                     <ul>
@@ -75,7 +81,9 @@
                                    ( $row->getTranslatedAttribute('display_name')=='Tipo gasto'  )||
                                    ( $row->getTranslatedAttribute('display_name')=='Id Nota Pedido'  )||
                                    ( $row->getTranslatedAttribute('display_name')=='proveedores'  )||
-                                   ( $row->getTranslatedAttribute('display_name')=='Id Caja'    )
+                                   ( $row->getTranslatedAttribute('display_name')=='Pto Vta' )||
+                                   ( $row->getTranslatedAttribute('display_name')=='Nro Recibo' )||
+                                   ( $row->getTranslatedAttribute('display_name')=='Id Caja'   )
                    )
                                   @php
                                      continue;
@@ -112,7 +120,7 @@
                         <input type="hidden" name="tipo_movimiento" value="Cobranza/Ingresos">
                         <input type="hidden" name="id_proveedor" value=0>
                         <input type="hidden" name="id_tipo_gasto" value=0>
-                     
+                       
 
 
                         <div class="panel-footer">

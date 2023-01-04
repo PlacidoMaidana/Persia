@@ -31,48 +31,71 @@
 </head>
 <body>
     
-    {{-- <img class="img-responsive" 
-    src="{{asset("images\cabeza.jpg")}}"  alt=""> --}}
-
-    <img class="img-responsive" 
-    src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
-    <h2>ORDEN DE FABRICACION</h2> 
-    <h3>Fecha: {{$datosOrden->fecha}} </h3> 
-    <h3>Cliente: {{$datosOrden->nombre}}</h3> 
+    <h2>ORDEN DE FABRICACION NRO: {{$datosOrden->id}} </h2>
     <hr />
-    
-    Pedido Nro: {{$datosOrden->id_orden}} <br>
+    Fecha: {{$datosOrden->fecha}} <br> 
+    Cliente: {{$datosOrden->nombre}}<br>    
+    Pedido Nro: {{$datosOrden->id_pedido}} <br>
     Producto: {{$datosOrden->descripcion}} <br>
     Cantidad: {{$datosOrden->cantidad}} mt2<br>
-    Estado: {{$datosOrden->estado}} <br>  
+    
      
 
     <hr style="color: rgb(84, 83, 83); background-color: rgb(101, 100, 100); width:100% higth:2px ;" />
-
+    BASE
     <table class="table">
+     
         <tbody>
             <thead >
                 <tr>
-                  <th scope="col">id producto</th>
-                  <th scope="col">Descripcion</th>
+                  <th scope="col">Insumo</th>
                   <th scope="col">Cantidad</th>
                   <th scope="col">Unidad</th>
                 </tr>
               </thead>
-    @foreach($detallesOrden as $p)
-    <tr >
-        <td> {{ $p->id_producto }}</td>
-        <td> {{ $p->descripcion }}</td>
-        <td> {{ $p->cantidad }}</td>
-        <td> {{ $p->unidad }}</td>
-        
+              @foreach($detallesbase as $p)
+              <tr >
+                  <td> {{ $p->descripcion }}</td>
+                  <td> {{ $p->cantidad }}</td>
+                  <td> {{ $p->unidad }}</td>
+              </tr>
+                  
+              @endforeach
 
-    </tr>
-        
-    @endforeach
-
-    </tbody>
+        </tbody>
     </table>
+LISTONES
+    <table class="table">
+      <tbody>
+          <thead >
+              <tr>
+                
+                <th scope="col">Insumo</th>
+                <th scope="col">Unidad</th>
+                <th scope="col">Cantidad liston 1</th>
+                <th scope="col">Cantidad liston 2</th>
+                <th scope="col">Cantidad liston 3</th>
+                
+              </tr>
+            </thead>
+            @foreach($detalleslistones as $l)
+            <tr >
+                
+                <td> {{ $l->descripcion }}</td>
+                <td> {{ $l->unidad }}</td>
+                <td> {{ $l->liston_1 }}</td>
+                <td> {{ $l->liston_2 }}</td>
+                <td> {{ $l->liston_3 }}</td>
+                
+            </tr>
+                
+            @endforeach
+
+      </tbody>
+  </table>
+
+
+
     <br>
    {{-- 
     Total sin IVA: {{$datosPedidos->totalgravado}} <br>
