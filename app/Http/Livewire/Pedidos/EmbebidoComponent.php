@@ -29,7 +29,7 @@ class EmbebidoComponent extends Component
     public $renglones;
 
 
-    protected $listeners = ['actualiza' => 'seleccion_producto'];
+    protected $listeners = ['actualiza' => 'seleccion_producto','totales'=>'CalculosTotales'];
 
     public function mount($renglones)
     {
@@ -136,6 +136,22 @@ class EmbebidoComponent extends Component
        //$this->resetImput();
     }
 
+    public function CalculosTotales($modVenta,$descuento)
+    {
+      //$this->precio=$modVenta;
+       
+       $this->descuento = $descuento;
+       $this->gravadocondescuento = $this->totalgravado + $descuento; 
+       $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
+       $this->totalconiva = $this->gravadocondescuento * 1.21;
+      
+       if ( $modVenta=="Contado") {
+         $this->total=$this->gravadocondescuento ;
+         }else{
+          $this->total=$this->gravadocondescuento  +  $this->monto_iva;
+         }
+         //dd($this->total);
+    }
    
     
     public function quitar($index)

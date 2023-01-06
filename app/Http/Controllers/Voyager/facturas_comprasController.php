@@ -427,9 +427,10 @@ public function update(Request $request, $id)
        
 
         
-        $data->iva_10_5=$request['iva_10_5']; 
-        $data->iva_21=$request['iva_21']; 
-        $data->iva_27=$request['iva_27']; 
+       // $data->iva_10_5=$request['iva_10_5']; 
+       // $data->iva_21=$request['iva_21']; 
+       // $data->iva_27=$request['iva_27']; 
+        $data->iva=$request['iva']; 
         $data->total_factura=$request['total_general'] + $request['total_impuestos'];
         $data->subtotal=$request['total_general']; 
         $data->save();

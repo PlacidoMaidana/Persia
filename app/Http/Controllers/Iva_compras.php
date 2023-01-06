@@ -30,13 +30,7 @@ class iva_compras extends Controller
                       'facturas_compras.fecha',
                       'p.cuit',
                       'facturas_compras.subtotal',
-                      'facturas_compras.exento',
-                      'facturas_compras.iva_10_5',
-                      'facturas_compras.iva_21',
-                      'facturas_compras.iva_27',
-                      'facturas_compras.monto_perc_iibb',
-                      'facturas_compras.monto_percepcion_iva',
-                      'facturas_compras.monto_percep_ganancias',
+                      'facturas_compras.iva',
                       'facturas_compras.otros_impuestos',
                       'facturas_compras.total_factura'  ]))
              ->toJson();  

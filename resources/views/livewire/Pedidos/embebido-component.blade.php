@@ -69,7 +69,7 @@
        
       </tbody>
     </table>
-    <h4 class="card-title">
+      <h4 class="card-title">
    
         Total gravado .......................: {{number_format($totalgravado, 2, '.', ',')}} <br>
         Recargo / Descuento (+ / -) .......: {{number_format($descuento, 2, '.', ',')}} <br>
@@ -79,6 +79,8 @@
         Total ......................................: {{number_format($total, 2, '.', ',')}}  <br>
 
       </h4>
+
+      <a href="" onclick="iva()" class="btn btn-primary" >IVA</a>
 
   </div>
 </div>
@@ -106,6 +108,16 @@
   });
 </script>
 
+
+<script>
+  function calculos()
+  { 
+    
+    Livewire.emit('totales',$("#Modalidad :selected " ).val(), $("#descuento" ).val());
+    
+   }
+   
+</script>
 
  
 

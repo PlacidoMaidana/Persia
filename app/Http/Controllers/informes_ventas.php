@@ -27,7 +27,6 @@ class informes_ventas extends Controller
                      'c.nombre',
                      'c.cuit',
                      'nota_pedidos.estado',
-                     'nota_pedidos.estado_pago',
                      'v.apellidoynombre',
                      'nota_pedidos.total'  ]))
             ->toJson();  

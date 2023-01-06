@@ -119,6 +119,33 @@
                                                  <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                              @endif
                                              
+                                             @if ($row->getTranslatedAttribute('display_name')=='Modalidad Venta')
+                                             <select class="form-control select2 select2-hidden-accessible" id='Modalidad' name="modalidad_venta" data-select2-id="7" tabindex="-1" aria-hidden="true">
+                                                <option value="Contado">Contado</option>
+                                                <option value="Otros" selected="selected" data-select2-id="9">Otros</option>
+                                             </select>
+                                             
+                                             @php
+                                             continue;
+                                             @endphp
+                                             @endif
+
+                                             @if ($row->getTranslatedAttribute('display_name')=='Recargo /Descuento (+/-)')
+                                                                                        
+                                             <div class="form-group  col-md-6 ">
+                                                 
+                                                <label class="control-label" for="name">Recargo /Descuento (+/-)</label>
+                                                <input type="text" class="form-control"  id='descuento'  name="descuento" placeholder="Recargo /Descuento (+/-)" value="{{$dataTypeContent->descuento}}">
+                                             </div>
+                                            
+                                            
+                                            
+                                             @php
+                                             continue;
+                                             @endphp
+                                             @endif
+
+
                                              @if ($row->getTranslatedAttribute('display_name')=='cliente')
                                                 {{-- <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                                                 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Boton + cliente          <<<<<<<<<<<<<<<<<<<<<<<<<
@@ -163,6 +190,11 @@
                                                     
                                                     
                                                     </label>
+
+
+
+
+
                                                     @include('voyager::multilingual.input-hidden-bread-edit-add')
                                                     @if (isset($row->details->view))
                                                         @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
@@ -322,11 +354,11 @@
                                    
                                     {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
                                         <input type="hidden" name="id_vendedor">
-                                        <input type="hidden" name="monto_iva">
+                                        <input type="hidden" id="monto_iva" name="monto_iva">
                                         <input type="hidden" name="total">
                                         <input type="hidden" name="totalgravado">
                                       
-                                       
+                                        
                                          
 
                                     {{-- FORMULARIO EMBEBIDO --}}
@@ -673,5 +705,26 @@
 
         });
      </script>
+
+    <script>
+
+    $(document).ready(function(){
+        $("#Modalidad").change(function(){
+               calculos();
+                // alert($('#Modalidad').val());
+                //$('#valor2').val($(this).val());
+                    });
+        $("#descuento").change(function(){
+           calculos();	});
+        
+    });
+    
+    </script>
+         
+
+
+
+
+
 
 @stop

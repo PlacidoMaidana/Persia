@@ -168,6 +168,11 @@
                                 <button type="button" class="btn btn-primary" id="proveedor_buscar">
                                 Proveedor
                                 </button>
+                                @php
+                                session(['urlOrigen' => 'admin/movimientos_financieros/create']);
+                                @endphp
+                                <a href="{{url('admin/proveedores/create')}}"  class="btn btn-primary" >Nuevo</a>
+                               
                                 <input type="hidden" id="id_proveedor" name="id_proveedor">
                             </div>
 

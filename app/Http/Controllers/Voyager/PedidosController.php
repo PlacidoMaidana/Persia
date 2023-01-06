@@ -684,8 +684,8 @@ public function remitos()
             $view = "voyager::$slug.edit-add";
         }
          
-         
-
+     
+      
        $id_filtro_pedido=$id;
        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido'));
     }

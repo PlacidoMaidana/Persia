@@ -1,7 +1,7 @@
 @php
     $edit = !is_null($dataTypeContent->getKey());
     $add  = is_null($dataTypeContent->getKey());
-  
+
 @endphp
 {{-- @extends('voyager::master') --}}
 @extends('layouts.voyager2')
@@ -149,7 +149,15 @@
                                 <button type="button" class="btn btn-primary" id="proveedor_buscar">
                                 Proveedor
                                 </button>
-                                <input type="hidden" id="id_proveedor" name="id_proveedor">
+                               
+                                @php
+                                session(['urlOrigen' => 'admin/movimientos_financieros/create']);
+
+                                session(['urlEgresoMovFinancieros' => 'admin/movimientos_financieros']);
+            
+                                @endphp
+                                <a href="{{url('admin/proveedores/create')}}"  class="btn btn-primary" >Nuevo</a>
+                              
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="">Tipo Gasto</label>
@@ -159,7 +167,7 @@
                                 <button type="button" class="btn btn-primary" id="tipogasto_buscar">
                                 Tipo Gasto
                                 </button>
-                                <input type="hidden" id="id_tipo_gasto" name="id_tipo_gasto">
+                                
                             </div>
                             <div class="row">
                             </div> 
@@ -185,6 +193,8 @@
                             </div>
                 
                         </div><!-- panel-body -->
+
+            
                         <div class="modal fade modal-warning" id="modalproveedor" v-if="allowCrop">
                             <div class="modal-dialog"  style="min-width: 90%">
                                 <div class="modal-content">
@@ -257,9 +267,9 @@
               
                        <!-- Modal --> 
                         <input type="hidden" name="id_factura_compra" value="{{$datos_fcompra->id_factura_compra}}">
-                        <input type="hidden" name="id_proveedor" value="{{$datos_fcompra->id_proveedor}}">
-                        <input type="hidden" name="id_tipo_gasto" value="{{$datos_fcompra->id_tipo_gasto}}">
                         <input type="hidden" name="id_usuario" value="{{$usuario}}">
+                        <input type="hidden" id="form_idProv" name="id_proveedor" value="{{$datos_fcompra->id_proveedor}}">
+                        <input type="hidden" id="form_idTipoGasto" name="id_tipo_gasto"  value="{{$datos_fcompra->id_tipo_gasto}}">
                         <input type="hidden" name="id_nota_pedido" value=0>
                         <input type="hidden" name="tipo_movimiento" value="Gastos/Egresos">
                     
@@ -437,15 +447,15 @@
         function elegir_proveedor(id,razonsocial) {   
             $('#modalproveedor').modal('hide');  
             $('#nombre_prov').val(razonsocial);            
-            $('#id_proveedor').val(id);
-  
+            $('#form_idProv').val(id);
+            
           }
     </script>
         <script>
             function elegir_tipogasto(id,tipo1,tipo2) {   
                 $('#modaltipogasto').modal('hide');  
                 $('#nombre_tipo_gasto').val(tipo1+'-'+tipo2);            
-                $('#id_tipo_gasto').val(id);
+                $('#form_idTipoGasto').val(id);
       
               }
         </script>

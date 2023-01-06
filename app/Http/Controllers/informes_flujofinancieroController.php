@@ -19,27 +19,7 @@ class informes_flujofinancieroController extends Controller
  
     public function en_rango_de_fechas($anio)
     {
-      /*
-      return $egresosmes = datatables()->of(DB::table('mov_financieros')
-      ->join ('tipos_gastos','mov_financieros.id_tipo_gasto','=','tipos_gastos.id')
-      -> where ('mov_financieros.tipo_movimiento','=','Gastos/Egresos')
-      ->select(['id_tipo_gasto', 'tipos_gastos.tipo1', 'tipos_gastos.tipo2', 
-               DB::raw('SUM(IF(MONTH(fecha)=1 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Ene'),
-               DB::raw('SUM(IF(MONTH(fecha)=2 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Feb'),
-               DB::raw('SUM(IF(MONTH(fecha)=3 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Mar'),
-               DB::raw('SUM(IF(MONTH(fecha)=4 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Abr'),
-               DB::raw('SUM(IF(MONTH(fecha)=5 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS May'),
-               DB::raw('SUM(IF(MONTH(fecha)=6 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Jun'),
-               DB::raw('SUM(IF(MONTH(fecha)=7 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Jul'),
-               DB::raw('SUM(IF(MONTH(fecha)=8 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Ago'),
-               DB::raw('SUM(IF(MONTH(fecha)=9 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Sep'),
-               DB::raw('SUM(IF(MONTH(fecha)=10 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Octu'),
-               DB::raw('SUM(IF(MONTH(fecha)=11 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Nov'),
-               DB::raw('SUM(IF(MONTH(fecha)=12 and year(mov_financieros.fecha)= '.$anio.', importe_egreso, NULL)) AS Dic')] )
-            
-               ->groupBy('id_tipo_gasto','tipos_gastos.tipo1', 'tipos_gastos.tipo2'))
-            ->toJson();  
-            */
+    
           
 
             $total_ingresos= DB::table('mov_financieros')
@@ -81,6 +61,7 @@ class informes_flujofinancieroController extends Controller
                                        ->groupBy('tipo','tipo1','tipo2');    
 
             $total_margen= DB::table('mov_financieros')
+
                                       ->select([DB::raw('"MARGEN TOTAL" as tipo'),
                                        DB::raw('" " as tipo1'),
                                        DB::raw('" " as tipo2'), 
@@ -99,22 +80,23 @@ class informes_flujofinancieroController extends Controller
                                                 ->groupBy('tipo','tipo1','tipo2');                            
 
             $egresos= DB::table('mov_financieros')
-                     ->leftjoin ('tipos_gastos','mov_financieros.id_tipo_gasto','=','tipos_gastos.id')
+                     -> join ('facturas_compras','mov_financieros.id_factura_compra','=','facturas_compras.id')
+                     ->leftjoin ('tipos_gastos','facturas_compras.id_tipo_gasto','=','tipos_gastos.id')
                      -> where ('mov_financieros.tipo_movimiento','=','Gastos/Egresos')
                      ->select([DB::raw('"EGRESOS" as tipo'),
                              'tipos_gastos.tipo1', 'tipos_gastos.tipo2', 
-                              DB::raw('SUM(IF(MONTH(fecha)=1 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Ene'),
-                              DB::raw('SUM(IF(MONTH(fecha)=2 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Feb'),
-                              DB::raw('SUM(IF(MONTH(fecha)=3 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Mar'),
-                              DB::raw('SUM(IF(MONTH(fecha)=4 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Abr'),
-                              DB::raw('SUM(IF(MONTH(fecha)=5 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS May'),
-                              DB::raw('SUM(IF(MONTH(fecha)=6 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Jun'),
-                              DB::raw('SUM(IF(MONTH(fecha)=7 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Jul'),
-                              DB::raw('SUM(IF(MONTH(fecha)=8 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Ago'),
-                              DB::raw('SUM(IF(MONTH(fecha)=9 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Sep'),
-                              DB::raw('SUM(IF(MONTH(fecha)=10 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Octu'),
-                              DB::raw('SUM(IF(MONTH(fecha)=11 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Nov'),
-                              DB::raw('SUM(IF(MONTH(fecha)=12 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Dic')] )
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=1 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Ene'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=2 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Feb'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=3 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Mar'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=4 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Abr'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=5 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS May'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=6 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Jun'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=7 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Jul'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=8 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Ago'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=9 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Sep'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=10 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Octu'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=11 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Nov'),
+                              DB::raw('SUM(IF(MONTH(mov_financieros.fecha)=12 and year(mov_financieros.fecha)= '.$anio.', importe_egreso*-1, NULL)) AS Dic')] )
                               ->groupBy('tipo','tipos_gastos.tipo1', 'tipos_gastos.tipo2');
 
             $egresosingresos= DB::table('mov_financieros')

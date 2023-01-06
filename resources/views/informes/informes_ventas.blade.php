@@ -35,7 +35,6 @@
         <th>cliente</th>
         <th>cuit</th>
         <th>estado</th>
-        <th>estado pago</th>
         <th>vendedor</th>
         <th>total</th>
       </tr>
@@ -70,7 +69,7 @@
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
     var filtro ="{{url('/informevtas_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
   
-    alert(filtro);
+    
     $('#example').dataTable( {
     "serverSide": true,
     "ajax":filtro,
@@ -82,7 +81,6 @@
             {data: 'nombre', name: 'c.nombre', width: '10%'},
             {data: 'cuit', name: 'c.cuit', width: '10%'},
             {data: 'estado', name: 'nota_pedidos.estado',width: '10%'},
-            {data: 'estado_pago', name: 'nota_pedidos.estado_pago',width: '10%'},
             {data: 'apellidoynombre', name:'v.apellidoynombre',width: '10%'},
             {data: 'total', name: 'nota_pedidos.total', width: '10%'},
              ]        

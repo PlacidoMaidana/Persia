@@ -1,6 +1,7 @@
 @php
     $edit = !is_null($dataTypeContent->getKey());
     $add  = is_null($dataTypeContent->getKey());
+   
 @endphp
 
 @extends('voyager::master')
@@ -13,7 +14,7 @@
 
 @section('page_header')
     <h1 class="page-title">
-       REGISTRO DE INGRESOS
+       REGISTRO DE INGRESOS 
     </h1>
     @include('voyager::multilingual.language-selector')
 @stop

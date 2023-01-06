@@ -1,6 +1,7 @@
 @php
     $edit = !is_null($dataTypeContent->getKey());
     $add  = is_null($dataTypeContent->getKey());
+
 @endphp
 
 {{-- @extends('voyager::master') --}}

@@ -32,7 +32,6 @@
       <tr>
         <th>fecha</th>
         <th>Operador</th>
-        <th>nro_op</th> 
         <th>nro_recibo</th> 
         <th>modalidad_pago</th>
         <th>detalle</th>
@@ -81,7 +80,6 @@
     "columns":[
             {data: 'fecha', name: 'mov_financieros.fecha', width: '5%'},
             {data: 'apellidoynombre', name: 'empleados.apellidoynombre', width: '5%'},
-            {data: 'nro_op', name: 'mov_financieros.nro_op', width: '10%'},
             {data: 'nro_recibo', name: 'mov_financieros.nro_recibo', width: '10%'},
             {data: 'modalidad_pago', name: 'mov_financieros.modalidad_pago', width: '10%'},
             {data: 'detalle', name:'mov_financieros.detalle', width: '10%'},
