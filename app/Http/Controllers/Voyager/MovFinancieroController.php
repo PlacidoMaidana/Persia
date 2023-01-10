@@ -431,7 +431,16 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
         //Variable de sesion para reordar el origen del edit de movimientos financieros
         $tipo_mov = $request->session()->pull('movimiento'); 
-
+           // Validamos carga de valores de comprobante y egreso
+           if ( ($tipo_mov=='pago_FC') || ($tipo_mov=='pago_movimiento') ){
+            if (($request['importe_egreso']) != ($request['subtotal'] + $request['iva'] + $request['otros_impuestos'] ) ){
+                $redirect = redirect()->back();        
+                return $redirect->with([
+                    'message'    => __('Verifique que el subtotal mas iva mas otros impuestos sea igual al importe del egreso'),
+                    'alert-type' => 'error',
+                ]);
+            }
+           }
         if ( ($tipo_mov=='pago_FC') || ($tipo_mov=='pago_movimiento') ){
                 // grabar factura de compras ******
                 $id_fc=$request['id_factura_compra'];
@@ -448,7 +457,8 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
                 $fcompra->subtotal = $request['subtotal'];
                 $fcompra->iva = $request['iva'];
                 $fcompra->otros_impuestos = $request['otros_impuestos'];
-                $fcompra->total_factura = $request['total_factura'];
+                $fcompra->total_factura = $request['importe_egreso'];
+              
                 // $fcompra->estado_pago = "Cancelada";
                 $fcompra->save();
             }
@@ -895,8 +905,14 @@ public function recibo_cobranza($id){
             $view = "voyager::$slug.edit-add";
 
         }
+
+       
+        
+        $nro_factura=DB::table('facturas_compras')->where ('tipo_factura','=',"INT")->max('nro_factura');
+        $nro_factura=$nro_factura+1;
+       
         session(['origen_new_movimiento' => 'Movimientos_Egresos']);
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario','nro_factura'));
     }
 
     //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><
@@ -1036,6 +1052,16 @@ public function recibo_cobranza($id){
       
              //Variable de sesion para reordar el origen del add de movimientos financieros
               $origen_add = $request->session()->pull('origen_new_movimiento'); 
+   // Validamos carga de valores de comprobante y egreso
+  
+    if (($request['importe_egreso']) != ($request['subtotal'] + $request['iva'] + $request['otros_impuestos'] ) ){
+        $redirect = redirect()->back();        
+        return $redirect->with([
+            'message'    => __('Verifique que el subtotal mas iva mas otros impuestos sea igual al importe del egreso'),
+            'alert-type' => 'error',
+        ]);
+   
+   }
 
               $data->id_nota_pedido=$request['id_nota_pedido'];
               $data->tipo_movimiento=$request['tipo_movimiento'];
@@ -1058,7 +1084,7 @@ public function recibo_cobranza($id){
                     $fcompra->subtotal = $request['subtotal'];
                     $fcompra->iva = $request['iva'];
                     $fcompra->otros_impuestos = $request['otros_impuestos'];
-                    $fcompra->total_factura = $request['total_factura'];
+                    $fcompra->total_factura = $request['importe_egreso'];
                     $fcompra->estado_pago = "Cancelada";
                     $fcompra->save();
                     $data->id_factura_compra =$fcompra->id;

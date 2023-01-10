@@ -110,6 +110,40 @@
 
                             <br>
                             <h3> DATOS DEL COMPROBANTE </h3> 
+
+                            <div class="form-group col-md-4">
+                                <label for="">Proveedor</label>
+                                <input type="text" name="nombre_prov" id="nombre_prov" required class="form-control " value="{{$datos_fcompra->razonsocial}}"    > 
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" id="proveedor_buscar">
+                            Proveedor
+                            </button>
+                           
+                            @php
+                            session(['urlOrigen' => 'admin/movimientos_financieros/create']);
+
+                            session(['urlEgresoMovFinancieros' => 'admin/movimientos_financieros']);
+        
+                            @endphp
+                            <a href="{{url('admin/proveedores/create')}}"  class="btn btn-primary" >Nuevo</a>
+                          
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">Tipo Gasto</label>
+                            <input type="text" name="nombre_tipo_gasto" id="nombre_tipo_gasto" required class="form-control " value= "{{$datos_fcompra->tipo1}} - {{$datos_fcompra->tipo2}}"  > 
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" id="tipogasto_buscar">
+                            Tipo Gasto
+                            </button>
+                        </div>
+                        <div class="row">
+                        </div> 
+
+                        
+
+             <div id="myDIVoculta" style="display:block">             
                             <div class="form-group  col-md-3 ">
                                 <label class="control-label" for="name">Fecha Factura</label>
                                 <input type="date"  name="fecha_factura"  class="form-control" value= {{$datos_fcompra->fecha}} >
@@ -141,34 +175,7 @@
                             </div>
                             <div class="row">
                             </div> 
-                            <div class="form-group col-md-4">
-                                    <label for="">Proveedor</label>
-                                    <input type="text" name="nombre_prov" id="nombre_prov" required class="form-control " value="{{$datos_fcompra->razonsocial}}"    > 
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary" id="proveedor_buscar">
-                                Proveedor
-                                </button>
-                               
-                                @php
-                                session(['urlOrigen' => 'admin/movimientos_financieros/create']);
 
-                                session(['urlEgresoMovFinancieros' => 'admin/movimientos_financieros']);
-            
-                                @endphp
-                                <a href="{{url('admin/proveedores/create')}}"  class="btn btn-primary" >Nuevo</a>
-                              
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="">Tipo Gasto</label>
-                                <input type="text" name="nombre_tipo_gasto" id="nombre_tipo_gasto" required class="form-control " value= "{{$datos_fcompra->tipo1}} - {{$datos_fcompra->tipo2}}"  > 
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-primary" id="tipogasto_buscar">
-                                Tipo Gasto
-                                </button>
-                                
-                            </div>
                             <div class="row">
                             </div> 
                             <div class="form-group col-md-2 ">
@@ -187,10 +194,7 @@
                                 <label class="control-label" for="name">Total Factura</label>
                                 <input type="text" name="total_factura"  id="total_factura" class="form-control" value= "{{$datos_fcompra->total_factura}}">
                             </div>
-                            <div class="form-group  col-md-12 ">
-                                <label class="control-label" for="name">Observaciones</label>
-                                <input type="text" name="observaciones" id="observaciones" required  class="form-control"  value= "{{$datos_fcompra->observaciones}}" >
-                            </div>
+                </div>
                 
                         </div><!-- panel-body -->
 
@@ -460,5 +464,15 @@
               }
         </script>
 
+<script>
+    function myFunction() {
+        var x = document.getElementById("myDIVoculta");
+        if (x.style.display === "none") {
+        x.style.display = "block";
+        } else {
+        x.style.display = "none";
+        }
+    }
+</script>
 
 @stop

@@ -18,7 +18,7 @@
      {{-- 
            {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     --}}
-           NUEVO EGRESO
+           NUEVO EGRESO 
       
        
     </h1>
@@ -130,34 +130,6 @@
                             <h3> DATOS DEL COMPROBANTE </h3>
                             <div class="row">
                             </div> 
-                           
-                            <div class="form-group  col-md-3 ">
-                                <label class="control-label" for="name">Fecha Factura</label>
-                                <input type="date" name="fecha_factura" required class="form-control" >
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="">Tipo factura</label>
-                                <select name="tipo_factura" id="tipo_factura" required class="form-control  form-select"  aria-label="Default select example">
-                                    <option selected value="A">A</option>
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="NDA">NDA</option>
-                                    <option value="NDB">NDB</option>
-                                    <option value="NDC">NDC</option>
-                                    <option value="INT">INT</option>
-                                  </select>
-                            </div>
-                      
-                            <div class="form-group col-md-2">
-                                <label for="">Pto vta</label>
-                                <input type="text" name="pto_vta" id="pto_vta" required class="form-control "  > 
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="">Nro factura</label>
-                                <input type="text" name="nro_factura" id="nro_factura" required class="form-control "   > 
-                            </div>
                             <div class="row">
                             </div> 
                             <div class="form-group col-md-4">
@@ -189,10 +161,50 @@
                             </div>
                             <div class="row">
                             </div> 
+
+                            <div class="form-group  col-md-3 ">
+                                <label class="control-label" for="tipo">Tipo Comprobante:  </label>
+                                <input type="checkbox" id="tipo" value="INT" CHECKED onclick="myFunction()"> <label for="cbox2">INT</label>  
+                            </div>
                             
+                            <div class="row">
+                            </div> 
+
+                     <div id="myDIVoculta" style="display:none">
+                            
+                            <div class="form-group  col-md-3 ">
+                                <label class="control-label" for="name">Fecha Factura</label>
+                                <input type="date" name="fecha_factura" required class="form-control" value= {{$date}}>
+                            </div>
+                            <div class="row">
+                            </div> 
+                            <div class="form-group col-md-2">
+                                <label for="">Tipo factura</label>
+                                <select name="tipo_factura" id="tipo_factura" required class="form-control  form-select"  aria-label="Default select example">
+                                    <option selected value="INT">INT</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="NDA">NDA</option>
+                                    <option value="NDB">NDB</option>
+                                    <option value="NDC">NDC</option>
+                                    <option value="INT">INT</option>
+                                  </select>
+                            </div>
+                      
+                            <div class="form-group col-md-2">
+                                <label for="">Pto vta</label>
+                                <input type="text" name="pto_vta" id="pto_vta" required class="form-control" value= "1" > 
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="">Nro factura</label>
+                                <input type="text" name="nro_factura" id="nro_factura" required class="form-control" value= "{{$nro_factura}}"  > 
+                            </div>
+                            <div class="row">
+                            </div> 
                             <div class="form-group col-md-2 ">
                                 <label class="control-label" for="name">Subtotal</label>
-                                <input type="text" name="subtotal" id="subtotal"  class="form-control"  >
+                                <input type="text" name="subtotal" id="subtotal" class="form-control"  >
                             </div>
                             <div class="form-group col-md-2 ">
                                 <label class="control-label" for="name">Iva </label>
@@ -202,14 +214,9 @@
                                 <label class="control-label" for="name">Otros Impuestos</label>
                                 <input type="text" name="otros_impuestos" id="otros_impuestos" class="form-control"  >
                             </div>
-                            <div class="form-group  col-md-2 ">
-                                <label class="control-label" for="name">Total Factura</label>
-                                <input type="text" name="total_factura" id="total_factura" required  class="form-control" >
-                            </div>
-                            <div class="form-group  col-md-12 ">
-                                <label class="control-label" for="name">Observaciones</label>
-                                <input type="text" name="observaciones" id="observaciones" required  class="form-control" >
-                            </div>
+
+                    </div>       
+                         
 
                                      <div class="modal fade modal-warning" id="modalproveedor" v-if="allowCrop">
                                          <div class="modal-dialog"  style="min-width: 90%">
@@ -288,7 +295,7 @@
                         <input type="hidden" name="id_nota_pedido" value=0>
                         <input type="hidden" name="id_factura_compra" value=0>
                         <input type="hidden" name="tipo_movimiento" value="Gastos/Egresos">
-                       
+                        
                     
                         <div class="panel-footer">
                             @section('submit-buttons')
@@ -341,9 +348,20 @@
 @stop
 
 @section('javascript')
+        <script>
+            var tipo_INT = document.getElementById('tipo');
+            var msg = document.getElementById('marcado');
+            miCheckbox.addEventListener('click', function() {
+            if(tipo_INT.checked) {
+                msg.innerText = 'El elemento está marcado';
+            } 
+            });
+        </script>
+
     <script>
         var params = {};
         var $file;
+       
 
         function deleteHandler(tag, isMulti) {
           return function() {
@@ -472,12 +490,24 @@
   
           }
     </script>
-        <script>
+    <script>
             function elegir_tipogasto(id,tipo1,tipo2) {   
                 $('#modaltipogasto').modal('hide');  
                 $('#nombre_tipo_gasto').val(tipo1+'-'+tipo2);            
                 $('#id_tipo_gasto').val(id);
       
               }
-        </script>
+    </script>
+
+ 
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myDIVoculta");
+            if (x.style.display === "none") {
+            x.style.display = "block";
+            } else {
+            x.style.display = "none";
+            }
+        }
+    </script>
 @stop
