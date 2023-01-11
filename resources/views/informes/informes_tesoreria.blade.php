@@ -39,7 +39,7 @@
         <th>Tipo gasto 1</th>
         <th>Tipo gasto 2</th>
         <th>importe_egreso</th>
-        <th>importe_ingreso</th>  ]))
+        <th>importe_ingreso</th>  
       </tr>
      </thead>
      
@@ -70,8 +70,12 @@
 
   function filtrar() {
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ='http://127.0.0.1:8000/informetesoreria_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    
+    var filtro ="{{url('/informetesoreria_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
   
+
+
+
     $('#example').dataTable( {
     "serverSide": true,
     "ajax":filtro,
