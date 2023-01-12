@@ -50,12 +50,6 @@
                 <div class="panel panel-bordered">
                     <div class="panel-body">
                                                   
-
-                            {{-- <a href="{{url('cobranzas/create')}}">Nueva Cobranzas</a> --}}
-
-
-                            
-
                                 <table id="cobranzas" class="table table-striped table-bordered dt-responsive "  >
                                     <thead>
                                       <tr >
@@ -73,15 +67,15 @@
                                     </thead>  
                                 </table>
                             
-                         
-                        {{-- </div> --}}
-
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Totales</h5>
-        <p class="card-text"> ..</p>
-    </div>
-</div>
+  
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total cobrado {{$cobranzapedido}}</h5>
+                                        <h5 class="card-title">Total pedido {{$totalpedido}}</h5>
+                                        <h5 class="card-title">Saldo {{$saldopedido}}</h5>
+                                        <p class="card-text"> </p>
+                                    </div>
+                                </div>
 
 
                         

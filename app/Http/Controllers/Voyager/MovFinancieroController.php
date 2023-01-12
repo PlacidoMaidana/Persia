@@ -225,13 +225,19 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         $isSoftDeleted = false;
         $model = app($dataType->model_name);
+
+        $cobranzapedido = DB::table('mov_financieros')-> where ('mov_financieros.id_nota_pedido','=',$pedido)->sum('importe_ingreso');
+        $totalpedido = DB::table('nota_pedidos')->where('id','=', $pedido)->max('total');
+
+      
+        $saldopedido = $totalpedido - $cobranzapedido;
+
         $cobranzas= DB::table('mov_financieros')
          ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_ingreso'])
          ->where('id_nota_pedido' , '=' ,$pedido);
 
         return view("vendor.voyager.mov-financieros.cobranzas_pedido", compact(
-            'cobranzas', 'pedido','dataType','isSoftDeleted',           
-        ));
+            'cobranzas','pedido','dataType','isSoftDeleted', 'cobranzapedido', 'totalpedido', 'saldopedido'));
 
     }
     //***************************************
@@ -252,12 +258,16 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         $isSoftDeleted = false;
         $model = app($dataType->model_name);
+        $pagoscompra = DB::table('mov_financieros')-> where ('mov_financieros.id_factura_compra','=',$id_compra)->sum('importe_egreso');
+        $totalcompra = DB::table('facturas_compras')->where('id','=', $id_compra)->max('total_factura');
+        $saldocompra = $totalcompra - $pagoscompra;
+
         $pagos= DB::table('mov_financieros')
          ->select(['mov_financieros.id as id', 'fecha', 'detalle', 'importe_egreso'])
          ->where('id_factura_compra' , '=' ,$id_compra);
         $id_compra_pago=$id_compra;
         return view("vendor.voyager.mov-financieros.pagos_fcompra", compact(
-            'pagos','id_compra','dataType','isSoftDeleted',           
+            'pagos','id_compra','dataType','isSoftDeleted', 'saldocompra' , 'totalcompra', 'pagoscompra'        
         ));
 
     }
@@ -433,6 +443,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
         $tipo_mov = $request->session()->pull('movimiento'); 
            // Validamos carga de valores de comprobante y egreso
            if ( ($tipo_mov=='pago_FC') || ($tipo_mov=='pago_movimiento') ){
+            if ($request['tipo_factura'] != "INT") {
             if (($request['importe_egreso']) != ($request['subtotal'] + $request['iva'] + $request['otros_impuestos'] ) ){
                 $redirect = redirect()->back();        
                 return $redirect->with([
@@ -441,6 +452,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
                 ]);
             }
            }
+        }
         if ( ($tipo_mov=='pago_FC') || ($tipo_mov=='pago_movimiento') ){
                 // grabar factura de compras ******
                 $id_fc=$request['id_factura_compra'];
@@ -488,34 +500,7 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
                     break;
             }
            
-          /*  } else {
-                $redirect = redirect()->back();
-            }
-            */
-
-          
-            /*
-          
-            if ( !empty($request['id_nota_pedido'])&& ($request['tipo_movimiento']== "Cobranza/Ingresos") ) {
-                return redirect(url('/CobranzasPedido/'.$request['id_nota_pedido']));
-               }else
-               {
-
-
-        
-                $value = $request->session()->pull('urlEgresoMovFinancieros');
-              
-
-
-                if  (( empty($value)) && (!empty($request['id_factura_compra'])&& ($request['tipo_movimiento']== "Gastos/Egresos") )) {
-                    return redirect(url('/pagos_compras/'.$request['id_factura_compra']));
-                  
-                }else
-                   { $redirect = redirect()->route("voyager.{$dataType->slug}.index");}
-               }*/
-     /*   } else {
-            $redirect = redirect()->back();
-        }*/
+   
 
         return $redirect->with([
             'message'    => __('voyager::generic.successfully_updated')." {$dataType->getTranslatedAttribute('display_name_singular')}",
@@ -1053,14 +1038,15 @@ public function recibo_cobranza($id){
              //Variable de sesion para reordar el origen del add de movimientos financieros
               $origen_add = $request->session()->pull('origen_new_movimiento'); 
    // Validamos carga de valores de comprobante y egreso
-  
+  if ($request['tipo_factura'] != "INT") {
+
     if (($request['importe_egreso']) != ($request['subtotal'] + $request['iva'] + $request['otros_impuestos'] ) ){
         $redirect = redirect()->back();        
         return $redirect->with([
             'message'    => __('Verifique que el subtotal mas iva mas otros impuestos sea igual al importe del egreso'),
             'alert-type' => 'error',
-        ]);
-   
+        ]);   
+   }
    }
 
               $data->id_nota_pedido=$request['id_nota_pedido'];
@@ -1088,6 +1074,7 @@ public function recibo_cobranza($id){
                     $fcompra->estado_pago = "Cancelada";
                     $fcompra->save();
                     $data->id_factura_compra =$fcompra->id;
+                    
                     $data->save();
               }
           

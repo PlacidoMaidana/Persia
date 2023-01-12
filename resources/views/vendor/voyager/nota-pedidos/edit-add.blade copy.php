@@ -123,10 +123,9 @@
                                             
                                                
                                                 @if ($row->getTranslatedAttribute('display_name')=='Modalidad Venta')
-                                                <select class="form-control select2 select2-hidden-accessible" id='Modalidad' name="modalidad_venta" required  data-select2-id="7" tabindex="-1" aria-hidden="true">
-                                                    <option selected value ="{{$dataTypeContent->modalidad_venta}}">{{$dataTypeContent->modalidad_venta}} </option>
+                                                <select class="form-control select2 select2-hidden-accessible" id='Modalidad' name="modalidad_venta"  data-select2-id="7" tabindex="-1" aria-hidden="true">
                                                     <option value="Contado">Contado</option>
-                                                    <option value="Otros">Otros</option>
+                                                    <option value="Otros" selected="selected" data-select2-id="9">Otros</option>
                                                 </select>
 
                                              @php
@@ -137,7 +136,7 @@
                                              @if ($row->getTranslatedAttribute('display_name')=='Recargo /Descuento (+/-)')
                                          
                                              <div class="form-group  col-md-6 ">
-                                                <label class="control-label" for="name">% de Recargo o Descuento (+/-)</label>
+                                                <label class="control-label" for="name">Recargo /Descuento (+/-)</label>
                                                 <input type="text" class="form-control"  id='descuento'  name="descuento" placeholder="Recargo /Descuento (+/-)" value="{{$dataTypeContent->descuento}}">
                                              </div>
                                             
@@ -180,7 +179,7 @@
                                                              </div>	
                                     
 
-                                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                                     {{ $row->slugify }}
                                                     <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}
                                                           <!-- Button trigger modal -->
@@ -193,12 +192,28 @@
                                                     <button type="button" id="boton_elegir_cliente" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_cliente_elegir">
                                                         Buscar Cliente
                                                     </button>
-                                                     
-                                                        <input type="hidden" id="id_cliente_elegido" name="id_cliente_elegido" required value="{{$id_cliente}}" >
-                                                        <input type="text" id="cliente_elegido" name="cliente_elegido" required value="{{$nombre_cliente}}" style="WIDTH: 550px" >
+                                                    <input type="text" id="id_cliente_elegido" name="id_cliente_elegido" required value="" >
+                                                    <input type="text" id="cliente_elegido" name="cliente_elegido" required value="" >
                                                  
-                                                </div>
 
+                                                    @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                                    @if (isset($row->details->view))
+                                                        @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
+                                                    @elseif ($row->type == 'relationship')
+                                                        @include('voyager::formfields.relationship', ['options' => $row->details])
+                                                    @else
+                                                        {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                                                    @endif
+
+                                                    @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                                        {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                                    @endforeach
+                                                    @if ($errors->has($row->field))
+                                                        @foreach ($errors->get($row->field) as $error)
+                                                            <span class="help-block">{{ $error }}</span>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
                                                  
                                                 @php
                                                     continue;

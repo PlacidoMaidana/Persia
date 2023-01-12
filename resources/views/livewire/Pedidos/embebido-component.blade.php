@@ -80,8 +80,6 @@
 
       </h4>
 
-      <a href="" onclick="iva()" class="btn btn-primary" >IVA</a>
-
   </div>
 </div>
 

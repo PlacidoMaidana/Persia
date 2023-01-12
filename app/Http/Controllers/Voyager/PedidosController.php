@@ -258,11 +258,17 @@ public function remitos()
                      'nota_pedidos.total',
                      'nota_pedidos.monto_iva',
                      'nota_pedidos.id_factura',
+                     'nota_pedidos.id_vendedor',
+                     'nota_pedidos.id_vendedor_2',
                      'nota_pedidos.observaciones',
                      'nota_pedidos.descuento',
-                     'nota_pedidos.estado'
+                     'nota_pedidos.estado',
+                     DB::raw('nota_pedidos.totalgravado*nota_pedidos.descuento/100 as montodescuento'),
+                     DB::raw('nota_pedidos.totalgravado+(nota_pedidos.totalgravado*nota_pedidos.descuento/100) as gravadocondescuento'),
+                      DB::raw('nota_pedidos.totalgravado+(nota_pedidos.totalgravado*nota_pedidos.descuento/100)+nota_pedidos.monto_iva as totalconiva'),
                ])           
            ->first();
+           
            
            $detallesPedidos= DB::table('nota_pedidos')
            ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')
@@ -317,6 +323,8 @@ public function remitos()
                       'nota_pedidos.total',
                       'nota_pedidos.monto_iva',
                       'nota_pedidos.id_factura',
+                      'nota_pedidos.id_vendedor',
+                      'nota_pedidos.id_vendedor_2',
                       'nota_pedidos.observaciones',
                       'nota_pedidos.descuento',
                       'nota_pedidos.nro_remito',
@@ -386,6 +394,8 @@ public function remitos()
                       'nota_pedidos.total',
                       'nota_pedidos.monto_iva',
                       'nota_pedidos.id_factura',
+                      'nota_pedidos.id_vendedor',
+                      'nota_pedidos.id_vendedor_2',
                       'nota_pedidos.observaciones',
                       'nota_pedidos.descuento',
                       'nota_pedidos.nro_remito',
@@ -417,11 +427,11 @@ public function remitos()
 
             $modo = 0;
 
-            $cuit = "aqui cuit sin separadores del emisor";
-
-            $certificado = "ruta y nombre del certificado *.pfx";
-
-            $licencia = " ";
+            //$cuit = "aqui cuit sin separadores del emisor";
+            $cuit = "27213672490";
+            //$certificado = "ruta y nombre del certificado *.pfx";
+            $certificado = "c:\certificado.pfx";
+            $licencia = "c:\licencia ";
 
             $resultado = $fe->iniciar($modo, $cuit, $certificado, $licencia);
 
@@ -683,11 +693,18 @@ public function remitos()
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
-         
-     
+      
+       $datos_cliente= DB::table ('clientes')
+       -> join ('nota_pedidos','clientes.id','=','nota_pedidos.id_cliente')
+       -> where('nota_pedidos.id' , '=' ,$id)
+       -> select(['clientes.id','clientes.nombre' ])           
+      ->first();
+      //dd($datos_cliente);
+      $id_cliente = $datos_cliente->id;
+      $nombre_cliente=$datos_cliente->nombre;
       
        $id_filtro_pedido=$id;
-       return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido'));
+       return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido','id_cliente', 'nombre_cliente'));
     }
 
     public function obtener_lineas($id_pedido)
@@ -820,15 +837,27 @@ public function remitos()
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   <<<<<>>>    >>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+         $data->tipo_presupuesto=$request['tipo_presupuesto'];
+         $data->id_cliente = $request['id_cliente_elegido'];
+         $data->fecha=$request['fecha'];
+         $data->estado=$request['estado'];
+         $data->descuento=$request['descuento'];
+         $data->id_vendedor=$request['id_vendedor'];
+         $data->id_vendedor_2=$request['id_vendedor_2'];
+         $data->modalidad_venta=$request['modalidad_venta'];
+         $data->observaciones=$request['observaciones'];
+         
+        // dd($data->modalidad_venta,$request['modalidad_venta'],$data->descuento,$request['descuento']);
        
-
-        $data->id_vendedor=auth()->id();
-        $data->totalgravado = $request['totalgravado']; 
-        $data->monto_iva = ($request['totalgravado'] +  $request['descuento'] )  * 0.21 ; 
+        
+        $data->totalgravado = $request['totalgravado'];
+        $calc_descuento= ($request['descuento'] * $request['totalgravado'] )/100;
+        $gravadocondescuento=$request['totalgravado'] + $calc_descuento ;
+        $data->monto_iva = $gravadocondescuento * 0.21 ; 
         if ($data->modalidad_venta=="Contado") {
-                $data->total = $request['totalgravado'] +  $request['descuento'] ;
+                $data->total = $gravadocondescuento ;
             }else{
-                $data->total = $request['totalgravado'] +  $request['descuento'] + $data->monto_iva;
+                $data->total = $gravadocondescuento + $data->monto_iva;
             }
         $data->save();
      
@@ -843,7 +872,7 @@ public function remitos()
             });
         $original_data = clone($data);
 
-        $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
+       // $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
 
         // Delete Images
         $this->deleteBreadImages($original_data, $to_remove);
@@ -906,10 +935,12 @@ public function remitos()
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
-
+    
+       $id_cliente=0;
+       $nombre_cliente='';
         $id_filtro_pedido=0 ; //$id;
         $renglones = null;
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','id_filtro_pedido','id_cliente', 'nombre_cliente'));
       //  return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
 
@@ -944,15 +975,23 @@ public function remitos()
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        $data->id_vendedor=auth()->id();
-        $data->totalgravado = $request['totalgravado']; 
-        $data->monto_iva = ($request['totalgravado'] +  $request['descuento'] )  * 0.21 ; 
-        if ($data->modalidad_venta=="Contado") {
-                $data->total = $request['totalgravado'] +  $request['descuento'] ;
-            }else{
-                $data->total = $request['totalgravado'] +  $request['descuento'] + $data->monto_iva;
-            }
-        $data->save();
+       
+        $data->modalidad_venta=$request['modalidad_venta'];
+        $data->descuento=$request['descuento'];
+       // dd($data->modalidad_venta,$request['modalidad_venta'],$data->descuento,$request['descuento']);
+      
+       $data->fecha=$request['fecha'];
+       $data->id_cliente = $request['id_cliente_elegido'];
+       $data->totalgravado = $request['totalgravado'];
+       $calc_descuento= ($request['descuento'] * $request['totalgravado'] )/100;
+       $gravadocondescuento=$request['totalgravado'] + $calc_descuento ;
+       $data->monto_iva = $gravadocondescuento * 0.21 ; 
+       if ($data->modalidad_venta=="Contado") {
+               $data->total = $gravadocondescuento ;
+           }else{
+               $data->total = $gravadocondescuento + $data->monto_iva;
+           }
+       $data->save();
 
         event(new BreadDataAdded($dataType,  $data));
 

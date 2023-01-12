@@ -53,7 +53,7 @@
                <hr style="color: rgb(84, 83, 83); background-color: rgb(101, 100, 100); width:100% higth:2px ;" />
                Sr/:  <br>
                Por medio de la presente le envió el presupuesto solicitado.		<br>
-               <table class="table">
+               <table class="table" >
                    <tbody>
                        <thead >
                            <tr>
@@ -82,11 +82,12 @@
                </tbody>
                </table>
                <br>
-               <h4 >
-                 Total gravado........................: {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
-                 Recargo/Descuento (+/-) ..................:   {{number_format($datosPedidos->descuento, 2, '.', ',')}}  <br>
-                 IVA 21....................................: {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
-                 Total.......................................: {{number_format($datosPedidos->total, 2, '.', ',')}}  <br>
+               <h4  style='text-align:right'>
+                 Total gravado: {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
+                 Monto Recargo o Descuento (+/-) :   {{number_format($datosPedidos->montodescuento, 2, '.', ',')}}  <br>
+                 Gravado con descuento/recargo: {{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}} <br>
+                 IVA 21: {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
+                 Total con IVA: {{number_format($datosPedidos->totalconiva, 2, '.', ',')}}  <br>
                  <br>
                </h4>
                {{-- 
