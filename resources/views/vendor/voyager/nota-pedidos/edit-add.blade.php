@@ -19,20 +19,23 @@
 
 @section('page_header')
     <h1 class="page-title">
-        
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
+        <div id="myDIVoculta"  style="display:block ">   
+            
+            <a href="{{url('admin/notas-pedido/crea_factura/'.$id_filtro_pedido)}}" class="btn btn-primary">Facturar</a>
 
-    <a href="{{url('admin/factura-ventas/create')}}" class="btn btn-primary">Facturar</a>
+            <a id="imprime"   href="{{url('/pedidos/export/'.$id_filtro_pedido)}}" class="btn btn-primary">Imprime Presupuesto</a>
 
-    <a id="imprime"   href="{{url('/pedidos/export/'.$id_filtro_pedido)}}" class="btn btn-primary">Imprime Presupuesto</a>
+            {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
 
-    {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
-
-    <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
-    
-
+            <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
+            
+            <button type="button" class="btn btn-primary" id="btn_ordenes_fabricacion" >
+                Genera Orden Fabricacion   
+            </button>
+        </div>
     <div class="modal fade modal-warning" id="cobranzas" v-if="allowCrop">
       <div class="modal-dialog"  style="min-width: 90%">
         <div class="modal-content">
@@ -119,15 +122,31 @@
                                              @if (isset($row->details->legend) && isset($row->details->legend->text))
                                                  <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                              @endif
-                                             
+                                             @if ( $row->getTranslatedAttribute('display_name')=='Fecha'  )
+                                                @php
+                                                $date= Carbon\Carbon::now()->format('Y-m-d');
                                             
-                                               
+                                                @endphp
+                                                <div class="form-group  col-md-3 ">
+                                                    <label class="control-label" for="name" >Fecha</label>
+                                                    <input type="date" class="form-control" name="fecha" placeholder="Fecha" value="{{$date}}" >  
+                                                </div>
+                                            
+                                                @php
+                                                    continue;
+                                                @endphp
+                                            @endif
+                                            
+                                             
                                                 @if ($row->getTranslatedAttribute('display_name')=='Modalidad Venta')
+                                                <div class="form-group  col-md-12 ">
+                                                    <label class="control-label" >Modalidad Venta</label>
                                                 <select class="form-control select2 select2-hidden-accessible" id='Modalidad' name="modalidad_venta" required  data-select2-id="7" tabindex="-1" aria-hidden="true">
                                                     <option selected value ="{{$dataTypeContent->modalidad_venta}}">{{$dataTypeContent->modalidad_venta}} </option>
                                                     <option value="Contado">Contado</option>
                                                     <option value="Otros">Otros</option>
                                                 </select>
+                                                </div>
 
                                              @php
                                              continue;
@@ -195,7 +214,7 @@
                                                     </button>
                                                      
                                                         <input type="hidden" id="id_cliente_elegido" name="id_cliente_elegido" required value="{{$id_cliente}}" >
-                                                        <input type="text" id="cliente_elegido" name="cliente_elegido" required value="{{$nombre_cliente}}" style="WIDTH: 550px" >
+                                                        <input type="text" id="cliente_elegido" name="cliente_elegido" required readonly value="{{$nombre_cliente}}" style="WIDTH: 550px" >
                                                  
                                                 </div>
 
@@ -332,11 +351,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                      
 
-                                       
-                                       
-                                       
                                        {{-- <<<<<<<<<<<<<<<<<<<<<<<    FIN MODAL CLIENTES    >>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
                                        {{-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  --}}
                                        {{-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  --}}
@@ -392,14 +407,11 @@
                                         @stop  
                                    
                                     {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
-                                        
+                                      
                                         <input type="hidden" id="monto_iva" name="monto_iva">
                                         <input type="hidden" name="total">
                                         <input type="hidden" name="totalgravado">
-                                       
-                                        
-                                      
-                                        
+                
                                          
 
                                     {{-- FORMULARIO EMBEBIDO --}}
@@ -418,11 +430,7 @@
                      
                         <div class="panel-footer">
                             @section('submit-buttons')
-                                <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
-                               
-                                <button type="button" class="btn btn-primary" id="btn_ordenes_fabricacion" >
-                                 Genera Orden Fabricacion   
-                                </button>
+                                <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>   
 
                             @stop
                             @yield('submit-buttons')
@@ -616,7 +624,7 @@
    </script> 
     <script>
     $('#btn_ordenes_fabricacion').on('click',function(){
-            $('#modal_ordenes_fabricacion').modal({show:true});
+              $('#modal_ordenes_fabricacion').modal({show:true});
         });
     </script> 
 
@@ -683,7 +691,7 @@
       
     $(document).ready(function() {
         $('#btn_ordenes_fabricacion').hide();
-       if ($('[name="estado"]').val()=="Pendiente Entrega") {
+       if ($('[name="estado"]').val()=="Pendiente Entrega") || ($('[name="estado"]').val()=="Pendiente Aprobacion"){
           $('#btn_ordenes_fabricacion').show();
        }  
     } );
@@ -794,11 +802,13 @@
     $(document).ready(function(){
         $("#Modalidad").change(function(){
                calculos();
-                // alert($('#Modalidad').val());
+                //alert($('#Modalidad').val());
                 //$('#valor2').val($(this).val());
                     });
         $("#descuento").change(function(){
-           calculos();	});
+                calculos();
+               // alert($('#descuento').val());
+            	});
           
            calculos();  
         
@@ -806,7 +816,21 @@
     
     </script>
          
+         <script>
+            $( document ).ready(function() {
+                var x = document.getElementById("myDIVoculta");
+               
+                if ({{ is_null($dataTypeContent->getKey()) }} ) {
+                x.style.display = "none";
+                } else
+                {
+                x.style.display = "block"; 
+                }
 
+
+             });
+         
+        </script>
 
 
 

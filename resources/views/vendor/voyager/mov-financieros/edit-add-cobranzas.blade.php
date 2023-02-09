@@ -26,8 +26,6 @@
         <div class="row">
             <div class="col-md-6">
 
-                
-
                 <div class="panel panel-bordered">
                     <!-- form start -->
                     <form role="form"
@@ -41,12 +39,19 @@
 
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
-                       <br> 
-                       Pto venta:
+                        
+                       <div  class="panel-body"> 
+                       Cliente:
+                       <input name="nom_cliente" placeholder="nombre cliente"  value={{$nombre_cliente}} readonly>
+                       </div> 
+                       <div  class="panel-body"> 
+                       Pto vta:
                        <input name="pto_vta" placeholder= "Pto Vta" value=1 readonly>
+                                             
                        Nro Recibo:
                        <input name="nro_recibo" placeholder="Nro Recibo" value="{{$nro_recibo}}" readonly>
-                       <br> 
+                       </div> 
+                       
                        <hr>
                         <div class="panel-body">
                           

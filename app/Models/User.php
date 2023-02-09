@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends \TCG\Voyager\Models\User
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -41,4 +42,15 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getRole($uid){
+        
+        $role= \DB::table('users') 
+        ->where('users.id','=',$uid)
+        ->join('roles', 'users.role_id', '=', 'roles.id')
+        ->select('roles.name as name')
+        ->first();
+       // dd($uid,$role->name);
+        return $role->name;
+      }
 }

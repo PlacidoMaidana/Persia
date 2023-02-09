@@ -561,10 +561,17 @@ class MovFinancieroController extends \TCG\Voyager\Http\Controllers\VoyagerBaseC
           //  $view = "vendor.voyager.movimientos_financieros.edit-add-cobranzas";
            
         }
+        // dd($dataTypeContent->id_nota_pedido);
+         $nom_cliente=DB::table('nota_pedidos')
+         ->join('clientes','nota_pedidos.id_cliente','=','clientes.id') 
+         ->where('nota_pedidos.id','=',$dataTypeContent->id_nota_pedido)
+         ->select( 'nombre')->get();
+        $nombre_cliente=$nom_cliente[0]->nombre;
         $nro_recibo=$dataTypeContent->nro_recibo;
         $id_pedido=$dataTypeContent->id_nota_pedido;
+       
         session(['movimiento' => 'cobranza_NP']);
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario','nro_recibo','id_pedido'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','usuario','nro_recibo','id_pedido','nombre_cliente'));
     }
 ///
 /// 
@@ -937,13 +944,18 @@ public function recibo_cobranza($id){
         
         $ult_recibo=DB::table('mov_financieros')->max('nro_recibo');
         $nro_recibo=$ult_recibo+1;
+        $nom_cliente=DB::table('nota_pedidos')
+        ->join('clientes','nota_pedidos.id_cliente','=','clientes.id') 
+        ->where('nota_pedidos.id','=',$id_pedido)
+        ->select( 'nombre')->get();
+        $nombre_cliente=$nom_cliente[0]->nombre;
         if (view()->exists("voyager::$slug.edit-add")) {
           //  $view = "voyager::$slug.edit-add";  
           $view = "vendor.voyager.mov-financieros.edit-add-cobranzas";
         }
      
         session(['origen_new_movimiento' => 'cobranzas_create']);
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido','usuario','nro_recibo'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_pedido','usuario','nro_recibo','nombre_cliente'));
     }
 
 //<><><><<><<><><<><><><><<><<><<><><><><><><><<><><><><<><<<><<><><><<><<><><<>><<><><><

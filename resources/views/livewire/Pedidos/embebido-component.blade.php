@@ -110,7 +110,7 @@
 <script>
   function calculos()
   { 
-    
+        
     Livewire.emit('totales',$("#Modalidad :selected " ).val(), $("#descuento" ).val());
     
    }

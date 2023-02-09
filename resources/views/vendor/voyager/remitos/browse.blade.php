@@ -35,9 +35,6 @@
                             <table id="remitos_abiertos" class="table table-striped table-bordered dt-responsive nowrap"   >
                                    <thead>
                                        <tr>
-                                          <th class="dt-not-orderable">
-                                          <input type="checkbox" class="select_all">
-                                          </th>
                                           <th>id_pedido</th>
                                           <th>fecha</th>
                                           <th>cliente</th>
@@ -53,9 +50,7 @@
               <table id="remitos_cerrados" class="table table-striped table-bordered dt-responsive nowrap"   >
                   <thead>
                       <tr>
-                          <th class="dt-not-orderable">
-                              <input type="checkbox" class="select_all">
-                          </th>
+                         
                                           <th>id_pedido</th>
                                           <th>fecha</th>
                                           <th>cliente</th>
@@ -115,7 +110,6 @@
              "serverSide": true,
              "ajax":"{{url('remitos_abiertos')}}",                
              "columns":[
-                     {data: 'check', width: '5%'},
                      {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
                      {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
                      {data: 'nombre', name: 'clientes.nombre', width: '10%'},
@@ -134,7 +128,6 @@
                "serverSide": true,
                "ajax":"{{url('remitos_cerrados')}}",                
                "columns":[
-                       {data: 'check', width: '5%'},
                        {data: 'id_pedido', name: 'nota_pedidos.id', width: '5%'},
                        {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
                        {data: 'nombre', name: 'clientes.nombre', width: '10%'},

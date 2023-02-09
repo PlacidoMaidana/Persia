@@ -89,7 +89,7 @@
                           <div class="panel-heading panel-heading-nav">
                             <ul class="nav nav-tabs">
                               <li role="presentation" class="active">
-                                <a href="#one" aria-controls="one" role="tab" data-toggle="tab">Pedidos pendientes</a>
+                                <a href="#one" aria-controls="one" role="tab" data-toggle="tab">Positivos Abiertos</a>
                               </li>
                               <li role="presentation">
                                 <a href="#two" aria-controls="two" role="tab" data-toggle="tab">Positivos Cerrados</a>
@@ -98,7 +98,7 @@
                                 <a href="#three" aria-controls="three" role="tab" data-toggle="tab">Negativos o Rechazados</a>
                               </li>
                               <li role="presentation">
-                                <a href="#four" aria-controls="four" role="tab" data-toggle="tab">Positivos Abiertos</a>
+                                <a href="#four" aria-controls="four" role="tab" data-toggle="tab">Pedidos Pendientes</a>
                               </li>
                               
                             </ul>

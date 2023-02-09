@@ -664,7 +664,7 @@ class ProductosController extends \TCG\Voyager\Http\Controllers\VoyagerBaseContr
         $view = 'voyager::bread.edit-add';
 
         if (view()->exists("voyager::$slug.edit-add")) {
-            $view = "voyager::$slug.edit-add";
+            $view = "voyager::$slug.edit-add-fabric";
         }
    
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));

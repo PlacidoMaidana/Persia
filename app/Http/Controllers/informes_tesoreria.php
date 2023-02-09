@@ -21,10 +21,10 @@ class informes_tesoreria extends Controller
     {
 
        return $datos = datatables()->of(DB::table('mov_financieros')
-           -> join ('facturas_compras','mov_financieros.id_factura_compra','=','facturas_compras.id')
+           -> leftjoin ('facturas_compras','mov_financieros.id_factura_compra','=','facturas_compras.id')
            ->leftjoin ('tipos_gastos','facturas_compras.id_tipo_gasto','=','tipos_gastos.id')
            ->leftjoin('empleados','empleados.id','=','mov_financieros.id_usuario')
-           ->whereBetween('mov_financieros.created_at',array($from,$to) )
+           ->whereBetween('mov_financieros.fecha',array($from,$to) )
            ->select(['mov_financieros.fecha',
                      'empleados.apellidoynombre',
                      'mov_financieros.nro_recibo', 

@@ -383,7 +383,7 @@ Route::get('/comprascanceladas', function () {
               'nota_pedidos.total',
               'nota_pedidos.estado'
             ]))   
-    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    //->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
     ->addColumn('accion','vendor/voyager/remitos/acciones_remitos')
     ->rawColumns(['check','accion'])   
     ->toJson();   
@@ -402,7 +402,7 @@ Route::get('/comprascanceladas', function () {
                 'nota_pedidos.total',
                 'nota_pedidos.estado'
               ]))   
-      ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    //  ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
       ->addColumn('accion','vendor/voyager/remitos/acciones_remitos')
       ->rawColumns(['check','accion'])   
       ->toJson();   

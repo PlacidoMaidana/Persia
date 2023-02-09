@@ -100,6 +100,9 @@
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
                                             </th>
+                                            <th>fecha orden</th>
+                                            <th>entrada proceso</th>
+                                            <th>salida proceso</th>
                                             <th>id pedido</th>
                                             <th>id orden</th>
                                             <th>descripcion</th>
@@ -109,9 +112,6 @@
                                             <th>Dias</th>
                                             <th>Cantidad de Unidades</th>
                                             <th>Cantidad de Paquetes</th>
-                                            <th>fecha orden</th>
-                                            <th>entrada proceso</th>
-                                            <th>salida proceso</th>
                                             <th>estado</th>
                                             <th>accion</th>
                                           </tr>
@@ -126,6 +126,9 @@
                                               <th class="dt-not-orderable">
                                                   <input type="checkbox" class="select_all">
                                               </th>
+                                              <th>fecha_orden</th>
+                                              <th>entrada proceso</th>
+                                              <th>salida proceso</th>
                                               <th>id pedido</th>
                                               <th>id orden</th>
                                               <th>descripcion</th>
@@ -135,9 +138,6 @@
                                               <th>Dias</th>
                                               <th>Cantidad de Unidades</th>
                                               <th>Cantidad de Paquetes</th>
-                                              <th>fecha_orden</th>
-                                              <th>entrada_proceso</th>
-                                              <th>salida_proceso</th>
                                               <th>estado</th>
                                               <th>accion</th>
                                         </tr>
@@ -291,6 +291,9 @@ ordenes_fabricacion_activas
              "ajax":"{{url('ordenes_fabricacion_activas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
+                     {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
+                     {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
+                     {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
                      {data: 'id', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
@@ -300,9 +303,6 @@ ordenes_fabricacion_activas
                      {data: 'dias', name: 'dias', width: '5%'},
                      {data: 'unidades', name: 'unidades', width: '5%'},
                      {data: 'paquetes', name: 'paquetes', width: '5%'},
-                     {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
-                     {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
-                     {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
                      {data: 'accion', width: '5%'},
         
@@ -319,6 +319,9 @@ ordenes_fabricacion_activas
              "ajax":"{{url('ordenes_fabricacion_cerradas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
+                     {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
+                     {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
+                     {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
                      {data: 'id', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
@@ -328,9 +331,6 @@ ordenes_fabricacion_activas
                      {data: 'dias', name: 'dias', width: '5%'},
                      {data: 'unidades', name: 'unidades', width: '5%'},
                      {data: 'paquetes', name: 'paquetes', width: '5%'},
-                     {data: 'fecha_orden', name: 'ordenes_fabricacion.fecha_orden', width: '5%'},
-                     {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
-                     {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
                      {data: 'accion', width: '10%'},
                 

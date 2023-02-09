@@ -411,7 +411,7 @@ public function remitos()
  
         }
         public function crea_factura($id_ped){
-
+         //dd($id_ped);
 
         /*
             Usar fechas del día.
@@ -420,18 +420,18 @@ public function remitos()
 
             Desde PHP se debe referenciar la clase como WSAFIPFEPHP. Por lo demás la clase tiene exactamente los mismos métodos y propiedades tal como se explica en esta documentación.
         */
-        /*
-            <?php
+        
+            
 
             $fe = new COM("WSAFIPFEPHP.FACTURA") or die("no se pudo crear clase WSAFIPFEPHP.factura");
 
-            $modo = 0;
+            $modo = 1;
 
             //$cuit = "aqui cuit sin separadores del emisor";
             $cuit = "27213672490";
             //$certificado = "ruta y nombre del certificado *.pfx";
-            $certificado = "c:\certificado.pfx";
-            $licencia = "c:\licencia ";
+            $certificado = "c:\certificado_GS.pfx";
+            $licencia = "c:\WSAFIPFE_GS.lic";
 
             $resultado = $fe->iniciar($modo, $cuit, $certificado, $licencia);
 
@@ -442,7 +442,7 @@ public function remitos()
             echo "resultado acceso   {$resultado}\n";
 
             echo "detalle acceso   {$fe->ultimomensajeerror}\n";
-
+/*
             $fe->FECabeceraCantReg = 1;
 
             $fe->FECabeceraPresta_serv = 1;
@@ -486,12 +486,8 @@ public function remitos()
             echo "fin";
 
             $fe = null;
-
-            ?>
-            
-        */
- 
-        }
+*/
+            }
 
     //***************************************
     //                _____
@@ -846,12 +842,13 @@ public function remitos()
          $data->id_vendedor_2=$request['id_vendedor_2'];
          $data->modalidad_venta=$request['modalidad_venta'];
          $data->observaciones=$request['observaciones'];
-         
+         $data->Anexo_Presupuesto=$request['Anexo_Presupuesto'];
         // dd($data->modalidad_venta,$request['modalidad_venta'],$data->descuento,$request['descuento']);
        
-        
+       // dd($data->descuento,$request['descuento']);
         $data->totalgravado = $request['totalgravado'];
         $calc_descuento= ($request['descuento'] * $request['totalgravado'] )/100;
+       
         $gravadocondescuento=$request['totalgravado'] + $calc_descuento ;
         $data->monto_iva = $gravadocondescuento * 0.21 ; 
         if ($data->modalidad_venta=="Contado") {

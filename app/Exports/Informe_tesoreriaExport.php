@@ -14,12 +14,12 @@ class Informe_tesoreriaExport implements FromCollection
     {
        
        return DB::table('mov_financieros')
+           -> leftjoin ('facturas_compras','mov_financieros.id_factura_compra','=','facturas_compras.id')
            ->leftjoin('empleados','empleados.id','=','mov_financieros.id_usuario')
-           ->leftjoin('tipos_gastos','tipos_gastos.id','=','mov_financieros.id_tipo_gasto')
-           ->whereBetween('mov_financieros.created_at',array($this->desde,$this->hasta) )
+           ->leftjoin('tipos_gastos','tipos_gastos.id','=','facturas_compras.id_tipo_gasto')
+           ->whereBetween('mov_financieros.fecha',array($this->desde,$this->hasta) )
            ->select(['mov_financieros.fecha',
                      'empleados.apellidoynombre',
-                     'mov_financieros.nro_op', 
                      'mov_financieros.nro_recibo', 
                      'mov_financieros.modalidad_pago',
                      'mov_financieros.detalle',
