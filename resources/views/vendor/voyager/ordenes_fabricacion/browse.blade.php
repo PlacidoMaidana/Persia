@@ -288,6 +288,7 @@ ordenes_fabricacion_activas
     $(document).ready(function() {
         $('#ordenes_fabricacion_activas').dataTable( {
              "serverSide": true,
+             "scrollX": true,
              "ajax":"{{url('ordenes_fabricacion_activas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -316,6 +317,7 @@ ordenes_fabricacion_activas
     $(document).ready(function() {
         $('#ordenes_fabricacion_cerradas').dataTable( {
              "serverSide": true,
+             "scrollX": true,
              "ajax":"{{url('ordenes_fabricacion_cerradas')}}",                
              "columns":[
                      {data: 'check', width: '5%'},

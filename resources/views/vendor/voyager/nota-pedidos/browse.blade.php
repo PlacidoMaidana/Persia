@@ -336,6 +336,7 @@
     $(document).ready(function() {
         $('#pedidos_pendientes').dataTable( {
              "serverSide": true,
+             "scrollX": true,
              "ajax":"{{url('pedidos_pendientes')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -357,6 +358,7 @@
     $(document).ready(function() {
         $('#pedidos_terminados').dataTable( {
              "serverSide": true,
+             "scrollX": true,
              "ajax":"{{url('pedidos_terminados')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -376,6 +378,7 @@
     $(document).ready(function() {
         $('#pedidos_negativos').dataTable( {
              "serverSide": true,
+             "scrollX": true,
              "ajax":"{{url('pedidos_negativos')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -395,6 +398,7 @@
     $(document).ready(function() {
         $('#pedidos_abiertos').dataTable( {
              "serverSide": true,
+             "scrollX": true,
              "ajax":"{{url('pedidos_abiertos')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -420,6 +424,7 @@
       $('#example').dataTable( {
       "serverSide": true,
       "ajax":filtro,
+      "scrollX": true,
       "paging": true,
       "searching": true,
       "columns":[
