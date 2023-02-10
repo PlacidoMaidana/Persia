@@ -40,12 +40,13 @@
           <div class="cabeza">
 
           </div>
+          @php
+              $date =Carbon\ Carbon::createFromDate($datosPedidos->fecha)->format('Y-m-d');
+          @endphp
           <div class="cuerpo">
                <h1>PRESUPUESTO</h1> 
-               {{-- 
-               <h3>Fecha: {{date_format($datosPedidos->fecha,"Y/m/d H:i:s")}} </h3> 
-               --}}
-               <h3>Fecha: {{$datosPedidos->fecha}} </h3> 
+               {{-- <h3>Fecha: {{$datosPedidos->fecha}} </h3>  --}}
+               <h3>Fecha: {{$date}} </h3> 
                <h3>Cliente: {{$datosPedidos->nombre}}</h3> 
                <br>
                <hr />
