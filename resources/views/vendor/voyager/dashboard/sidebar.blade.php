@@ -27,21 +27,27 @@
                     <div style="clear:both"></div>
                 </div>
             </div>
-
         </div>
         <div id="adminmenu">
-                 
-             @if(Auth::user()->name!="Admin")
-        {
-    <admin-menu :items="{{ menu('informes NoAutorizados', '_json') }}"></admin-menu>
-       
-       }
-       @else{<admin-menu :items="{{ menu('admin', '_json') }}"></admin-menu>
-    }
-       
-     
-       @endif
-    </div>
+            @php
+                $uid =  Auth::User()->id;
+
+            @endphp
+          
+                @if(Auth::user()->getRole($uid)=="Ventas")
+                        <admin-menu :items="{{menu('vendedores','my_menu') }}"></admin-menu>               
+                   @else
+                        @if(Auth::user()->getRole($uid)=="Ventas_con_productos")
+                             <admin-menu :items="{{menu('ventas_con_prod','my_menu') }}"></admin-menu>               
+                           @else
+                                @if(Auth::user()->getRole($uid)=="Administracion")
+                                    <admin-menu :items="{{menu('administracion') }}"></admin-menu>               
+                                   @else
+                                    <admin-menu :items="{{ menu('admin', '_json') }}"></admin-menu>
+                                @endif
+                         @endif
+                @endif           
+        </div>
             
     </nav>
 </div>

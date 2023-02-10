@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Voyager;
 use App\Models\OrdenesFabricacion;
 use App\Models\Producto;
 use App\Models\Molde;
-
+use App\Models\nota_pedido;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
@@ -371,6 +371,7 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
         } else {
             // If Model doest exist, get data from table name
             $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
+          
         }
 
         foreach ($dataType->editRows as $key => $row) {
@@ -395,7 +396,12 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
             $view = "voyager::$slug.edit-add";
         }
         $id_filtro_orden=$id;
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_filtro_orden'));
+       
+       
+        $id_pedido=$dataTypeContent->id_pedido;
+        $datosPedido = DB::table('nota_pedidos')->where('id', $id_pedido)->first();
+      //  dd($datosPedido);
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_filtro_orden', 'datosPedido'));
     }
 
     // POST BR(E)AD

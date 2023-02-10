@@ -39,4 +39,20 @@ class ClienteBrebeController extends \TCG\Voyager\Http\Controllers\VoyagerBaseCo
                      'dataType',
                      'dataTypeContent'  ));
     }
+
+    public function clientes_elegir()
+    {
+        return datatables()->of(DB::table('clientes')
+        ->select([  'clientes.id',
+                'clientes.nombre',
+                'clientes.cuit',
+                'clientes.direccion'                
+              ]))
+    ->addColumn('seleccionar',"vendor/voyager/nota-pedidos/boton_seleccionarCliente")
+    ->rawColumns(['seleccionar'])     
+    ->toJson();   
+           
+    }
+
+
 }

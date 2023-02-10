@@ -19,23 +19,20 @@
 
 @section('page_header')
     <h1 class="page-title">
+        
         <i class="{{ $dataType->icon }}"></i>
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
-        <div id="myDIVoculta"  style="display:block ">   
-            
-            <a href="{{url('admin/notas-pedido/crea_factura/'.$id_filtro_pedido)}}" class="btn btn-primary">Facturar</a>
 
-            <a id="imprime"   href="{{url('/pedidos/export/'.$id_filtro_pedido)}}" class="btn btn-primary">Imprime Presupuesto</a>
+    <a href="{{url('admin/factura-ventas/create')}}" class="btn btn-primary">Facturar</a>
 
-            {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
+    <a id="imprime"   href="{{url('/pedidos/export/'.$id_filtro_pedido)}}" class="btn btn-primary">Imprime Presupuesto</a>
 
-            <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
-            
-            <button type="button" class="btn btn-primary" id="btn_ordenes_fabricacion" >
-                Genera Orden Fabricacion   
-            </button>
-        </div>
+    {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
+
+    <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
+    
+
     <div class="modal fade modal-warning" id="cobranzas" v-if="allowCrop">
       <div class="modal-dialog"  style="min-width: 90%">
         <div class="modal-content">
@@ -122,31 +119,14 @@
                                              @if (isset($row->details->legend) && isset($row->details->legend->text))
                                                  <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                              @endif
-                                             @if ( $row->getTranslatedAttribute('display_name')=='Fecha'  )
-                                                @php
-                                                $date= Carbon\Carbon::now()->format('Y-m-d');
-                                            
-                                                @endphp
-                                                <div class="form-group  col-md-3 ">
-                                                    <label class="control-label" for="name" >Fecha</label>
-                                                    <input type="date" class="form-control" name="fecha" placeholder="Fecha" value="{{$date}}" >  
-                                                </div>
-                                            
-                                                @php
-                                                    continue;
-                                                @endphp
-                                            @endif
-                                            
                                              
+                                            
+                                               
                                                 @if ($row->getTranslatedAttribute('display_name')=='Modalidad Venta')
-                                                <div class="form-group  col-md-12 ">
-                                                    <label class="control-label" >Modalidad Venta</label>
-                                                <select class="form-control select2 select2-hidden-accessible" id='Modalidad' name="modalidad_venta" required  data-select2-id="7" tabindex="-1" aria-hidden="true">
-                                                    <option selected value ="{{$dataTypeContent->modalidad_venta}}">{{$dataTypeContent->modalidad_venta}} </option>
+                                                <select class="form-control select2 select2-hidden-accessible" id='Modalidad' name="modalidad_venta"  data-select2-id="7" tabindex="-1" aria-hidden="true">
                                                     <option value="Contado">Contado</option>
-                                                    <option value="Otros">Otros</option>
+                                                    <option value="Otros" selected="selected" data-select2-id="9">Otros</option>
                                                 </select>
-                                                </div>
 
                                              @php
                                              continue;
@@ -156,7 +136,7 @@
                                              @if ($row->getTranslatedAttribute('display_name')=='Recargo /Descuento (+/-)')
                                          
                                              <div class="form-group  col-md-6 ">
-                                                <label class="control-label" for="name">% de Recargo o Descuento (+/-)</label>
+                                                <label class="control-label" for="name">Recargo /Descuento (+/-)</label>
                                                 <input type="text" class="form-control"  id='descuento'  name="descuento" placeholder="Recargo /Descuento (+/-)" value="{{$dataTypeContent->descuento}}">
                                              </div>
                                             
@@ -199,7 +179,7 @@
                                                              </div>	
                                     
 
-                                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 12 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                                 <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 6 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                                     {{ $row->slugify }}
                                                     <label class="control-label" for="name">{{ $row->getTranslatedAttribute('display_name') }}
                                                           <!-- Button trigger modal -->
@@ -212,12 +192,28 @@
                                                     <button type="button" id="boton_elegir_cliente" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_cliente_elegir">
                                                         Buscar Cliente
                                                     </button>
-                                                     
-                                                        <input type="hidden" id="id_cliente_elegido" name="id_cliente_elegido" required value="{{$id_cliente}}" >
-                                                        <input type="text" id="cliente_elegido" name="cliente_elegido" required readonly value="{{$nombre_cliente}}" style="WIDTH: 550px" >
+                                                    <input type="text" id="id_cliente_elegido" name="id_cliente_elegido" required value="" >
+                                                    <input type="text" id="cliente_elegido" name="cliente_elegido" required value="" >
                                                  
-                                                </div>
 
+                                                    @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                                    @if (isset($row->details->view))
+                                                        @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
+                                                    @elseif ($row->type == 'relationship')
+                                                        @include('voyager::formfields.relationship', ['options' => $row->details])
+                                                    @else
+                                                        {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                                                    @endif
+
+                                                    @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                                        {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                                    @endforeach
+                                                    @if ($errors->has($row->field))
+                                                        @foreach ($errors->get($row->field) as $error)
+                                                            <span class="help-block">{{ $error }}</span>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
                                                  
                                                 @php
                                                     continue;
@@ -351,7 +347,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                      
 
+                                       
+                                       
+                                       
                                        {{-- <<<<<<<<<<<<<<<<<<<<<<<    FIN MODAL CLIENTES    >>>>>>>>>>>>>>>>>>>>>>>>>>>> --}}
                                        {{-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  --}}
                                        {{-- >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  --}}
@@ -407,11 +407,14 @@
                                         @stop  
                                    
                                     {{-- Campos que no se cargan en la vista pero se modificaran en el controlador --}}
-                                      
+                                        
                                         <input type="hidden" id="monto_iva" name="monto_iva">
                                         <input type="hidden" name="total">
                                         <input type="hidden" name="totalgravado">
-                
+                                       
+                                        
+                                      
+                                        
                                          
 
                                     {{-- FORMULARIO EMBEBIDO --}}
@@ -430,7 +433,11 @@
                      
                         <div class="panel-footer">
                             @section('submit-buttons')
-                                <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>   
+                                <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
+                               
+                                <button type="button" class="btn btn-primary" id="btn_ordenes_fabricacion" >
+                                 Genera Orden Fabricacion   
+                                </button>
 
                             @stop
                             @yield('submit-buttons')
@@ -624,7 +631,7 @@
    </script> 
     <script>
     $('#btn_ordenes_fabricacion').on('click',function(){
-              $('#modal_ordenes_fabricacion').modal({show:true});
+            $('#modal_ordenes_fabricacion').modal({show:true});
         });
     </script> 
 
@@ -691,7 +698,7 @@
       
     $(document).ready(function() {
         $('#btn_ordenes_fabricacion').hide();
-       if ($('[name="estado"]').val()=="Pendiente Entrega") || ($('[name="estado"]').val()=="Pendiente Aprobacion"){
+       if ($('[name="estado"]').val()=="Pendiente Entrega") {
           $('#btn_ordenes_fabricacion').show();
        }  
     } );
@@ -802,13 +809,11 @@
     $(document).ready(function(){
         $("#Modalidad").change(function(){
                calculos();
-                //alert($('#Modalidad').val());
+                // alert($('#Modalidad').val());
                 //$('#valor2').val($(this).val());
                     });
         $("#descuento").change(function(){
-                calculos();
-               // alert($('#descuento').val());
-            	});
+           calculos();	});
           
            calculos();  
         
@@ -816,21 +821,7 @@
     
     </script>
          
-         <script>
-            $( document ).ready(function() {
-                var x = document.getElementById("myDIVoculta");
-               
-                if ({{ is_null($dataTypeContent->getKey()) }} ) {
-                x.style.display = "none";
-                } else
-                {
-                x.style.display = "block"; 
-                }
 
-
-             });
-         
-        </script>
 
 
 

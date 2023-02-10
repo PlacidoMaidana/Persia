@@ -68,13 +68,15 @@
                             
                          
                         {{-- </div> --}}
-
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Totales</h5>
-        <p class="card-text">el total de todo</p>
-    </div>
-</div>
+                       
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total pagado {{$pagoscompra}}</h5>
+                                <h5 class="card-title">Total compra {{$totalcompra}}</h5>
+                                <h5 class="card-title">Saldo {{$saldocompra}}</h5>
+                                <p class="card-text"> </p>
+                            </div>
+                        </div>
 
 
                         

@@ -274,7 +274,7 @@ Route::get('/comprascanceladas', function () {
  Route::get('/pedidos_pendientes', function () {     
     return datatables()->of(DB::table('nota_pedidos')
     ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-    ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+    ->leftjoin('empleados','nota_pedidos.id_vendedor','=','empleados.id')
     ->where('nota_pedidos.estado','=', 'Pendiente Aprobacion')
     ->select([  'nota_pedidos.id as id_pedido',
                 'nota_pedidos.fecha',
@@ -295,7 +295,7 @@ Route::get('/comprascanceladas', function () {
  Route::get('/pedidos_terminados', function () {     
   return datatables()->of(DB::table('nota_pedidos')
   ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->leftjoin('empleados','nota_pedidos.id_vendedor','=','empleados.id')
   ->where('nota_pedidos.estado','=', 'Entregado')
   ->select([  'nota_pedidos.id as id_pedido',
               'nota_pedidos.fecha',
@@ -312,11 +312,13 @@ Route::get('/comprascanceladas', function () {
     ->toJson();   
  
  });
+
+
  
  Route::get('/pedidos_negativos', function () {     
   return datatables()->of(DB::table('nota_pedidos')
   ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->leftjoin('empleados','nota_pedidos.id_vendedor','=','empleados.id')
   ->where('nota_pedidos.estado','=', 'Rechazado')
   ->select([  'nota_pedidos.id as id_pedido',
               'nota_pedidos.fecha',
@@ -336,7 +338,7 @@ Route::get('/comprascanceladas', function () {
  Route::get('/pedidos_abiertos', function () {     
   return datatables()->of(DB::table('nota_pedidos')
   ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
-  ->join('empleados','nota_pedidos.id_vendedor','=','empleados.id')
+  ->leftjoin('empleados','nota_pedidos.id_vendedor','=','empleados.id')
   ->where('nota_pedidos.estado','=', 'Pendiente Entrega')
   ->select([  'nota_pedidos.id as id_pedido',
               'nota_pedidos.fecha',
@@ -359,6 +361,7 @@ Route::get('/comprascanceladas', function () {
  //   ACCIONES EN NOTAS PEDIDO
  ////////////////////////////////////////////////////////
 
+ Route::get('Clientes_elegir', 'App\Http\Controllers\ClienteBrebeController@clientes_elegir');
 
  Route::get('admin/notas-pedido/crea_factura/{id_ped}', 'App\Http\Controllers\Voyager\PedidosController@crea_factura');
 
@@ -380,7 +383,7 @@ Route::get('/comprascanceladas', function () {
               'nota_pedidos.total',
               'nota_pedidos.estado'
             ]))   
-    ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    //->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
     ->addColumn('accion','vendor/voyager/remitos/acciones_remitos')
     ->rawColumns(['check','accion'])   
     ->toJson();   
@@ -399,7 +402,7 @@ Route::get('/comprascanceladas', function () {
                 'nota_pedidos.total',
                 'nota_pedidos.estado'
               ]))   
-      ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
+    //  ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
       ->addColumn('accion','vendor/voyager/remitos/acciones_remitos')
       ->rawColumns(['check','accion'])   
       ->toJson();   

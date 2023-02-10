@@ -16,7 +16,8 @@ class EmbebidoComponent extends Component
     public $total_linea;
 
     public $totalgravado=0;
-    
+    public $modVenta='';
+    public $descuento1=0;    
     public $descuento=0;
     public $gravadocondescuento=0;
     public $totalconiva=0;
@@ -33,13 +34,10 @@ class EmbebidoComponent extends Component
 
     public function mount($renglones)
     {
-      //session()->flash('El producto', $renglones[0]->descripcion);
-           //dd($renglones[0]->id_pedido);
-           //  dd($pedido['descuento']);
-            if (!is_null($renglones)) {
+              if (!is_null($renglones)) {
                $id_pedido=($renglones[0]->id_pedido);
                $pedido=nota_pedido::find($id_pedido);
-              // dd($pedido['modalidad_venta']);
+         
                $this->totalgravado=0;
                 foreach ($renglones as $key => $value) {
                    $prod=Producto::find($value->id_producto);
@@ -55,17 +53,8 @@ class EmbebidoComponent extends Component
                    $this->detalles_string=serialize($this->detalles);
                    $this->totalgravado+=$value->total_linea;
                 }
-                $this->descuento = $pedido['descuento'];
-                $this->gravadocondescuento = $this->totalgravado + $pedido['descuento']; 
-                $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-                $this->totalconiva = $this->gravadocondescuento * 1.21;
-               
-                if ($pedido['modalidad_venta']=="Contado") {
-                  $this->total=$this->gravadocondescuento ;
-                  }else{
-                   $this->total=$this->gravadocondescuento  +  $this->monto_iva;
-                  }
-                  //dd($this->total);
+                $this->CalculosTotales($this->modVenta,$this->descuento1);
+  
             }
 
     }
@@ -97,13 +86,7 @@ class EmbebidoComponent extends Component
          $this->detalles[]=$a; 
          $this->totalgravado+=$value['total_linea'];
       }
-      $this->gravadocondescuento = $this->totalgravado + $pedido['descuento']; 
-      $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-        if ($pedido['modalidad_venta']=="Contado") {
-        $this->total=$this->gravadocondescuento ;
-        }else{
-         $this->total=$this->gravadocondescuento  +  $this->monto_iva;
-        }
+      $this->CalculosTotales($this->modVenta,$this->descuento1);
     }
     
     public function resetImput()
@@ -119,7 +102,7 @@ class EmbebidoComponent extends Component
     {
    
       $this->total_linea= floatval($this->cantidad) * floatval($this->precio);
-        
+      
        $a=array('id_producto'=> $this->id_producto,
        'producto'=> $this->producto,   
        'cantidad'=> $this->cantidad,
@@ -129,19 +112,22 @@ class EmbebidoComponent extends Component
        $this->detalles[]=$a;     
        $this->detalles_string=serialize($this->detalles);
        $this->totalgravado+=$this->total_linea;
-       $this->gravadocondescuento = $this->totalgravado + $this->descuento; 
-       $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-       $this->total=$this->gravadocondescuento  +  $this->monto_iva;
-       //dd("Los renglones    ".$this->detalles_string);
-       //$this->resetImput();
+       $this->CalculosTotales($this->modVenta,$this->descuento1);
     }
 
-    public function CalculosTotales($modVenta,$descuento)
+    public function CalculosTotales($modVenta,$descuento1)
     {
-      //$this->precio=$modVenta;
        
-       $this->descuento = $descuento;
-       $this->gravadocondescuento = $this->totalgravado + $descuento; 
+       $this->modVenta=$modVenta;
+       $this->descuento1= $descuento1;
+       if (($descuento1!=0) &&  !empty($descuento1) ) {
+          $this->descuento = ($this->descuento1 * $this->totalgravado) / 100 ;
+         }else{
+         $this->descuento = 0;
+         }
+
+       
+       $this->gravadocondescuento = $this->totalgravado + $this->descuento; 
        $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
        $this->totalconiva = $this->gravadocondescuento * 1.21;
       
@@ -150,18 +136,15 @@ class EmbebidoComponent extends Component
          }else{
           $this->total=$this->gravadocondescuento  +  $this->monto_iva;
          }
-         //dd($this->total);
+         
     }
    
     
     public function quitar($index)
     {
        //dd($this->detalles[$index]);
-       
        $this->totalgravado-=$this->detalles[$index]['total-linea'];
-       $this->gravadocondescuento = $this->totalgravado + $this->descuento; 
-       $this->monto_iva = $this->gravadocondescuento * 0.21 ; 
-       $this->total=$this->gravadocondescuento  +  $this->monto_iva;
+       $this->CalculosTotales($this->modVenta,$this->descuento1);
        unset($this->detalles[$index]);
        $this->detalles_string=serialize($this->detalles);
     }

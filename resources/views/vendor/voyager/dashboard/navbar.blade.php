@@ -1,4 +1,5 @@
 <nav class="navbar navbar-default navbar-fixed-top navbar-top">
+   
     <div class="container-fluid">
         <div class="navbar-header">
             <button class="hamburger btn-link">
@@ -9,6 +10,7 @@
                 @php
                 $segments = array_filter(explode('/', str_replace(route('voyager.dashboard'), '', Request::url())));
                 $url = route('voyager.dashboard');
+               
                 @endphp
                 @if(count($segments) == 0)
                     <li class="active"><i class="voyager-boat"></i> {{ __('voyager::generic.dashboard') }}</li>

@@ -59,66 +59,8 @@
                             @php
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                             @endphp
-
-                                {{-- <<<<<<<<<<<<<<<<  RUBROS Y SUBRUBRO    >>>>>>>>>>>>>>>>>>>> --}}
-                                <div class="form-group">
-                                    <label id="descripcion_rubro" for="my-input">Rubro:</label>
-                                    <button type="button" id="boton_rubros" class="btn btn-primary " style="width: 134px">
-                                        <div class="icon voyager-zoom-in">Rubro</div> 
-                                    </button>
-                                <input type="hidden" id="rubro_id" name="rubro_id">
-                                <input type="hidden" id="subrubro_id" name="subrubro_id">
-                                </div>
-                                
-                                   {{-- >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                      >>>>>>>>>><<<<<<    MODAL RUBRO              <<<<<<<<<
-                                      >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                      >>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< --}}
-
-                                      <!-- Modal --> 
-                                      <div class="modal fade modal-warning" id="modal_rubro" v-if="allowCrop">
-                                          <div class="modal-dialog"  style="min-width: 60%">
-                                              <div class="modal-content">
-                                                   <div class="modal-header">
-                                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                  <h4 class="modal-title">Seleccione el rubro</h4>
-                                                   </div>
-                                               
-                                                   <div id="x34" class="modal-body">
-                                                  <div class="card" >
-                                                      <img class="card-img-top" src="holder.js/100x180/" alt="">
-                                                      <div class="card-body">
-                                                    
-                                                          <table id="rubros_elegir" class="table table-striped table-bordered dt-responsive nowrap" >
-                                                              <thead>
-                                                                <tr>
-                                                                    <th>id_rubro</th>
-                                                                    <th>rubro</th>
-                                                                    <th>id_subrubro</th>
-                                                                    <th>descripcion_subrubro</th>
-                                                                    <th>seleccionar</th>                                                                
-                                                                </tr>
-                                                               </thead>
-                                                           
-                                                              </table>
-
-                                                      </div>
-                                                  </div>
-                                              
-                                                   </div>
-                                               
-                                                   <div class="modal-footer">
-                                                  <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>                
-                                                   </div>
-                                              </div>
-                                          </div>
-                                      </div>  
-
-                                                                   
-                                {{-- <<<<<<<<<<<<<<<<  RUBROS Y SUBRUBRO    >>>>>>>>>>>>>>>>>>>> --}}
-
-
-                                @foreach($dataTypeRows as $row)
+                    
+                            @foreach($dataTypeRows as $row)
                              
                                 <!-- GET THE DISPLAY OPTIONS -->
                                 @php
@@ -133,15 +75,7 @@
                                 @endif
                          
 
-                                @if (( $row->getTranslatedAttribute('display_name')=='Precio Compra'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='Unidad Compra'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='Tasa Iva'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='moldes'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='Id Base'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='Manual Procedimiento'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='Unidades Mt2'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='Paquetes Mt2'    )||
-                                    ( $row->getTranslatedAttribute('display_name')=='Created At'  )
+                                @if ( ( $row->getTranslatedAttribute('display_name')=='Created At'  )
                                       )
                                    @php
                                        continue;
@@ -171,6 +105,7 @@
                                 </div>
                             @endforeach
 
+                                                 
                         </div><!-- panel-body -->
 
                         <div class="panel-footer">
@@ -189,6 +124,10 @@
                         <input type="hidden" name="type_slug" id="type_slug" value="{{ $dataType->slug }}">
                         {{ csrf_field() }}
                     </form>
+                    <div class="form-group col md-12">
+                        <label class="control-label" for="name">Observaciones del pedido</label>
+                        <textarea class="form-control" id="observ1" name="observ1"  rows="6"    >{{$datosPedido->observaciones}} </textarea>
+                    </div>
 
                 </div>
             </div>
