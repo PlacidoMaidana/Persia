@@ -104,6 +104,7 @@
                                             <th>entrada proceso</th>
                                             <th>salida proceso</th>
                                             <th>id pedido</th>
+                                            <th>cliente</th>
                                             <th>id orden</th>
                                             <th>descripcion</th>
                                             <th>rubro</th>
@@ -113,6 +114,7 @@
                                             <th>Cantidad de Unidades</th>
                                             <th>Cantidad de Paquetes</th>
                                             <th>estado</th>
+                                            <th>observaciones</th>
                                             <th>accion</th>
                                           </tr>
                                       </thead>
@@ -130,6 +132,7 @@
                                               <th>entrada proceso</th>
                                               <th>salida proceso</th>
                                               <th>id pedido</th>
+                                              <th>cliente</th>
                                               <th>id orden</th>
                                               <th>descripcion</th>
                                               <th>rubro</th>
@@ -139,6 +142,7 @@
                                               <th>Cantidad de Unidades</th>
                                               <th>Cantidad de Paquetes</th>
                                               <th>estado</th>
+                                              <th>observaciones</th>
                                               <th>accion</th>
                                         </tr>
                                        </thead>
@@ -296,6 +300,7 @@ ordenes_fabricacion_activas
                      {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
                      {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
+                     {data: 'nombre', name: 'clientes.nombre', width: '5%'},
                      {data: 'id', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},
@@ -305,6 +310,7 @@ ordenes_fabricacion_activas
                      {data: 'unidades', name: 'unidades', width: '5%'},
                      {data: 'paquetes', name: 'paquetes', width: '5%'},
                      {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
+                     {data: 'observaciones', name: 'nota_pedidos.observaciones', width: '5%'},
                      {data: 'accion', width: '5%'},
         
                       ]           
@@ -325,6 +331,7 @@ ordenes_fabricacion_activas
                      {data: 'fecha_entrada_proceso', name: 'ordenes_fabricacion.fecha_entrada_proceso', width: '5%'},
                      {data: 'fecha_salida_proceso', name: 'ordenes_fabricacion.fecha_salida_proceso', width: '5%'},
                      {data: 'id_pedido', name: 'ordenes_fabricacion.id_pedido', width: '5%'},
+                     {data: 'nombre', name: 'clientes.nombre', width: '5%'},
                      {data: 'id', name: 'ordenes_fabricacion.id', width: '5%'},
                      {data: 'descripcion', name: 'productos.descripcion', width: '5%'},
                      {data: 'rubro', name: 'rubros.rubro', width: '5%'},
@@ -334,6 +341,7 @@ ordenes_fabricacion_activas
                      {data: 'unidades', name: 'unidades', width: '5%'},
                      {data: 'paquetes', name: 'paquetes', width: '5%'},
                      {data: 'estado', name: 'ordenes_fabricacion.estado', width: '5%'},
+                     {data: 'observaciones', name: 'nota_pedidos.observaciones', width: '5%'},
                      {data: 'accion', width: '10%'},
                 
                       ]           

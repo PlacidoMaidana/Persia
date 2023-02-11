@@ -13,5 +13,6 @@
 </a>
 
 <a href="{{url('/pedidos/export/'.$id_pedido)}}" title="Presupuesto" class="btn btn-primary pull-right">Presupuesto</a>
-                                             
+<a href="{{url('/CobranzasPedido/'.$id_pedido)}}" class="btn btn-primary pull-right">Cobranzas</a>
+
 </td>

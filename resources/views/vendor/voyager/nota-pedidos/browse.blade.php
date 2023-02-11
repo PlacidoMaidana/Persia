@@ -119,6 +119,7 @@
                                           <th>vendedor</th>
                                           <th>total</th>
                                           <th>estado</th>
+                                          <th>observaciones</th>
                                           <th>accion</th>
                                         </tr>
                                     </thead>
@@ -139,6 +140,7 @@
                                             <th>vendedor</th>
                                             <th>total</th>
                                             <th>estado</th>
+                                            <th>observaciones</th>
                                             <th>accion</th>
                                         </tr>
                                      </thead>
@@ -158,6 +160,7 @@
                                             <th>vendedor</th>
                                             <th>total</th>
                                             <th>estado</th>
+                                            <th>observaciones</th>
                                             <th>accion</th>
                                         </tr>
                                      </thead>
@@ -177,6 +180,7 @@
                                             <th>vendedor</th>
                                             <th>total</th>
                                             <th>estado</th>
+                                            <th>observaciones</th>
                                             <th>accion</th>
                                         </tr>
                                      </thead>
@@ -354,6 +358,7 @@
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},
                      {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
+                     {data: 'observaciones', name: 'nota_pedidos.observaciones', width: '10%'},
                      {data: 'accion', width: '10%'},
                       ]           
         } );
@@ -383,6 +388,7 @@
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},
                      {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
+                     {data: 'observaciones', name: 'nota_pedidos.observaciones', width: '10%'},
                      {data: 'accion', width: '10%'},
                       ]           
         } );
@@ -410,6 +416,7 @@
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},
                      {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
+                     {data: 'observaciones', name: 'nota_pedidos.observaciones', width: '10%'},
                      {data: 'accion', width: '10%'},
                       ]           
         } );
@@ -437,6 +444,7 @@
                      {data: 'vendedor', name: 'empleados.apellidoynombre', width: '10%'},
                      {data: 'total', name: 'nota_pedidos.total', width: '10%'},
                      {data: 'estado', name: 'nota_pedidos.estado', width: '10%'},
+                     {data: 'observaciones', name: 'nota_pedidos.observaciones', width: '10%'},
                      {data: 'accion', width: '10%'},
                       ]           
         } );
@@ -479,24 +487,6 @@
   </script>
   <script src "/vendor/datatables/buttons.server-side.js"> </script>
   
-
-  
- <script>
-        // $(document).ready(function(){
-        // $("input[type=checkbox]:checked").each(function(){
-        //     //cada elemento seleccionado
-        //     alert($(this).val());
-        // });
-        // });
-
-
-        // $('#operar').on('click', function(){
-        //     $("input[type=checkbox]:checked").each(function(){
-        //     //cada elemento seleccionado
-        //     alert($(this).val());
-        //       });
-        //     });
- </script>
 
 <script>
      function borrar(id) {

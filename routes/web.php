@@ -49,6 +49,7 @@ Route::get('/Remitos','App\Http\Controllers\Voyager\PedidosController@remitos');
 Route::get('/IVAcompras','App\Http\Controllers\iva_comprasController@index');
 Route::get('/IVAventas','App\Http\Controllers\iva_ventas@index');
 Route::get('/Informeventas','App\Http\Controllers\informes_ventas@index');
+Route::get('/Informecomisiones','App\Http\Controllers\informes_ventas_comisiones@index');
 Route::get('/Informecompras','App\Http\Controllers\informes_compras@index');
 Route::get('/Informeproduccion','App\Http\Controllers\informes_produccion@index');
 Route::get('/Informetesoreria','App\Http\Controllers\informes_tesoreria@index');
@@ -58,15 +59,20 @@ Route::get('/informe_flujofinanciero', 'App\Http\Controllers\informes_flujofinan
 Route::get('/ivavtas_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_ventas@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/ivacomprasen_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_comprasController@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informevtas_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_ventas@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/informevtasComisiones_rango_de_fechas/{from}/{to}/{vend}','App\Http\Controllers\informes_ventas_comisiones@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/totalesvtasComisiones_rango_de_fechas/{from}/{to}/{vend}','App\Http\Controllers\informes_ventas_comisiones@totalesen_rango_de_fechas');//ruta que devuelve datos
+
 Route::get('/informecompras_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_compras@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informeproduccion_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_produccion@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informetesoreria_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_tesoreria@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/vtasproductos_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\informesProductos@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informeflujofinanciero_rango_de_fechas/{anio}','App\Http\Controllers\informes_flujofinancieroController@en_rango_de_fechas');//ruta que devuelve datos
 
+
 Route::get('productos/export/{from}/{to}', 'App\Http\Controllers\informesProductos@export');
 Route::get('informes_compras/export/{from}/{to}', 'App\Http\Controllers\informes_compras@export');
 Route::get('informes_ventas/export/{from}/{to}', 'App\Http\Controllers\informes_ventas@export');
+Route::get('informes_ventasComisiones/export/{from}/{to}/{vend}', 'App\Http\Controllers\informes_ventas_comisiones@export');
 Route::get('informes_produccion/export/{from}/{to}', 'App\Http\Controllers\informes_produccion@export');
 Route::get('informes_tesoreria/export/{from}/{to}', 'App\Http\Controllers\informes_tesoreria@export');
 Route::get('iva_compras/export/{from}/{to}', 'App\Http\Controllers\Iva_compras@export');
@@ -283,7 +289,8 @@ Route::get('/comprascanceladas', function () {
                 'clientes.id as id_cliente',
                 'empleados.apellidoynombre as vendedor',
                 'nota_pedidos.total',
-                'nota_pedidos.estado'
+                'nota_pedidos.estado',
+                'nota_pedidos.observaciones'
               ]))
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
     ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidospend')
@@ -304,7 +311,8 @@ Route::get('/comprascanceladas', function () {
               'clientes.id as id_cliente',
               'empleados.apellidoynombre as vendedor',
               'nota_pedidos.total',
-              'nota_pedidos.estado'
+              'nota_pedidos.estado',
+              'nota_pedidos.observaciones'
             ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
     ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidosterm')
@@ -327,7 +335,8 @@ Route::get('/comprascanceladas', function () {
               'clientes.id as id_cliente',
               'empleados.apellidoynombre as vendedor',
               'nota_pedidos.total',
-              'nota_pedidos.estado'
+              'nota_pedidos.estado',
+              'nota_pedidos.observaciones'
             ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
     ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidosneg')
@@ -347,7 +356,8 @@ Route::get('/comprascanceladas', function () {
               'clientes.id as id_cliente',
               'empleados.apellidoynombre as vendedor',
               'nota_pedidos.total',
-              'nota_pedidos.estado'
+              'nota_pedidos.estado',
+              'nota_pedidos.observaciones'
             ]))   
     ->addColumn('check','vendor/voyager/nota-pedidos/check_pedido')
     ->addColumn('accion','vendor/voyager/nota-pedidos/acciones_npedidosabie')
@@ -422,6 +432,8 @@ Route::get('/comprascanceladas', function () {
    Route::get('/ordenes_fabricacion_activas', function () {     
   return datatables()->of(DB::table('ordenes_fabricacion')
   ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+  ->join('nota_pedidos','ordenes_fabricacion.id_pedido','=','nota_pedidos.id')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
   ->join('rubros','productos.rubro_id','=','rubros.id')
   ->join('subrubros','productos.subrubro_id','=','subrubros.id')
   ->leftjoin('moldes','moldes.id','=','productos.id_molde')
@@ -439,6 +451,8 @@ Route::get('/comprascanceladas', function () {
                   ordenes_fabricacion.fecha_orden,
                   ordenes_fabricacion.fecha_entrada_proceso,
                   ordenes_fabricacion.fecha_salida_proceso,
+                  clientes.nombre,
+                  nota_pedidos.observaciones,
                   ordenes_fabricacion.estado'
        )))
        ->setRowAttr([
@@ -479,6 +493,8 @@ Route::get('/comprascanceladas', function () {
 Route::get('/ordenes_fabricacion_cerradas', function () {     
   return datatables()->of(DB::table('ordenes_fabricacion')
 ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+->join('nota_pedidos','ordenes_fabricacion.id_pedido','=','nota_pedidos.id')
+->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
 ->join('rubros','productos.rubro_id','=','rubros.id')
 ->join('subrubros','productos.subrubro_id','=','subrubros.id')
 ->leftjoin('moldes','moldes.id','=','productos.id_molde')
@@ -496,6 +512,8 @@ Route::get('/ordenes_fabricacion_cerradas', function () {
                 ordenes_fabricacion.fecha_orden,
                 ordenes_fabricacion.fecha_entrada_proceso,
                 ordenes_fabricacion.fecha_salida_proceso,
+                clientes.nombre,
+                nota_pedidos.observaciones,
                 ordenes_fabricacion.estado'
                   )))
 ->addColumn('check','vendor/voyager/ordenes_fabricacion/check_ordenes_fabricacion')
