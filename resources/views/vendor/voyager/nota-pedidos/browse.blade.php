@@ -106,8 +106,8 @@
                           <div class="panel-body" style="width: 100%">
                             <div class="tab-content">
                               <div role="tabpanel" class="tab-pane fade in active" id="one">
-                                <table id="pedidos_pendientes" class="table table-striped table-bordered dt-responsive nowrap"   >
-                                    <thead>
+                                <table id="pedidos_pendientes" class="table table-striped table-bordered dt-responsive nowrap"  style="width:100%;" >
+                                    <thead style="width:100%;">
                                       <tr >
                                           <th class="dt-not-orderable">
                                               <input type="checkbox" class="select_all">
@@ -126,8 +126,8 @@
                                 </table>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="two">
-                                <table id="pedidos_terminados" class="table table-striped table-bordered dt-responsive nowrap"   >
-                                    <thead>
+                                <table id="pedidos_terminados" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;"  >
+                                    <thead style="width:100%;">
                                         <tr>
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
@@ -145,8 +145,8 @@
                                     </table>
                               </div>
                               <div role="tabpanel" class="tab-pane fade" id="three">
-                                <table id="pedidos_negativos" class="table table-striped table-bordered dt-responsive nowrap"   >
-                                    <thead>
+                                <table id="pedidos_negativos" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;"   >
+                                    <thead style="width:100%;">
                                         <tr>
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
@@ -164,8 +164,8 @@
                                     </table>
                               </div>
                               <div role="tabpanel" class="tab-pane fade" id="four">
-                                <table id="pedidos_abiertos" class="table table-striped table-bordered dt-responsive nowrap"   >
-                                    <thead>
+                                <table id="pedidos_abiertos" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;"  >
+                                    <thead style="width:100%;">
                                         <tr>
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
@@ -337,6 +337,13 @@
         $('#pedidos_pendientes').dataTable( {
              "serverSide": true,
              "scrollX": true,
+             "scrollCollapse": true,
+             "paging": true,
+             "searching": true,
+             "ordering": true,
+             "responsive": true,
+             "colReorder": true,
+             "orderCellsTop": true,
              "ajax":"{{url('pedidos_pendientes')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -357,8 +364,15 @@
 <script>
     $(document).ready(function() {
         $('#pedidos_terminados').dataTable( {
-             "serverSide": true,
+            "serverSide": true,
              "scrollX": true,
+             "scrollCollapse": true,
+             "paging": true,
+             "searching": true,
+             "ordering": true,
+             "responsive": true,
+             "colReorder": true,
+             "orderCellsTop": true,
              "ajax":"{{url('pedidos_terminados')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -377,8 +391,15 @@
  <script>
     $(document).ready(function() {
         $('#pedidos_negativos').dataTable( {
-             "serverSide": true,
+            "serverSide": true,
              "scrollX": true,
+             "scrollCollapse": true,
+             "paging": true,
+             "searching": true,
+             "ordering": true,
+             "responsive": true,
+             "colReorder": true,
+             "orderCellsTop": true,
              "ajax":"{{url('pedidos_negativos')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -397,8 +418,15 @@
 <script>
     $(document).ready(function() {
         $('#pedidos_abiertos').dataTable( {
-             "serverSide": true,
-             "scrollX": true,
+            "serverSide": true,
+            "scrollX": true,
+             "scrollCollapse": true,
+             "paging": true,
+             "searching": true,
+             "ordering": true,
+             "responsive": true,
+             "colReorder": true,
+             "orderCellsTop": true,
              "ajax":"{{url('pedidos_abiertos')}}",                
              "columns":[
                      {data: 'check', width: '5%'},
@@ -422,12 +450,17 @@
       var filtro ='http://127.0.0.1:8000/informecompras_rango_de_fechas/'+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
     
       $('#example').dataTable( {
-      "serverSide": true,
-      "ajax":filtro,
-      "scrollX": true,
-      "paging": true,
-      "searching": true,
-      "columns":[
+        "serverSide": true,
+             "scrollX": true,
+             "scrollCollapse": true,
+             "paging": true,
+             "searching": true,
+             "ordering": true,
+             "responsive": true,
+             "colReorder": true,
+             "orderCellsTop": true,
+             "ajax":filtro,
+             "columns":[
               {data: 'tipo_factura', name:'f.tipo_factura', width: '5%'},
               {data: 'pto_venta', name: 'f.pto_venta', width: '5%'},
               {data: 'nro_factura', name: 'f.nro_factura', width: '10%'},
