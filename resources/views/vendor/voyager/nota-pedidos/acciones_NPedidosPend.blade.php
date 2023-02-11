@@ -11,7 +11,7 @@
 </a>
 
 <a href="{{url('/pedidos/export/'.$id_pedido)}}" title="Presupuesto" class="btn btn-primary pull-right">Presupuesto</a>
- 
+<a href="{{url('/CobranzasPedido/'.$id_pedido)}}" class="btn btn-primary pull-right">Cobranzas</a> 
 {{--                                                    
 <a href="{{url('admin/nota-pedidos/'.$id_pedido)}}" title="View" class="btn btn-sm btn-warning pull-right view">
 <i class="voyager-eye"></i> <span class="hidden-xs hidden-sm">View</span>

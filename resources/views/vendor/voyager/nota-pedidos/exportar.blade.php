@@ -41,7 +41,7 @@
 
           </div>
           @php
-              $date =Carbon\ Carbon::createFromDate($datosPedidos->fecha)->format('Y-m-d');
+              $date =Carbon\Carbon::createFromDate($datosPedidos->fecha)->format('Y-m-d');
           @endphp
           <div class="cuerpo">
                <h1>PRESUPUESTO</h1> 
@@ -75,8 +75,8 @@
                    <td> {{ $p->descripcion }}</td>
                    <td> {{ $p->cantidad }}</td>
                    <td> {{ $p->unidad }}</td>
-                   <td> {{ number_format($p->punit,2) }}</td>
-                   <td> {{ number_format($p->total_linea,2) }}</td>
+                   <td> $ {{ number_format($p->punit,2) }} </td>
+                   <td> $ {{ number_format($p->total_linea,2) }}</td>
 
 
                </tr>
@@ -87,11 +87,12 @@
                </table>
                <br>
                <h4  style='text-align:right'>
-                 Total gravado: {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
-                 Monto Recargo o Descuento (+/-) :   {{number_format($datosPedidos->montodescuento, 2, '.', ',')}}  <br>
-                 Gravado con descuento/recargo: {{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}} <br>
-                 IVA 21: {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
-                 Total con IVA: {{number_format($datosPedidos->totalconiva, 2, '.', ',')}}  <br>
+               
+                 Total gravado: $ {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
+                 Monto Recargo o Descuento (+/-) :  $ {{number_format($datosPedidos->montodescuento, 2, '.', ',')}}  <br>
+                 Gravado con descuento/recargo: $ {{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}} <br>
+                 IVA 21: $ {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
+                 Total con IVA: $ {{number_format($datosPedidos->totalconiva, 2, '.', ',')}}  <br>
                  <br>
                </h4>
                {{-- 
