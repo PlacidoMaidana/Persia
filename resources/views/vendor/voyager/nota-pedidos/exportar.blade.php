@@ -30,6 +30,7 @@
       border:1px solid black;
       background-color: #ffffff;     
       text-align:right;
+      /*grid-template-columns: reapeat(auto-fill,minimax(15rem,1fr));*/
        }
 	</style>
 
@@ -61,12 +62,11 @@
                <hr style="color: rgb(84, 83, 83); background-color: rgb(101, 100, 100); width:100% higth:2px ;" />
                Sr/:  <br>
                Por medio de la presente le envió el presupuesto solicitado.		<br>
-               {{-- grilla --}}
-            <div class="caja " style="height:350px;">
-              <div>
-                <table class="table" style="width:100%;"  >
+                    
 
-               <table class="table" >
+     {{-- grilla --}}
+            <div class="caja " style="height:350px;">
+                  <table class="table" style="width:100%;"  >
                    <tbody>
                        <thead >
                            <tr>
@@ -79,64 +79,83 @@
                            </tr>
                          </thead>
                @foreach($detallesPedidos as $p)
-               <tr >
+                  <tr >
                    <td> {{ $p->subrubro }}</td>
                    <td> {{ $p->descripcion }}</td>
                    <td> {{ $p->cantidad }}</td>
                    <td> {{ $p->unidad }}</td>
                    <td> ${{ number_format($p->punit,2) }}</td>
                    <td> ${{ number_format($p->total_linea,2) }}</td>
-
-
-              </tr>
-
-               @endforeach
-             
+                  </tr>
+                  @endforeach             
                </tbody>
                </table>
               </div>
-               <br>
-               <h4  style='text-align:right'>
-                 Total gravado:$ {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
-                 Monto Recargo o Descuento (+/-) :$   {{number_format($datosPedidos->montodescuento, 2, '.', ',')}}  <br>
-                 Gravado con descuento/recargo:$ {{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}} <br>
-                 IVA 21:$ {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
-                 Total con IVA:$ {{number_format($datosPedidos->totalconiva, 2, '.', ',')}}  <br>
-                 <br>
-               </h4>
-               
-
-        
-            </div>
-            {{-- Detalles --}}
-             <div  style="height:100px;">
-            
-              <hr />
-               <br>
-               <p>
 
 
-               OBSERVACIONES:     {{$datosPedidos->observaciones}}
-               <br>
-               <br>
-               <hr />
-               <br>
-               FORMA DE PAGO: {{$texto->Forma_pago_Productos}} <br>
-              
-               </p>
-            
-             </div>
-               
-               
-              
-
-          </div>
-          <div class="pie"></div>
-      </div>
-      </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+   {{-- Totales --}}
+       <div class="caja " style="height:100px;">
+        <br>
+        <h4 style='text-align:right'>
+          Total gravado:$ {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
+          Monto Recargo o Descuento (+/-) :$   {{number_format($datosPedidos->montodescuento, 2, '.', ',')}}  <br>
+          Gravado con descuento/recargo:$ {{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}} <br>
+          IVA 21:$ {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
+          Total con IVA:$ {{number_format($datosPedidos->totalconiva, 2, '.', ',')}}  <br>
+          <br>
+        </h4>
+      
+       </div>
     
+
+  {{-- Detalles --}}
+  <div  style="height:100px;">
+    <hr />
+    <br>            
+    <p>
+    OBSERVACIONES:     {{$datosPedidos->observaciones}}
+    <br>
+    <br>
+    <hr />
+    <br>
+    FORMA DE PAGO: {{$texto->Forma_pago_Productos}}
+    <br>
+    </p>
+   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             </div>
+           
+      <div class="pie"></div>
+
+      </div>  
+  </div>      
 </body>
 
 </html>
