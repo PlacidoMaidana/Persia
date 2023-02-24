@@ -1,0 +1,18 @@
+    
+        .table {
+              color: #0c0d0e;
+        }
+        .table>tfoot>tr>th, .table>thead>tr>th {
+            color: #db3f07;
+            font-weight: 4600;
+        }
+    
+        /* .voyager .table>thead>tr>th {
+            background: #f8fafc;
+            border-color: #eaeaea;
+        } */
+
+        .voyager .table>thead>tr>th {
+            background: #3078c1;
+            border-color: #eaeaea;
+        }

@@ -16,23 +16,35 @@
 		table th {
 			border:1px solid #b3adad;
 			padding:5px;
-			background: #f0f0f0;
+			/* background: #f0f0f0; */
 			color: #313030;
 		}
 		table td {
 			border:1px solid #b3adad;
 			text-align:center;
 			padding:5px;
-			background: #ffffff;
+			/* background: #ffffff; */
 			color: #313030;
 		}
+    .right {
+    padding-top: 10px;
+    padding-left: 197px;
+    margin-left: 10px;
+    position: relative;
+    float: left;
+    /* width: 45%; */
+    /* border: steelblue solid 1px; */
+    height: auto;
+}
+
     .caja{
       border:1px solid black;
-      background-color: #ffffff;     
+      /* background-color: #ffffff;      */
       text-align:right;
       /*grid-template-columns: reapeat(auto-fill,minimax(15rem,1fr));*/
        }
-	</style>
+	
+  </style>
 
 </head>
 <body>
@@ -65,7 +77,7 @@
                     
 
      {{-- grilla --}}
-            <div class="caja " style="height:350px;">
+            <div class="caja " style="height:210px;">
                   <table class="table" style="width:100%;"  >
                    <tbody>
                        <thead >
@@ -107,17 +119,35 @@
 
 
    {{-- Totales --}}
-       <div class="caja " style="height:100px;">
+       <div class="caja " style="height:200px;">
         <br>
-        <h4 style='text-align:right'>
-          Total gravado:$ {{number_format($datosPedidos->totalgravado, 2, '.', ',')}} <br>
-          Monto Recargo o Descuento (+/-) :$   {{number_format($datosPedidos->montodescuento, 2, '.', ',')}}  <br>
-          Gravado con descuento/recargo:$ {{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}} <br>
-          IVA 21:$ {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  <br>
-          Total con IVA:$ {{number_format($datosPedidos->totalconiva, 2, '.', ',')}}  <br>
-          <br>
-        </h4>
-      
+        
+        <table class="right" style="border:1px text-align:right;
+        font-family: Tahoma, Verdana, Segoe, sans-serif;
+        font-size: 14px; 
+        font-style: normal;">
+          <tbody>
+            <tr>
+              <td>Total gravado:$</td><td> {{number_format($datosPedidos->totalgravado, 2, '.', ',')}}</td>
+            </tr>
+            <tr>
+              <td>Monto Recargo o Descuento (+/-) :$</td><td>{{number_format($datosPedidos->montodescuento, 2, '.', ',')}}</td>
+            </tr>
+            <tr>
+              <td>Gravado con descuento/recargo:$</td><td>{{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}}</td>
+            </tr>
+            <tr>
+              <td>IVA 21:$</td><td> {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  </td>
+            </tr>
+            <tr>
+              <td>Total con IVA:$</td><td>{{number_format($datosPedidos->totalconiva, 2, '.', ',')}}</td>
+            </tr>
+            
+          </tbody>
+        </table>
+          
+             
+        
        </div>
     
 

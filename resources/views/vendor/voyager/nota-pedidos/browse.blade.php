@@ -397,7 +397,7 @@
  <script>
     $(document).ready(function() {
         $('#pedidos_negativos').dataTable( {
-            "serverSide": true,
+             "serverSide": true,
              "scrollX": true,
              "scrollCollapse": true,
              "paging": true,

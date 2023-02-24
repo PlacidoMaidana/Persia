@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <meta name="assets-path" content="{{ route('voyager.voyager_assets') }}"/>
-    <link rel="stylesheet" href= "https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-    <script src=" https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js">  </script>
-    <script src=" https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js">  </script>
+        <style>
 
-    <link rel="stylesheet"  href= https://cdn.datatables.net/buttons/2.2.2/css/buttons.bootstrap5.min.css >
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.bootstrap5.min.js"></script>
-    <script src="/vendor/datatables/buttons.server-side.js"></script>
-
-  
+.table>tfoot>tr>th, .table>thead>tr>th {
+    color: #1d7ebd;
+    font-weight: 400;
+}
+        </style>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
@@ -30,23 +27,14 @@
 
 
     <!-- App CSS -->
-
-      <!-- Bootstrap CSS -->
-      <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
-      <!-- Datatables Bootstrap CSS -->
     <link rel="stylesheet" href="{{ voyager_asset('css/app.css') }}">
-    {{-- <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/app.css">     --}}
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     @yield('css')
     @if(__('voyager::generic.is_rtl') == 'true')
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.css">
         <link rel="stylesheet" href="{{ voyager_asset('css/rtl.css') }}">
     @endif
-    
-    
-   
+
     <!-- Few Dynamic Styles -->
     <style type="text/css">
         .voyager .side-menu .navbar-header {
@@ -62,30 +50,15 @@
         .voyager .breadcrumb a{
             color:{{ config('voyager.primary_color','#22A7F0') }};
         }
-
-        /* tab panel */
-        .panel-heading-nav {
-          border-bottom: 0;
-          padding: 10px 0 0;
-        }
-
-        .panel-heading-nav .nav {
-          padding-left: 10px;
-          padding-right: 10px;
-        }
     </style>
 
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
         @foreach(config('voyager.additional_css') as $css)<link rel="stylesheet" type="text/css" href="{{ asset($css) }}">@endforeach
     @endif
 
-    
     @yield('head')
-    @livewireStyles
-     {{-- <wireui:scripts /> --}}
-        {{-- <script src="//unpkg.com/alpinejs"></script> --}}
-    </head>
-    
+</head>
+
 <body class="voyager @if(isset($dataType) && isset($dataType->slug)){{ $dataType->slug }}@endif">
 
 <div id="voyager-loader">
@@ -142,30 +115,17 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
                 @yield('page_header')
                 <div id="voyager-notifications"></div>
                 @yield('content')
-                {{-- Usaremos esta seccion para poner los modales de seleccion --}}
-                @yield('modal_elejir')
             </div>
         </div>
     </div>
 </div>
 @include('voyager::partials.app-footer')
 
-
- @stack('scripts')
-<!-- hasta aqui los scrips de datatables -->
-
 <!-- Javascript Libs -->
-
- <!-- jQuery -->
- <script src="//code.jquery.com/jquery.js"></script>
- <!-- DataTables -->
- <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
- <!-- Bootstrap JavaScript -->
- <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
- <!-- App scripts -->
 
 
 <script type="text/javascript" src="{{ voyager_asset('js/app.js') }}"></script>
+
 <script>
     @if(Session::has('alerts'))
         let alerts = {!! json_encode(Session::get('alerts')) !!};
@@ -193,6 +153,5 @@ if (\Illuminate\Support\Str::startsWith(Auth::user()->avatar, 'http://') || \Ill
     @foreach(config('voyager.additional_js') as $js)<script type="text/javascript" src="{{ asset($js) }}"></script>@endforeach
 @endif
 
-@livewireScripts
 </body>
 </html>
