@@ -108,7 +108,7 @@
                               <div role="tabpanel" class="tab-pane fade in active" id="one">
                                 <table id="pedidos_pendientes" class="table table-striped table-bordered dt-responsive nowrap"  style="width:100%;" >
                                     <thead style="width:100%;">
-                                      <tr >
+                                      <tr style="width:100%;" >
                                           <th class="dt-not-orderable">
                                               <input type="checkbox" class="select_all">
                                           </th>
@@ -128,8 +128,8 @@
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="two">
                                 <table id="pedidos_terminados" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;"  >
-                                    <thead style="width:100%;">
-                                        <tr>
+                                    <thead style="width:100%; grid-template-columns: reapeat(auto-fill,minimax(15rem,1fr));">
+                                        <tr style="width:100%;">
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
                                             </th>
@@ -149,7 +149,7 @@
                               <div role="tabpanel" class="tab-pane fade" id="three">
                                 <table id="pedidos_negativos" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;"   >
                                     <thead style="width:100%;">
-                                        <tr>
+                                        <tr style="width:100%;">
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
                                             </th>
@@ -169,7 +169,7 @@
                               <div role="tabpanel" class="tab-pane fade" id="four">
                                 <table id="pedidos_abiertos" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%;"  >
                                     <thead style="width:100%;">
-                                        <tr>
+                                        <tr style="width:100%;">
                                             <th class="dt-not-orderable">
                                                 <input type="checkbox" class="select_all">
                                             </th>

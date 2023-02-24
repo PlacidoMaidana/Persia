@@ -128,19 +128,19 @@
         font-style: normal;">
           <tbody>
             <tr>
-              <td>Total gravado:$</td><td> {{number_format($datosPedidos->totalgravado, 2, '.', ',')}}</td>
+              <td style="text-align:right;">Total gravado:$</td><td style="text-align:right;"> {{number_format($datosPedidos->totalgravado, 2, '.', ',')}}</td>
             </tr>
             <tr>
-              <td>Monto Recargo o Descuento (+/-) :$</td><td>{{number_format($datosPedidos->montodescuento, 2, '.', ',')}}</td>
+              <td style="text-align:right;">Monto Recargo o Descuento (+/-) :$</td><td style="text-align:right;">{{number_format($datosPedidos->montodescuento, 2, '.', ',')}}</td>
             </tr>
             <tr>
-              <td>Gravado con descuento/recargo:$</td><td>{{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}}</td>
+              <td style="text-align:right;">Gravado con descuento/recargo:$</td><td style="text-align:right;">{{number_format($datosPedidos->gravadocondescuento, 2, '.', ',')}}</td>
+            </tr>
+            <tr >
+              <td style="text-align:right;">IVA 21:$</td><td style="text-align:right;"> {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  </td>
             </tr>
             <tr>
-              <td>IVA 21:$</td><td> {{number_format($datosPedidos->monto_iva, 2, '.', ',')}}  </td>
-            </tr>
-            <tr>
-              <td>Total con IVA:$</td><td>{{number_format($datosPedidos->totalconiva, 2, '.', ',')}}</td>
+              <td style="text-align:right;">Total con IVA:$</td><td style="text-align:right;">{{number_format($datosPedidos->totalconiva, 2, '.', ',')}}</td>
             </tr>
             
           </tbody>
