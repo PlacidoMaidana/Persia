@@ -291,7 +291,7 @@ ordenes_fabricacion_activas
 <script>
     $(document).ready(function() {
         $('#ordenes_fabricacion_activas').dataTable( {
-             "serverSide": true,
+             "serverSide": false,
              "scrollX": true,
              "ajax":"{{url('ordenes_fabricacion_activas')}}",                
              "columns":[
@@ -322,7 +322,7 @@ ordenes_fabricacion_activas
 <script>
     $(document).ready(function() {
         $('#ordenes_fabricacion_cerradas').dataTable( {
-             "serverSide": true,
+             "serverSide": false,
              "scrollX": true,
              "ajax":"{{url('ordenes_fabricacion_cerradas')}}",                
              "columns":[

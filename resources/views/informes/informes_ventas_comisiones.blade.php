@@ -16,14 +16,35 @@
     <input type="date" id="fecha_hasta" class="form-control" placeholder="" aria-describedby="helpId">
     <small id="helpId" class="text-muted">fecha_hasta</small>
 </div>
-
-<div class="form-group  col-md-6 " data-select2-id="18">
-    <label class="control-label" for="name">Vendedor</label>
-    <select class="form-control select2-ajax select2-hidden-accessible" id="id_vendedor" data-get-items-route="/admin/nota-pedidos/relation" data-get-items-field="nota_pedido_belongsto_empleado_relationship" data-id="66" data-method="edit" data-select2-id="9" tabindex="-1" aria-hidden="true">
-        <option value="" data-select2-id="11">Ninguno</option>
-    </select>
+{{-- 
+<div class="form-group col-md-2"   data-select2-id="js-example-data-array">
+  <label class="control-label" for="name">Vendedor</label>
+  <select class="form-control select2-array " data:{{$vendedores}}>
+</select> 
 </div>
 
+
+  <div class="form-group  col-md-2 " data-select2-id="18">
+  <label class="control-label" for="name">Vendedor</label>
+  <select class="form-control select2-ajax select2-hidden-accessible" id="id_vendedor" data-get-items-route="admin/nota-pedidos/relation" data-get-items-field="nota_pedido_belongsto_empleado_relationship" data-id="66" data-method="edit"  tabindex="-1" aria-hidden="true">
+   </select>
+</div>
+--}}
+
+<div class="form-group  col-md-6 ">
+                                          
+  <label class="control-label" for="name">Vendedor</label>
+  <select class="form-control select2-ajax select2-hidden-accessible" id="id_vendedor" data-get-items-route="http://c1561704.ferozo.com/persia/public/admin/nota-pedidos/relation" data-get-items-field="nota_pedido_belongsto_empleado_relationship_1" data-id="121" data-method="edit"  tabindex="-1" data-select2-id="id_vendedor" aria-hidden="true">
+  </select>
+</div>
+
+{{-- 
+<div class="form-group  col-md-2 " data-select2-id="18">
+  <label class="control-label" for="name">Vendedor</label>
+  <select class="form-control select2-ajax select2-hidden-accessible" id="id_vendedor" data-get-items-route="admin/nota-pedidos/relation" data-get-items-field="nota_pedido_belongsto_empleado_relationship" data-id="66" data-method="edit" tabindex="-1" aria-hidden="true" data-select2-id="id_vendedor">
+  </select>
+</div>
+--}}
 <div class="row ">
     <div class="col-md-2  ">
       <button  type="button" id="informe_vtas"  onclick="filtrar()" class="btn btn-sm btn-primary" >Filtrar ventas</button>
@@ -42,7 +63,8 @@
         <th>cliente</th>
         <th>cuit</th>
         <th>estado</th>
-        <th>vendedor</th>
+        <th>vendedor1</th>
+        <th>vendedor2</th>
         <th>Subtotal sin IVA</th>
       </tr>
      </thead>
@@ -69,6 +91,7 @@
 @stop
 
 @section('javascript')
+
     <script>
         $("#btnLimpiar").click(function(event) {
         $("#formFecha")[0].reset();
@@ -102,6 +125,7 @@
             {data: 'cuit', name: 'c.cuit', width: '10%'},
             {data: 'estado', name: 'nota_pedidos.estado',width: '10%'},
             {data: 'apellidoynombre', name:'v.apellidoynombre',width: '10%'},
+            {data: 'apellidoynombre', name:'v2.apellidoynombre',width: '10%'},
             {data: 'totalgravado', name: 'nota_pedidos.totalgravado', width: '10%'},
              ]        
 });
@@ -112,6 +136,8 @@ var filtrototales ="{{url('/totalesvtasComisiones_rango_de_fechas/')}}"+"/"+$("#
 $('#totales').dataTable( {
     "serverSide": true,
     "ajax":filtrototales,
+    "paging": false,
+    "searching": false,
     "columns":[
             {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
             {data: 'porc_comision', name: 'porc_comision', width: '5%'},

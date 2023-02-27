@@ -30,17 +30,28 @@
 <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
     <thead>
       <tr>
+        <th>id</th>
         <th>fecha</th>
         <th>tipo presupuesto</th>
         <th>cliente</th>
         <th>cuit</th>
         <th>estado</th>
-        <th>vendedor</th>
-        <th>total</th>
+        <th>total pedido</th>
+        <th>cobrado</th>
       </tr>
      </thead>
-     
     </table>
+
+    <table id="totales" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+      <thead>
+        <tr>
+          <th>tipo presup</th>
+          <th>Total ventas</th>
+        </tr>
+       </thead>
+      
+       
+      </table>
 
 @stop
 
@@ -76,16 +87,33 @@
     "paging": true,
     "searching": true,
     "columns":[
+            {data: 'id', name: 'nota_pedidos.id', width: '5%'},
             {data: 'fecha', name: 'nota_pedidos.fecha', width: '5%'},
             {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
             {data: 'nombre', name: 'c.nombre', width: '10%'},
             {data: 'cuit', name: 'c.cuit', width: '10%'},
             {data: 'estado', name: 'nota_pedidos.estado',width: '10%'},
-            {data: 'apellidoynombre', name:'v.apellidoynombre',width: '10%'},
             {data: 'total', name: 'nota_pedidos.total', width: '10%'},
+            {data: 'cobrado', name: 'cobrado', width: '10%'},
              ]        
 });
    
+
+var filtrototales ="{{url('/totalesvtas_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+  
+ 
+$('#totales').dataTable( {
+    "serverSide": true,
+    "ajax":filtrototales,
+    "paging": false,
+    "searching": false,
+    "columns":[
+            {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
+            {data: 'total_ventas', name: 'total_ventas', width: '10%'},
+             ]        
+});   
+
+
   }
 </script>
 
