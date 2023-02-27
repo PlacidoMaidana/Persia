@@ -17,7 +17,10 @@ body{
     font-size: 10px;
     margin: 80px;
     width: 700px;
-    height: 800px;
+    height: 900px;
+    background-image: url("../images/remitos/PRESUPUESTO2.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     /*outline: dashed 1px black;*/
   }
 
@@ -36,48 +39,48 @@ body{
     grid-template-columns: 10% 90%;
 }
 .lateral {
-        background-color: #C32927;
+        /* background-color: #C32927;
         background-image: url("../images/remitos/lateral-2.gif");
         background-repeat: no-repeat;
-        background-size: 100% 100%;
-        /*padding: 1em;*/
-        /*width: 250px;*/
+        background-size: 100% 100%; */
+        padding: 1em;
+        width: 250px;
         height: 100%;       
         
   }
 .grid div{
-    background-color: #ffffff;
-    background-image: url("../images/remitos/cuerpo.gif");
+    /* background-color: #ffffff;
+    background-image: url("../images/remitos/cuerpo.gif"); */
     /*padding: 1em;*/
 }
 .grid div:hover {
     border: 1px solid #F87405;
 }
 .cuerpo {
-    background-color: #ffffff;
+    /* background-color: #ffffff;
     background-image: url("../images/remitos/cuerpo.gif");
-    background-size: 100% 100%;
+    background-size: 100% 100%;*/
     width: 77%;
-    padding-left: 110px;
+    padding-left: 110px; 
 
     /*padding: 1em;*/
 }
 
 .cabeza{
-    background-color: #FCB923;
+    /* background-color: #FCB923;
     background-image: url("../images/remitos/cabeza.gif");
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: 100% 100%;*/
     padding: 1em;
     width: 90%;
-    height:100px;
+    height:100px; 
 }
 .pie{
-    background-color: #FCB923;
+    /* background-color: #FCB923;
     background-image: url("../images/remitos/pie.gif");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     padding: 1em;
     width: 90%;
-    height:100px;
+    height:100px; */
 }
