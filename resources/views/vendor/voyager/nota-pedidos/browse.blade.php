@@ -251,6 +251,67 @@
     </div><!-- /.modal -->
 
     
+    <!-- MODAL    OREDENES DE FABRICACION--> 
+
+               <!-- Modal --> 
+               <div class="modal fade modal-warning" id="modal_ordenes_fabricacion" v-if="allowCrop">
+                <div class="modal-dialog"  style="min-width: 90%">
+                    <div class="modal-content">
+                  
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Ordenes de Fabricacion</h4>
+                            pedido nro: 4
+                        </div>
+                    
+                        <div id="x34" class="modal-body">
+                            <div class="card" style="min-width: 70%">
+                                <img class="card-img-top" src="holder.js/100x180/" alt="">
+                                <div class="card-body">
+    
+                                  
+                                    <a id="btn_genera_ordenes_fabricacion"   href="{{url('ordenes_fabricacion/generar_orden/',['id' => 'javaVariable'])}} " class="btn btn-primary">
+                                    Genera Ordenes de Fabricacion 
+                                    </a>
+    
+                                    <table id="ordenes_fabricacion" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+                                        <thead>
+                                          <tr>
+                                              <th>pedido</th>
+                                              <th>fecha</th>
+                                              <th>producto</th>
+                                              <th>rubro</th>
+                                              <th>subrubro</th>
+                                              <th>mt2 solicitados</th>
+    
+                                          </tr>
+                                        </thead>
+                                    
+                                        </table>
+    
+                                </div>
+                            </div>
+                          </div>
+                    
+                        <div class="modal-footer">
+                            <button type="button" id="salir" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    
+                        </div>
+                    </div>
+                </div>
+            </div>	
+    
+    
+
+
+
+
+
+
+
+
+
+
 @stop
 
 @section('css')
@@ -536,6 +597,41 @@
         });
     }
     </script>
+
+ <script>
+    $('#btn_ordenes_fabricacion').on('click',function(){
+        var id = document.getElementById("btn_ordenes_fabricacion").getAttribute("id");
+              alert('hola'+id);
+      //$('#modal_ordenes_fabricacion').modal({show:true});
+    });
+  </script>
+                                       
+  <script> 
+        $(document).ready(function() {
+            var id = document.getElementById("btn_ordenes_fabricacion").getAttribute("id");
+           
+            $('#ordenes_fabricacion').dataTable( {
+                 "serverSide": true,
+                 "ajax":"{{url('/ordenes_fabricacion_pedido/')}}"+id,                
+                 "columns":[
+                         {data: 'pedido', name: 'ordenes_fabricacion.id_pedido', width: '50px'},
+                         {data: 'fecha', name: 'ordenes_fabricacion.fecha_orden', width: '50px'},
+                         {data: 'producto', name: 'productos.descripcion', width: '205px'},
+                         {data: 'rubro', name: 'r.rubro', width: '30px'},
+                         {data: 'subrubro', name: 's.descripcion_subrubro', width: '205px'},
+                         {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '205px'},                                             
+                          ]           
+            } );
+        } );
+    
+  </script>
+  
+
+
+
+
+
+
 
 
 @stop

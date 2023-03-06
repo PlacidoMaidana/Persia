@@ -96,6 +96,7 @@ class informes_tesoreria extends Controller
     
      public function ing_totales_en_rango_de_fechas($from,$to)
     {
+      /*
        return $datos = datatables()->of(DB::table('mov_financieros')
            ->leftjoin('users','users.id','=','mov_financieros.id_usuario')
            ->whereBetween('mov_financieros.fecha',array($from,$to) )
@@ -111,6 +112,20 @@ class informes_tesoreria extends Controller
            DB::raw('SUM(mov_financieros.importe_ingreso) AS total_cobrado'),
              ]))
             ->toJson();  
+            */
+            return $datos = datatables()->of(DB::table('mov_financieros')
+             ->whereBetween('mov_financieros.fecha',array($from,$to) )
+            ->where('mov_financieros.tipo_movimiento','=','Cobranza/Ingresos')
+            ->select([ 
+            DB::raw('SUM(IF(mov_financieros.modalidad_pago="Efectivo", importe_ingreso, NULL)) AS efectivo'),
+            DB::raw('SUM(IF(mov_financieros.modalidad_pago="Cheque", importe_ingreso, NULL)) AS cheque'),
+            DB::raw('SUM(IF(mov_financieros.modalidad_pago="Transferencia", importe_ingreso, NULL)) AS transferencia'),
+            DB::raw('SUM(IF(mov_financieros.modalidad_pago="Tarjeta Débito", importe_ingreso, NULL)) AS tarjeta_debito'),
+            DB::raw('SUM(IF(mov_financieros.modalidad_pago="Tarjeta Crédito", importe_ingreso, NULL)) AS tarjeta_credito'),
+            DB::raw('SUM(IF(mov_financieros.modalidad_pago="Retenciones", importe_ingreso, NULL)) AS retenciones'),
+            DB::raw('SUM(mov_financieros.importe_ingreso) AS total_cobrado'),
+              ]))
+             ->toJson();  
            
     }
 

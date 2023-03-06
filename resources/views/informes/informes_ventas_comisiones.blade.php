@@ -126,7 +126,7 @@
             {data: 'estado', name: 'nota_pedidos.estado',width: '10%'},
             {data: 'apellidoynombre', name:'v.apellidoynombre',width: '10%'},
             {data: 'apellidoynombre', name:'v2.apellidoynombre',width: '10%'},
-            {data: 'totalgravado', name: 'nota_pedidos.totalgravado', width: '10%'},
+            {data: 'totalgravado', name: 'nota_pedidos.totalgravado', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
              ]        
 });
 
@@ -141,14 +141,16 @@ $('#totales').dataTable( {
     "columns":[
             {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
             {data: 'porc_comision', name: 'porc_comision', width: '5%'},
-            {data: 'Pendiente_Entrega', name: 'Pendiente_Entrega', width: '10%'},
-            {data: 'Entregado', name: 'Entregado', width: '10%'},
-            {data: 'total_ventas', name: 'total_ventas', width: '10%'},
-            {data: 'comision', name: 'comision', width: '10%'},
+            {data: 'Pendiente_Entrega', name: 'Pendiente_Entrega', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
+            {data: 'Entregado', name: 'Entregado', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
+            {data: 'total_ventas', name: 'total_ventas', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
+            {data: 'comision', name: 'comision', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
               ]        
 });
 
-   
+  
+
+
   }
 </script>
 
@@ -157,4 +159,6 @@ $('#totales').dataTable( {
        window.location.href =  "{{url('/informes_ventasComisiones/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val()+'/'+$("#id_vendedor").val();
    }
 </script>
+
+
 @stop

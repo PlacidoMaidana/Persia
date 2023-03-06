@@ -45,7 +45,7 @@
     <table id="totales" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
       <thead>
         <tr>
-          <th>Operador</th>
+          
           <th>Efectivo</th> 
           <th>Cheque</th>
           <th>Transferencia</th>
@@ -105,14 +105,30 @@
 
 var filtrototales ="{{url('/totalesingresos_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
   
- 
+    {{-- 
+    $('#totales').dataTable( {
+        "serverSide": true,
+        "ajax":filtrototales,
+        "paging": false,
+        "searching": false,
+        "columns":[
+                {data: 'name', name: 'users.name', width: '5%'},
+                {data: 'efectivo', name: 'efectivo', width: '10%'},
+                {data: 'cheque', name: 'cheque', width: '10%'},
+                {data: 'transferencia', name: 'transferencia', width: '10%'},
+                {data: 'tarjeta_debito', name: 'tarjeta_debito', width: '10%'},
+                {data: 'tarjeta_credito', name: 'tarjeta_credito', width: '10%'},
+                {data: 'retenciones', name: 'retenciones', width: '10%'},
+                {data: 'total_cobrado', name: 'total_cobrado', width: '10%'},
+                ]        
+    });   
+    --}}
 $('#totales').dataTable( {
     "serverSide": true,
     "ajax":filtrototales,
     "paging": false,
     "searching": false,
     "columns":[
-            {data: 'name', name: 'users.name', width: '5%'},
             {data: 'efectivo', name: 'efectivo', width: '10%'},
             {data: 'cheque', name: 'cheque', width: '10%'},
             {data: 'transferencia', name: 'transferencia', width: '10%'},
@@ -121,8 +137,7 @@ $('#totales').dataTable( {
             {data: 'retenciones', name: 'retenciones', width: '10%'},
             {data: 'total_cobrado', name: 'total_cobrado', width: '10%'},
              ]        
-});   
-
+});
 
   }
 </script>

@@ -296,7 +296,7 @@ public function remitos()
 
 
         public function createremitosPDF($id_ped){
-         
+         // dd($id_ped);
             // verifico que se haya pagado toda la NP antes de emitir el Remito
              $suma_cobranza = DB::table('mov_financieros')-> where ('mov_financieros.id_nota_pedido','=',$id_ped)->sum('importe_ingreso');
             
@@ -338,6 +338,7 @@ public function remitos()
            //  dd( $suma_cobranza , $datosPedidos->total);
             if ($suma_cobranza != $datosPedidos->total)
                 {
+                  // dd($id_ped, $suma_cobranza, $datosPedidos->total);
                     $redirect = redirect()->back();        
                     return $redirect->with([
                         'message'    => __('Asegurese que el cliente pague la totalidad del pedido antes de emitir el remito'),

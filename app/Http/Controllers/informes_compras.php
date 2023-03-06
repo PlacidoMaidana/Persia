@@ -38,6 +38,17 @@ class informes_compras extends Controller
             ->toJson();  
      
     }
+
+    public function totalesen_rango_de_fechas($from,$to)      
+    { 
+            return $totales = datatables()->of(DB::table('facturas_compras')
+            ->whereBetween('facturas_compras.created_at',array($from,$to) )
+            ->select([ DB::raw('count(facturas_compras.id) as cantidad'),
+                       DB::raw('SUM(facturas_compras.total_factura) AS total_compras')
+                        ]))
+             ->toJson();  
+      }      
+
     public function export($desde,$hasta) 
     {
       $aa = new Informe_comprasExport();

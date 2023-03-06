@@ -49,6 +49,7 @@ Route::get('/Remitos','App\Http\Controllers\Voyager\PedidosController@remitos');
 Route::get('/IVAcompras','App\Http\Controllers\iva_comprasController@index');
 Route::get('/IVAventas','App\Http\Controllers\iva_ventas@index');
 Route::get('/Informeventas','App\Http\Controllers\informes_ventas@index');
+Route::get('/Informectacte','App\Http\Controllers\informes_ventas@index_ctacte');
 Route::get('/Informecomisiones','App\Http\Controllers\informes_ventas_comisiones@index');
 Route::get('/Informecompras','App\Http\Controllers\informes_compras@index');
 Route::get('/Informeproduccion','App\Http\Controllers\informes_produccion@index');
@@ -62,10 +63,15 @@ Route::get('/ivavtas_en_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_v
 Route::get('/ivacomprasen_rango_de_fechas/{from}/{to}','App\Http\Controllers\iva_comprasController@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informevtas_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_ventas@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/totalesvtas_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_ventas@totalesen_rango_de_fechas');//ruta que devuelve datos
+Route::get('/informectacte_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_ventas@ctacte_en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/totalesctacte_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_ventas@totalesctacte_en_rango_de_fechas');//ruta que devuelve datos
+
 Route::get('/informevtasComisiones_rango_de_fechas/{from}/{to}/{vend}','App\Http\Controllers\informes_ventas_comisiones@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/totalesvtasComisiones_rango_de_fechas/{from}/{to}/{vend}','App\Http\Controllers\informes_ventas_comisiones@totalesen_rango_de_fechas');//ruta que devuelve datos
 
 Route::get('/informecompras_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_compras@en_rango_de_fechas');//ruta que devuelve datos
+Route::get('/totalescompras_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_compras@totalesen_rango_de_fechas');//ruta que devuelve datos
+
 Route::get('/informeproduccion_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_produccion@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informetesoreria_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_tesoreria@en_rango_de_fechas');//ruta que devuelve datos
 Route::get('/informeingresos_rango_de_fechas/{from}/{to}','App\Http\Controllers\informes_tesoreria@ing_en_rango_de_fechas');//ruta que devuelve datos

@@ -16,6 +16,11 @@ class informes_ventas extends Controller
         return view('informes.informes_ventas');
      }
  
+     public function index_ctacte()
+     {
+        return view('informes.informes_ctacte');
+     }
+
     public function en_rango_de_fechas($from,$to)
     {
        return $datos = datatables()->of(DB::table('nota_pedidos')
@@ -42,6 +47,37 @@ class informes_ventas extends Controller
                     })
             ->toJson();    
     }
+
+    public function ctacte_en_rango_de_fechas($from,$to)
+    {
+     
+      return $datos = datatables()->of(DB::table('nota_pedidos')
+           ->join('clientes as c','c.id','=','nota_pedidos.id_cliente')
+           ->leftjoin ('mov_financieros','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
+           ->leftjoin('empleados as v','v.id','=','nota_pedidos.id_vendedor')
+           ->whereBetween('nota_pedidos.fecha',array($from,$to) )
+           ->where(function ($query2) {
+               $query2->where('nota_pedidos.estado','=','Entregado')
+                      ->orwhere('nota_pedidos.estado','=','Pendiente Entrega');
+            })
+          
+           ->groupBy('nota_pedidos.id','nota_pedidos.fecha','nota_pedidos.tipo_presupuesto','c.nombre','c.cuit','nota_pedidos.estado','nota_pedidos.total' )
+           ->havingRaw('nota_pedidos.total <> coalesce(SUM(mov_financieros.importe_ingreso),0)')
+           ->select(['nota_pedidos.id',
+                     'nota_pedidos.fecha',
+                     'nota_pedidos.tipo_presupuesto', 
+                     'c.nombre',
+                     'c.cuit',
+                     'nota_pedidos.estado',
+                     'nota_pedidos.total',
+                     DB::raw('SUM(mov_financieros.importe_ingreso) as cobrado'),
+                       ]))
+                       ->filterColumn('cobrado', function($query, $keyword) {
+                        $query->havingRaw("coalesce(SUM(mov_financieros.importe_ingreso),0) = ?", $keyword);
+                    })
+            ->toJson();  
+            
+    }
     public function totalesen_rango_de_fechas($from,$to)      
     { 
             return $totales = datatables()->of(DB::table('nota_pedidos')
@@ -56,8 +92,25 @@ class informes_ventas extends Controller
                        DB::raw('SUM(nota_pedidos.total) AS total_ventas'),
                         ]))
              ->toJson();  
-            
- 
+      }      
+    public function totalesctacte_en_rango_de_fechas($from,$to)      
+      { 
+                     return $totales = datatables()->of(DB::table('nota_pedidos')
+                     ->leftjoin('tipos_presupuestos as tp','tp.desc_tipo','=','nota_pedidos.tipo_presupuesto')
+                     ->leftjoin ('mov_financieros','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
+                     ->whereBetween('nota_pedidos.fecha',array($from,$to) )
+                     ->where(function ($query2) {
+                          $query2->where('nota_pedidos.estado','=','Entregado')
+                                 ->orwhere('nota_pedidos.estado','=','Pendiente Entrega');
+                       })
+                     ->groupBy('nota_pedidos.tipo_presupuesto')
+                     ->havingRaw('coalesce(SUM(nota_pedidos.total),0) <> coalesce(SUM(mov_financieros.importe_ingreso),0)')
+                     ->select(['nota_pedidos.tipo_presupuesto',
+                                DB::raw('SUM(nota_pedidos.total) AS total_ventas'),
+                                DB::raw('SUM(mov_financieros.importe_ingreso) as total_cobrado'),
+                                 ]))
+                      ->toJson();  
+
 
     }
     public function export($desde,$hasta) 

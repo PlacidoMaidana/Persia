@@ -110,16 +110,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
    {{-- Totales --}}
        <div class="caja " style="height:200px;">
         <br>

@@ -45,6 +45,14 @@
      
     </table>
 
+    <table id="totales" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
+      <thead>
+        <tr>
+          <th>comprobantes </th>
+          <th>Total Compras del periodo</th>
+        </tr>
+       </thead>
+     </table>
 @stop
 
 @section('css')
@@ -91,6 +99,21 @@
             {data: 'tipo2', name: 'tg.tipo2', width: '10%'},
              ]        
 });
+
+
+var filtrototales ="{{url('/totalescompras_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+  
+ 
+$('#totales').dataTable( {
+    "serverSide": true,
+    "ajax":filtrototales,
+    "paging": false,
+    "searching": false,
+    "columns":[
+            {data: 'cantidad', name: 'cantidad', width: '5%'},
+            {data: 'total_compras', name: 'total_compras', width: '5%'},
+             ]        
+});   
 
   }
 </script>

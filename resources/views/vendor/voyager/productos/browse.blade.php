@@ -92,7 +92,7 @@
                                 <a href="#three" aria-controls="three" role="tab" data-toggle="tab">Materia Prima</a>
                               </li>
                               <li role="presentation">
-                                <a href="#four" aria-controls="four" role="tab" data-toggle="tab">Obras</a>
+                                <a href="#four" aria-controls="four" role="tab" data-toggle="tab">Servicios</a>
                               </li>
                               
                             </ul>

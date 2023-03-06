@@ -1,7 +1,7 @@
 {{-- @extends('voyager::master') --}}
 @extends('layouts.voyager2')
 
-@section('page_title', __('voyager::generic.viewing').' '.'Informe de Ventas')
+@section('page_title', __('voyager::generic.viewing').' '.'Informe de Cuentas Corrientes de Clientes')
 
 @section('content')
 
@@ -47,7 +47,7 @@
       <thead>
         <tr>
           <th>tipo presup</th>
-          <th>Total ventas</th>
+          <th>pendiente de cobro</th>
         </tr>
        </thead>
       
@@ -80,9 +80,10 @@
 <script>
 
   function filtrar() {
+    
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ="{{url('/informevtas_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
-  
+    var filtro ="{{url('/informectacte_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+ 
     
     $('#example').dataTable( {
     "serverSide": true,
@@ -109,7 +110,7 @@
 });
    
 
-var filtrototales ="{{url('/totalesvtas_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+var filtrototales ="{{url('/totalesctacte_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
   
  
 $('#totales').dataTable( {
@@ -119,7 +120,14 @@ $('#totales').dataTable( {
     "searching": false,
     "columns":[
             {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
-            {data: 'total_ventas', name: 'total_ventas', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
+            {  
+              "data": null,  
+              "render": function(data,type,row)
+                { 
+                  return (numeral(data["total_ventas"] - data["total_cobrado"]).format('$ 0,0.00'))
+                }
+            }
+           
              ]        
 });   
 
