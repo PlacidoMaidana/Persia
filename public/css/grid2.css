@@ -12,7 +12,7 @@ body{
     font-size: 1rem;
     min-height: 100%;
 }
-.container {
+.container_Presup {
     font-family: arial;
     font-size: 10px;
     margin: 80px;
@@ -21,12 +21,12 @@ body{
     background-image: url("../images/remitos/PRESUPUESTO2.jpg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    /*outline: dashed 1px black;*/
+  
   }
 
 
   p {
-    /* Center horizontally*/
+ 
     text-align: center;
   }
 
@@ -39,48 +39,53 @@ body{
     grid-template-columns: 10% 90%;
 }
 .lateral {
-        /* background-color: #C32927;
-        background-image: url("../images/remitos/lateral-2.gif");
-        background-repeat: no-repeat;
-        background-size: 100% 100%; */
+      
         padding: 1em;
         width: 250px;
         height: 100%;       
         
   }
-.grid div{
-    /* background-color: #ffffff;
-    background-image: url("../images/remitos/cuerpo.gif"); */
-    /*padding: 1em;*/
-}
+
 .grid div:hover {
     border: 1px solid #F87405;
 }
 .cuerpo {
-    /* background-color: #ffffff;
-    background-image: url("../images/remitos/cuerpo.gif");
-    background-size: 100% 100%;*/
+   
     width: 77%;
     padding-left: 110px; 
 
-    /*padding: 1em;*/
 }
 
-.cabeza{
-    /* background-color: #FCB923;
-    background-image: url("../images/remitos/cabeza.gif");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;*/
+.cabeza{  
     padding: 1em;
     width: 90%;
     height:100px; 
 }
-.pie{
-    /* background-color: #FCB923;
-    background-image: url("../images/remitos/pie.gif");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    padding: 1em;
-    width: 90%;
-    height:100px; */
-}
+
+.right {
+    padding-top: 10px;
+    padding-left: 197px;
+    margin-left: 10px;
+    position: relative;
+    float: left;
+    height: auto;
+    }
+
+    .right_NPedido_livewire {
+            text-align:right;
+            border: 1px text-align:right;
+            font-family: Tahoma, Verdana, Segoe, sans-serif;
+            font-size: 15px;
+            font-style: normal;
+             
+        }
+    .caja{
+      border:1px solid black;
+      text-align:right;
+      border: 1px text-align:right;
+      font-family: Tahoma, Verdana, Segoe, sans-serif;
+      font-size: 15px;
+      font-style: normal;
+       }
+
+      

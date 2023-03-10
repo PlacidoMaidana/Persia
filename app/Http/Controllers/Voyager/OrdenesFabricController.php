@@ -204,6 +204,108 @@ class OrdenesFabricController extends  \TCG\Voyager\Http\Controllers\VoyagerBase
         ));
     }
 
+
+public function por_pedido( $id_pedido )
+{
+    //dd("Llegaste con el pedido",$id_pedido);
+    $dataType='ordenes_fabricacion';
+
+     // GET THE DataType based on the slug
+     $dataType = Voyager::model('DataType')->where('slug', '=','ordenes_fabricacion')->first();
+
+     // Check permission
+     $this->authorize('browse', app($dataType->model_name));
+
+     // Actions
+     $actions = [];
+     
+     $usesSoftDeletes = false;
+     $showSoftDeleted = false;
+
+
+
+    return view("vendor.voyager.ordenes_fabricacion.brw_por_pedido", compact(
+        'dataType',
+        'usesSoftDeletes',
+        'showSoftDeleted',
+        'actions',
+        'id_pedido'
+        
+    ));
+
+    
+}
+
+public function ordenes_por_pedido($id_pedido)
+    {
+
+        return datatables()->of(DB::table('ordenes_fabricacion')
+  ->join('productos','ordenes_fabricacion.id_producto','=','productos.id')
+  ->join('nota_pedidos','ordenes_fabricacion.id_pedido','=','nota_pedidos.id')
+  ->join('clientes','nota_pedidos.id_cliente','=','clientes.id')
+  ->join('rubros','productos.rubro_id','=','rubros.id')
+  ->join('subrubros','productos.subrubro_id','=','subrubros.id')
+  ->leftjoin('moldes','moldes.id','=','productos.id_molde')
+  ->where('ordenes_fabricacion.id_pedido','=', $id_pedido)
+  ->select( DB::raw('
+                  ordenes_fabricacion.id,
+                  ordenes_fabricacion.id_pedido,
+                  productos.descripcion,
+                  rubros.rubro,
+                  subrubros.descripcion_subrubro,
+                  ordenes_fabricacion.cantidad,  
+                  (ordenes_fabricacion.cantidad / (moldes.mt2_por_molde * moldes.cant_moldes)) as dias,
+                    (ordenes_fabricacion.cantidad * productos.unidades_mt2) as unidades,
+                    (ordenes_fabricacion.cantidad * productos.paquetes_mt2) as paquetes,                  
+                  ordenes_fabricacion.fecha_orden,
+                  ordenes_fabricacion.fecha_entrada_proceso,
+                  ordenes_fabricacion.fecha_salida_proceso,
+                  clientes.nombre,
+                  nota_pedidos.observaciones,
+                  ordenes_fabricacion.estado'
+       )))
+  ->filterColumn('dias', function($query, $keyword) {
+        $query->whereRaw("ordenes_fabricacion.cantidad / (moldes.mt2_por_molde * moldes.cant_moldes) = ?", $keyword);
+         })    
+  ->setRowAttr([
+        'style' => 'background-color: #EFEE06;',      
+         ]) 
+  ->setRowAttr([
+        'style' => function($item){          
+          switch ($item->estado) {
+            case 'Pendiente':
+              return 'background-color: #EFEE06;color:#000000';
+              break;
+            case 'En Proceso':
+              return 'background-color: #EFBB07;color:#000000';
+              break; 
+            case 'Terminado':
+              return 'background-color: #F5BFBD;color:#000000';
+              break; 
+            case 'Empaquetado y controlado':
+              return 'background-color: #B8E2D4;color:#000000';
+              break;   
+            
+            default:
+              # code...
+              break;
+          }
+        }
+    ])        
+                     
+  ->addColumn('check','vendor/voyager/ordenes_fabricacion/check_ordenes_fabricacion')
+  ->addColumn('accion','vendor/voyager/ordenes_fabricacion/acciones_ordenes_fabricacion')
+  ->rawColumns(['check','accion'])     
+  ->toJson(); 
+     
+    }
+
+
+
+
+
+
+
 //<<<<<<<<<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<>>>>>>>>>>>><<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>
         //<<<<<<<<<<<<<<<       <>>>>>><<<<<         <>>>>>><<<<><<              <>>>>>>>>>>>
         //<<<<<<<<<<<<    <<<<<>    >>><<<<<    <<<<    >>><<<>><<<    <<<<<>>>>>>>>>>>>>>>>>

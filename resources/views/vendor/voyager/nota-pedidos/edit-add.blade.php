@@ -18,23 +18,20 @@
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular'))
 
 @section('page_header')
-    <h1 class="page-title">
-        <i class="{{ $dataType->icon }}"></i>
-        {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
-    </h1>
+
         <div id="myDIVoculta"  style="display:block ">   
             
-            <a href="{{url('admin/notas-pedido/crea_factura/'.$id_filtro_pedido)}}" class="btn btn-primary">Facturar</a>
+            {{-- <a href="{{url('admin/notas-pedido/crea_factura/'.$id_filtro_pedido)}}" class="btn btn-primary">Facturar</a>
 
             <a id="imprime"   href="{{url('/pedidos/export/'.$id_filtro_pedido)}}" class="btn btn-primary">Imprime Presupuesto</a>
 
-            {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
+             <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>
 
             <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
             
             <button type="button" class="btn btn-primary" id="btn_ordenes_fabricacion" >
-                Genera Orden Fabricacion   
-            </button>
+                Ver Ordenes de Fabricacion   
+            </button> --}}
         </div>
     <div class="modal fade modal-warning" id="cobranzas" v-if="allowCrop">
       <div class="modal-dialog"  style="min-width: 90%">
@@ -371,12 +368,9 @@
                                                        <div class="card" style="min-width: 70%">
                                                            <img class="card-img-top" src="holder.js/100x180/" alt="">
                                                            <div class="card-body">
-
-                                                              
                                                                <a id="btn_genera_ordenes_fabricacion"   href="{{url('ordenes_fabricacion/generar_orden/'.$id_filtro_pedido)}}" class="btn btn-primary">
                                                                 Genera Ordenes de Fabricacion 
                                                                </a>
-
                                                                 <table id="ordenes_fabricacion" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
                                                                    <thead>
                                                                      <tr>
@@ -386,12 +380,10 @@
                                                                          <th>rubro</th>
                                                                          <th>subrubro</th>
                                                                          <th>mt2 solicitados</th>
- 
+                                                                         <th>estado</th>
                                                                      </tr>
                                                                     </thead>
-                                                                
                                                                    </table>
-
                                                            </div>
                                                        </div>
                                                      </div>
@@ -423,14 +415,15 @@
                                     @endif
                                     
                                 </div>
-                               
+                                <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>   
+
                             </div>
                        
                         </div>
                      
                         <div class="panel-footer">
-                            @section('submit-buttons')
-                                <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>   
+                             @section('submit-buttons')
+                                {{-- <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>    --}}
 
                             @stop
                             @yield('submit-buttons')
@@ -781,7 +774,8 @@
                          {data: 'producto', name: 'productos.descripcion', width: '205px'},
                          {data: 'rubro', name: 'r.rubro', width: '30px'},
                          {data: 'subrubro', name: 's.descripcion_subrubro', width: '205px'},
-                         {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '205px'},                                             
+                         {data: 'cantidad', name: 'ordenes_fabricacion.cantidad', width: '205px'},  
+                         {data: 'estado', name: 'ordenes_fabricacion.estado', width: '205px'},                                           
                           ]           
             } );
         } );
@@ -814,8 +808,7 @@
         
     });
     
-    </script>
-         
+    </script>        
          <script>
             $( document ).ready(function() {
                 var x = document.getElementById("myDIVoculta");
@@ -826,14 +819,8 @@
                 {
                 x.style.display = "block"; 
                 }
-
-
              });
          
         </script>
-
-
-
-
 
 @stop

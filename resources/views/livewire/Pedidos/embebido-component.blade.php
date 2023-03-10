@@ -49,6 +49,7 @@
           <th>unidad  </th>
           <th>precio</th>
           <th>importe</th>
+          <th>estado Fabric</th>
           <th>acciones</th>
         </tr>
       </thead>
@@ -62,6 +63,7 @@
           <td>{{$item['unidad']}}</td>
           <td>{{number_format($item['precio'], 2, '.', ',')}}</td>
           <td>{{number_format($item['total-linea'], 2, '.', ',')}}</td>
+          <td>{{$item['estado']}}</td>
           <td><a wire:click.prevent="quitar({{$index}})"> Quitar</a></td>
         </tr>  
        @endforeach
@@ -69,16 +71,51 @@
        
       </tbody>
     </table>
-      <h4 class="card-title">
-   
-        Total gravado .......................: {{number_format($totalgravado, 2, '.', ',')}} <br>
-        Recargo / Descuento (+ / -) .......: {{number_format($descuento, 2, '.', ',')}} <br>
-        Gravado con descuento .....: {{number_format($gravadocondescuento, 2, '.', ',')}}  <br>
-        IVA 21 ......................................: {{number_format($monto_iva, 2, '.', ',')}}  <br>
-        Total con IVA ............................: {{number_format($totalconiva, 2, '.', ',')}}  <br>
-        Total ......................................: {{number_format($total, 2, '.', ',')}}  <br>
+     
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 col-md-5">
+    
+        </div>
+       
+    
+        <div class="col-lg-6 col-md-6">
+          <div class=" right_NPedido_livewire " style="width:100%;">
+            <table style="width:100%;">
+              <tbody>
+                <tr>
+                  <td style="text-align:right;"> Total gravado :   $</td><td style="text-align:right;"> {{number_format($totalgravado, 2, '.', ',')}}</td>
+                </tr>
+                <tr>
+                  <td style="text-align:right;">Recargo / Descuento (+ / -):   $</td><td style="text-align:right;">{{number_format($descuento, 2, '.', ',')}}</td>
+                </tr>
+                <tr>
+                  <td style="text-align:right;">Gravado con descuento:   $</td><td style="text-align:right;">{{number_format($gravadocondescuento, 2, '.', ',')}}</td>
+                </tr>
+                <tr >
+                  <td style="text-align:right;">IVA 21 :   $</td><td style="text-align:right;"> {{number_format($monto_iva, 2, '.', ',')}}  </td>
+                </tr>
+                <tr>
+                  <td style="text-align:right;">Total con IVA :   $</td><td style="text-align:right;">{{number_format($totalconiva, 2, '.', ',')}}</td>
+                </tr>
+                <tr>
+                  <td style="text-align:right;">Total Pedido :   $</td><td style="text-align:right;">{{number_format($total, 2, '.', ',')}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      </h4>
+          
+        </div>
+      </div>
+    </div>
+
+       {{-- Totales --}}
+       
+        
+
+
+
 
   </div>
 </div>

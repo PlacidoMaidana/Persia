@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Exports\Informe_ventasExport;
+use App\Exports\Informe_ctacteExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
@@ -41,10 +42,14 @@ class informes_ventas extends Controller
                      'nota_pedidos.estado',
                      'nota_pedidos.total',
                      DB::raw('SUM(mov_financieros.importe_ingreso) as cobrado'),
+                     DB::raw('nota_pedidos.total - coalesce(SUM(mov_financieros.importe_ingreso),0) as saldo' ),
                        ]))
             ->filterColumn('cobrado', function($query, $keyword) {
-                        $query->whereRaw("SUM(mov_financieros.importe_ingreso) = ?", $keyword);
+                        $query->havingRaw("SUM(mov_financieros.importe_ingreso) = ?", $keyword);
                     })
+            ->filterColumn('saldo', function($query, $keyword) {
+                      $query->havingRaw("nota_pedidos.total - coalesce(SUM(mov_financieros.importe_ingreso),0) = ?", $keyword);
+                  })
             ->toJson();    
     }
 
@@ -71,17 +76,21 @@ class informes_ventas extends Controller
                      'nota_pedidos.estado',
                      'nota_pedidos.total',
                      DB::raw('SUM(mov_financieros.importe_ingreso) as cobrado'),
-                       ]))
-                       ->filterColumn('cobrado', function($query, $keyword) {
-                        $query->havingRaw("coalesce(SUM(mov_financieros.importe_ingreso),0) = ?", $keyword);
-                    })
+                     DB::raw('nota_pedidos.total - coalesce(SUM(mov_financieros.importe_ingreso),0) as saldo' ),
+                     ])    )
+                     ->filterColumn('cobrado', function($query, $keyword) {
+                      $query->havingRaw("SUM(mov_financieros.importe_ingreso) = ?", $keyword);
+                      })
+                    ->filterColumn('saldo', function($query, $keyword) {
+                        $query->havingRaw("nota_pedidos.total - coalesce(SUM(mov_financieros.importe_ingreso),0) = ?", $keyword);
+                      }) 
+         
             ->toJson();  
             
     }
     public function totalesen_rango_de_fechas($from,$to)      
     { 
             return $totales = datatables()->of(DB::table('nota_pedidos')
-            ->join('tipos_presupuestos as tp','tp.desc_tipo','=','nota_pedidos.tipo_presupuesto')
             ->whereBetween('nota_pedidos.fecha',array($from,$to) )
             ->where(function ($query2) {
                  $query2->where('nota_pedidos.estado','=','Entregado')
@@ -96,18 +105,19 @@ class informes_ventas extends Controller
     public function totalesctacte_en_rango_de_fechas($from,$to)      
       { 
                      return $totales = datatables()->of(DB::table('nota_pedidos')
-                     ->leftjoin('tipos_presupuestos as tp','tp.desc_tipo','=','nota_pedidos.tipo_presupuesto')
                      ->leftjoin ('mov_financieros','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
                      ->whereBetween('nota_pedidos.fecha',array($from,$to) )
                      ->where(function ($query2) {
                           $query2->where('nota_pedidos.estado','=','Entregado')
                                  ->orwhere('nota_pedidos.estado','=','Pendiente Entrega');
                        })
-                     ->groupBy('nota_pedidos.tipo_presupuesto')
+                     
                      ->havingRaw('coalesce(SUM(nota_pedidos.total),0) <> coalesce(SUM(mov_financieros.importe_ingreso),0)')
-                     ->select(['nota_pedidos.tipo_presupuesto',
+                     ->groupBy('nota_pedidos.tipo_presupuesto')
+                     ->select([ 'nota_pedidos.tipo_presupuesto',
                                 DB::raw('SUM(nota_pedidos.total) AS total_ventas'),
                                 DB::raw('SUM(mov_financieros.importe_ingreso) as total_cobrado'),
+                                
                                  ]))
                       ->toJson();  
 
@@ -119,6 +129,15 @@ class informes_ventas extends Controller
       $aa->desde=$desde;
       $aa->hasta=$hasta;
        return Excel::download($aa, 'informe_ventas.xlsx');
+     // dd($aa)  ;
+
+    } 
+    public function ctacteexport($desde,$hasta) 
+    {
+      $aa = new Informe_ctacteExport();
+      $aa->desde=$desde;
+      $aa->hasta=$hasta;
+       return Excel::download($aa, 'informe_ctacte.xlsx');
      // dd($aa)  ;
 
     } 

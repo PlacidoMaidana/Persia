@@ -37,7 +37,7 @@
     /* width: 45%; */
     /* border: steelblue solid 1px; */
     height: auto;
-}
+    }
 
     .caja{
       border:1px solid black;
@@ -54,7 +54,7 @@
     {{-- <img class="img-responsive" 
     src="{{asset("images\cabeza.jpg")}}"  alt=""> --}}
 
-    <div class="container">
+    <div class="container_Presup">
       <div class="filas">
           <div class="cabeza">
 

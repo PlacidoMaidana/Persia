@@ -38,7 +38,7 @@
     <link rel="stylesheet" href="{{ voyager_asset('css/app.css') }}">
     {{-- <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8000/css/app.css">     --}}
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('css/grid2.css') }}">
     @yield('css')
     @if(__('voyager::generic.is_rtl') == 'true')
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.css">

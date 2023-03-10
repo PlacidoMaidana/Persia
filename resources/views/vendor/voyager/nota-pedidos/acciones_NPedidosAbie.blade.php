@@ -14,10 +14,8 @@
 
 <a href="{{url('/pedidos/export/'.$id_pedido)}}" title="Presupuesto" class="btn btn-primary ">Presupuesto</a>
 <a href="{{url('/CobranzasPedido/'.$id_pedido)}}" class="btn btn-primary ">Cobranzas</a>
+<a href="{{url('ordenes_fabricacion/por_pedido/'.$id_pedido)}}" class="btn btn-primary ">Genera Orden Fabricacion  </a>
 
-<button type="button" class="btn btn-primary" data-id={{$id_pedido}} id="btn_ordenes_fabricacion" >
-  Genera Orden Fabricacion   
-</button>
 </td>
 
 

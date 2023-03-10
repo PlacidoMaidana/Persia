@@ -84,6 +84,7 @@ Route::get('/informeflujofinanciero_rango_de_fechas/{anio}','App\Http\Controller
 Route::get('productos/export/{from}/{to}', 'App\Http\Controllers\informesProductos@export');
 Route::get('informes_compras/export/{from}/{to}', 'App\Http\Controllers\informes_compras@export');
 Route::get('informes_ventas/export/{from}/{to}', 'App\Http\Controllers\informes_ventas@export');
+Route::get('informes_ctacte/export/{from}/{to}', 'App\Http\Controllers\informes_ventas@ctacteexport');
 Route::get('informes_ventasComisiones/export/{from}/{to}/{vend}', 'App\Http\Controllers\informes_ventas_comisiones@export');
 Route::get('informes_produccion/export/{from}/{to}', 'App\Http\Controllers\informes_produccion@export');
 Route::get('informes_tesoreria/export/{from}/{to}', 'App\Http\Controllers\informes_tesoreria@export');
@@ -182,7 +183,13 @@ Route::get('/tipogasto_elegir', function () {
   ->join('rubros as r','p.rubro_id','=','r.id')
   ->join('subrubros as s','p.subrubro_id','=','s.id')
   ->where('ordenes_fabricacion.id_pedido','=', $id_notapedido)
-  ->select(['ordenes_fabricacion.id_pedido as pedido', 'ordenes_fabricacion.fecha_orden as fecha', 'p.descripcion as producto', 'r.rubro as rubro', 's.descripcion_subrubro as subrubro', 'ordenes_fabricacion.cantidad']))
+  ->select(['ordenes_fabricacion.id_pedido as pedido',
+   'ordenes_fabricacion.fecha_orden as fecha', 
+   'p.descripcion as producto', 
+   'r.rubro as rubro', 
+   's.descripcion_subrubro as subrubro',
+   'ordenes_fabricacion.cantidad',
+   'ordenes_fabricacion.estado']))
   ->toJson();    
 
 });
@@ -219,6 +226,10 @@ Route::get('/tipogasto_elegir', function () {
 ///////////////////////////////////////////
 
 Route::get('ordenes_fabricacion/generar_orden/{id_pedido}', 'App\Http\Controllers\Voyager\PedidosController@generaordenesfabricacion');
+Route::get('ordenes_fabricacion/por_pedido/{id_pedido}', 'App\Http\Controllers\Voyager\OrdenesFabricController@por_pedido');
+Route::get('ordenes_fabricacion/ordenes_por_pedido/{id_pedido}', 'App\Http\Controllers\Voyager\OrdenesFabricController@ordenes_por_pedido');
+
+
 /////////////////////////////////////////// 
 //      IMPRESION DE ORDEN DE FABRICACION 
 ///////////////////////////////////////////

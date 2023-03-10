@@ -77,21 +77,7 @@
           </div>
       </div>
       </div>
-      
-
-
-
-
-
-    <img class="img-responsive" 
-    src="{{public_path("images/cabeza.jpg")}}" width="70%" alt="">
-    
-
-    <hr style="color: rgb(84, 83, 83); background-color: rgb(101, 100, 100); width:100% higth:2px ;" />
-
-    
-    
-   
+ 
     
 </body>
 

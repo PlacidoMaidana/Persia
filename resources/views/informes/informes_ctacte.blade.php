@@ -46,8 +46,8 @@
     <table id="totales" class="table table-striped table-bordered dt-responsive nowrap" style="width:60%">
       <thead>
         <tr>
-          <th>tipo presup</th>
-          <th>pendiente de cobro</th>
+        <th>Tipo presupuesto</th>
+        <th>pendiente de cobro</th>
         </tr>
        </thead>
       
@@ -99,13 +99,15 @@
             {data: 'estado', name: 'nota_pedidos.estado',width: '10%'},
             {data: 'total', name: 'nota_pedidos.total',  render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
             {data: 'cobrado', name: 'cobrado', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
+            {data: 'saldo', name: 'saldo', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
+           {{-- 
             {  
               "data": null,  
               "render": function(data,type,row)
                 { 
                   return (numeral(data["total"] - data["cobrado"]).format('$ 0,0.00'))
                 }
-            }
+            } --}} 
              ]        
 });
    
@@ -119,14 +121,14 @@ $('#totales').dataTable( {
     "paging": false,
     "searching": false,
     "columns":[
-            {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
-            {  
+      {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
+      {  
               "data": null,  
               "render": function(data,type,row)
                 { 
                   return (numeral(data["total_ventas"] - data["total_cobrado"]).format('$ 0,0.00'))
                 }
-            }
+      }
            
              ]        
 });   
@@ -137,7 +139,7 @@ $('#totales').dataTable( {
 
 <script>
    function excelExport()   {
-       window.location.href =  "{{url('/informes_ventas/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+       window.location.href =  "{{url('/informes_ctacte/export/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
    }
 </script>
 @stop

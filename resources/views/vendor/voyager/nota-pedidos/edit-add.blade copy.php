@@ -24,14 +24,14 @@
         {{ __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->getTranslatedAttribute('display_name_singular') }}
     </h1>
 
-    <a href="{{url('admin/factura-ventas/create')}}" class="btn btn-primary">Facturar</a>
+    <!-- <a href="{{url('admin/factura-ventas/create')}}" class="btn btn-primary">Facturar</a>
 
     <a id="imprime"   href="{{url('/pedidos/export/'.$id_filtro_pedido)}}" class="btn btn-primary">Imprime Presupuesto</a>
 
     {{-- <a href="{{url('/vercobranzas')}}" class="btn btn-primary">Cobranzas > </a>--}}
 
     <a id="cobranzas"   href="{{url('/CobranzasPedido/'.$id_filtro_pedido)}}" class="btn btn-primary">Cobranzas</a>
-    
+     -->
 
     <div class="modal fade modal-warning" id="cobranzas" v-if="allowCrop">
       <div class="modal-dialog"  style="min-width: 90%">

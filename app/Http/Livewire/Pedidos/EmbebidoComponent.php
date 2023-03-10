@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Pedidos;
 use App\Models\Producto;
+use App\Models\OrdenesFabricacion;
 use App\Models\nota_pedido;
 use Livewire\Component;
 use TCG\Voyager\Alert;
@@ -14,6 +15,7 @@ class EmbebidoComponent extends Component
     public $unidad;
     public $precio;
     public $total_linea;
+    public $estado;
 
     public $totalgravado=0;
     public $modVenta='';
@@ -34,6 +36,7 @@ class EmbebidoComponent extends Component
 
     public function mount($renglones)
     {
+
               if (!is_null($renglones)) {
                $id_pedido=($renglones[0]->id_pedido);
                $pedido=nota_pedido::find($id_pedido);
@@ -41,23 +44,38 @@ class EmbebidoComponent extends Component
                $this->totalgravado=0;
                 foreach ($renglones as $key => $value) {
                    $prod=Producto::find($value->id_producto);
-
+                   $ord_fab = OrdenesFabricacion::select('estado')
+                        ->where('id_pedido', '=', $id_pedido)
+                        ->Where('id_producto', '=', $value->id_producto)
+                        ->first();
+                  if (empty($ord_fab->estado) )
+                      { 
+                       $estado = "";
+                      } 
+                    else 
+                      {
+                      $estado= $ord_fab->estado;
+                      }
+                    
+                 
                    $a=array(
                    'id_producto'=> $value->id_producto,
                    'producto'=> $value->descripcion,   
                    'cantidad'=> $value->cantidad,
                    'unidad'=> $value->unidad,
                    'precio'=> $value->precio, 
-                   'total-linea'=>$value->total_linea);
+                   'total-linea'=>$value->total_linea,
+                   'estado'=>  $estado);
                    $this->detalles[]=$a;
                    $this->detalles_string=serialize($this->detalles);
                    $this->totalgravado+=$value->total_linea;
                 }
+                // dd($renglones,$this->detalles);
                 $this->CalculosTotales($this->modVenta,$this->descuento1);
-  
-            }
-
+              }
     }
+
+    
 
     public function render()
     {
@@ -82,7 +100,9 @@ class EmbebidoComponent extends Component
            'cantidad'=> $value['cantidad'],
            'unidad'=> $value['unidad'],
            'precio'=> $value['precio'], 
-           'total-linea'=>$value['total_linea']);
+           'total-linea'=>$value['total_linea'],
+           'estado'=>$value['estado']
+          );
          $this->detalles[]=$a; 
          $this->totalgravado+=$value['total_linea'];
       }
@@ -95,6 +115,7 @@ class EmbebidoComponent extends Component
         $this->producto ="";
         $this->cantidad=null;
         $this->precio =null;
+        $this->estado =null;
         
     }
 
@@ -108,7 +129,8 @@ class EmbebidoComponent extends Component
        'cantidad'=> $this->cantidad,
        'unidad'=> $this->unidad,
        'precio'=>  $this->precio,
-       'total-linea' =>$this->total_linea);
+       'total-linea' =>$this->total_linea,
+       'estado' =>$this->estado);
        $this->detalles[]=$a;     
        $this->detalles_string=serialize($this->detalles);
        $this->totalgravado+=$this->total_linea;

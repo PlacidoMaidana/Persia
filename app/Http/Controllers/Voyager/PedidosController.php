@@ -667,6 +667,8 @@ public function remitos()
         }
 
         $renglones=$this->obtener_lineas($id);
+
+        //dd($renglones);
          
         
         foreach ($dataType->editRows as $key => $row) {
@@ -1031,6 +1033,7 @@ public function remitos()
 
     public function eliminar_renglones_de_pedido($id_pedido)
     {
+        //dd($id_pedido);
         DB::table('renglones_notapedidos')->where('id_pedido', '=', $id_pedido)->delete();
     }
 

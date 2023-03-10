@@ -98,13 +98,8 @@
             {data: 'estado', name: 'nota_pedidos.estado',width: '10%'},
             {data: 'total', name: 'nota_pedidos.total',  render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
             {data: 'cobrado', name: 'cobrado', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
-            {  
-              "data": null,  
-              "render": function(data,type,row)
-                { 
-                  return (numeral(data["total"] - data["cobrado"]).format('$ 0,0.00'))
-                }
-            }
+            {data: 'saldo', name: 'saldo', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
+            
              ]        
 });
    
