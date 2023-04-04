@@ -6,22 +6,7 @@
 @section('content')
 
 
-<div class="form-group col-md-2 ">
-    <label for="">fecha_desde</label>
-    <input type="date"  id="fecha_desde" class="form-control" placeholder="" aria-describedby="helpId">
-    <small id="helpId" class="text-muted">fecha_desde</small>
-</div>
-<div class="form-group col-md-2 ">
-    <label for="">fecha_hasta</label>
-    <input type="date" id="fecha_hasta" class="form-control" placeholder="" aria-describedby="helpId">
-    <small id="helpId" class="text-muted">fecha_hasta</small>
-</div>
 
-<div class="row ">
-    <div class="col-md-2  ">
-      <button  type="button" id="informe_vtas"  onclick="filtrar()" class="btn btn-sm btn-primary" >Filtrar ventas</button>
-    </div>    
-</div>
 <div class="row ">
   <div class="col-md-2  ">
     <button  type="button" id="ver ventas"  onclick="excelExport()" class="btn btn-sm btn-primary" >Excel</button>
@@ -70,19 +55,13 @@
     </script>
 
 
-    <script>
-    
-    $(document).ready(function() {
-           
-
-</script> 
 
 <script>
 
-  function filtrar() {
-    
+  //function filtrar() {
+  $(document).ready(function(){
     //var fechas=$("#fecha_desde").val()+"hasta: "+$("#fecha_hasta").val();
-    var filtro ="{{url('/informectacte_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+    var filtro ="{{url('/informectacte_rango_de_fechas')}}";
  
     
     $('#example').dataTable( {
@@ -100,41 +79,33 @@
             {data: 'total', name: 'nota_pedidos.total',  render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
             {data: 'cobrado', name: 'cobrado', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
             {data: 'saldo', name: 'saldo', render: $.fn.dataTable.render.number(",", ".", 2,'$ '), width: '10%'},
-           {{-- 
-            {  
-              "data": null,  
-              "render": function(data,type,row)
-                { 
-                  return (numeral(data["total"] - data["cobrado"]).format('$ 0,0.00'))
-                }
-            } --}} 
+           
              ]        
-});
+    });
    
 
-var filtrototales ="{{url('/totalesctacte_rango_de_fechas/')}}"+"/"+$("#fecha_desde").val()+'/'+$("#fecha_hasta").val();
+var filtrototales ="{{url('/totalesctacte_rango_de_fechas')}}";
   
  
-$('#totales').dataTable( {
+$('#totales').dataTable({
     "serverSide": true,
     "ajax":filtrototales,
     "paging": false,
     "searching": false,
     "columns":[
-      {data: 'tipo_presupuesto', name: 'nota_pedidos.tipo_presupuesto', width: '5%'},
-      {  
-              "data": null,  
-              "render": function(data,type,row)
-                { 
-                  return (numeral(data["total_ventas"] - data["total_cobrado"]).format('$ 0,0.00'))
-                }
-      }
-           
-             ]        
-});   
+           {data: 'tipo_presupuesto', name: 'A.tipo_presupuesto', width: '5%'},
+               {  
+                   "data": null,  
+                   "render": function(data,type,row)
+                     { 
+                       return (numeral(data["total_ventas"] - data["total_cobrado"]).format('$ 0,0.00'))
+                     }
+           }           
+      ]        
+    });   
 
 
-  }
+  });
 </script>
 
 <script>

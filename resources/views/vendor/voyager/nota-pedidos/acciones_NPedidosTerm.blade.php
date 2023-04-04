@@ -11,5 +11,6 @@
 <a href="{{url('admin/nota-pedidos/'.$id_pedido.'/edit')}}" title="Edit" class="btn btn-sm btn-primary  edit">
   <i class="voyager-edit"></i> <span class="hidden-xs hidden-sm">Edit</span>
   </a>
+  <a href="{{url('/CobranzasPedido/'.$id_pedido)}}" class="btn btn-primary ">Cobranzas</a> 
                                              
 </td>

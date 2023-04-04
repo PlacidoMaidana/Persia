@@ -25,7 +25,7 @@ class informes_ventas extends Controller
     public function en_rango_de_fechas($from,$to)
     {
        return $datos = datatables()->of(DB::table('nota_pedidos')
-           ->join('clientes as c','c.id','=','nota_pedidos.id_cliente')
+           ->leftjoin('clientes as c','c.id','=','nota_pedidos.id_cliente')
            ->leftjoin ('mov_financieros','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
            ->leftjoin('empleados as v','v.id','=','nota_pedidos.id_vendedor')
            ->whereBetween('nota_pedidos.fecha',array($from,$to) )
@@ -53,19 +53,17 @@ class informes_ventas extends Controller
             ->toJson();    
     }
 
-    public function ctacte_en_rango_de_fechas($from,$to)
+    public function ctacte_en_rango_de_fechas()
     {
      
       return $datos = datatables()->of(DB::table('nota_pedidos')
-           ->join('clientes as c','c.id','=','nota_pedidos.id_cliente')
+           ->leftjoin('clientes as c','c.id','=','nota_pedidos.id_cliente')
            ->leftjoin ('mov_financieros','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
            ->leftjoin('empleados as v','v.id','=','nota_pedidos.id_vendedor')
-           ->whereBetween('nota_pedidos.fecha',array($from,$to) )
            ->where(function ($query2) {
                $query2->where('nota_pedidos.estado','=','Entregado')
                       ->orwhere('nota_pedidos.estado','=','Pendiente Entrega');
-            })
-          
+            })          
            ->groupBy('nota_pedidos.id','nota_pedidos.fecha','nota_pedidos.tipo_presupuesto','c.nombre','c.cuit','nota_pedidos.estado','nota_pedidos.total' )
            ->havingRaw('nota_pedidos.total <> coalesce(SUM(mov_financieros.importe_ingreso),0)')
            ->select(['nota_pedidos.id',
@@ -102,27 +100,25 @@ class informes_ventas extends Controller
                         ]))
              ->toJson();  
       }      
-    public function totalesctacte_en_rango_de_fechas($from,$to)      
+    public function totalesctacte_en_rango_de_fechas()      
       { 
-                     return $totales = datatables()->of(DB::table('nota_pedidos')
-                     ->leftjoin ('mov_financieros','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
-                     ->whereBetween('nota_pedidos.fecha',array($from,$to) )
-                     ->where(function ($query2) {
-                          $query2->where('nota_pedidos.estado','=','Entregado')
-                                 ->orwhere('nota_pedidos.estado','=','Pendiente Entrega');
-                       })
-                     
-                     ->havingRaw('coalesce(SUM(nota_pedidos.total),0) <> coalesce(SUM(mov_financieros.importe_ingreso),0)')
-                     ->groupBy('nota_pedidos.tipo_presupuesto')
-                     ->select([ 'nota_pedidos.tipo_presupuesto',
-                                DB::raw('SUM(nota_pedidos.total) AS total_ventas'),
-                                DB::raw('SUM(mov_financieros.importe_ingreso) as total_cobrado'),
-                                
-                                 ]))
-                      ->toJson();  
+
+                      return $totales = datatables()->of(DB::table(DB::raw(
+                        '(SELECT nota_pedidos.tipo_presupuesto, nota_pedidos.id, nota_pedidos.total, SUM(mov_financieros.importe_ingreso) as cobrado
+                         FROM nota_pedidos LEFT JOIN mov_financieros ON mov_financieros.id_nota_pedido = nota_pedidos.id 
+                         WHERE (nota_pedidos.estado = "Entregado" OR nota_pedidos.estado = "Pendiente Entrega")
+                         GROUP BY nota_pedidos.id, nota_pedidos.tipo_presupuesto, nota_pedidos.total
+                         HAVING total <> COALESCE(SUM(mov_financieros.importe_ingreso), 0)) AS A'))
+                         ->select('A.tipo_presupuesto', DB::raw('SUM(A.total) AS total_ventas'), DB::raw('SUM(A.cobrado) AS total_cobrado'))
+                         ->groupBy('A.tipo_presupuesto'))                      
+                         ->toJson();
+                       
 
 
     }
+    
+
+
     public function export($desde,$hasta) 
     {
       $aa = new Informe_ventasExport();
@@ -132,11 +128,9 @@ class informes_ventas extends Controller
      // dd($aa)  ;
 
     } 
-    public function ctacteexport($desde,$hasta) 
+    public function ctacteexport() 
     {
       $aa = new Informe_ctacteExport();
-      $aa->desde=$desde;
-      $aa->hasta=$hasta;
        return Excel::download($aa, 'informe_ctacte.xlsx');
      // dd($aa)  ;
 

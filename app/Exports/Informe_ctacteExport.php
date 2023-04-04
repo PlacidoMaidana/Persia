@@ -6,9 +6,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class Informe_ctacteExport implements FromCollection
 {
-    public $desde;
-    public $hasta;
- 
+     
     
     public function collection()
     {
@@ -17,7 +15,6 @@ class Informe_ctacteExport implements FromCollection
            ->join('clientes as c','c.id','=','nota_pedidos.id_cliente')
            ->leftjoin('empleados as v','v.id','=','nota_pedidos.id_vendedor')
            ->leftjoin ('mov_financieros','mov_financieros.id_nota_pedido','=','nota_pedidos.id')
-            ->whereBetween('nota_pedidos.fecha',array($this->desde,$this->hasta))
            ->where(function ($query2) {
                $query2->where('nota_pedidos.estado','=','Entregado')
                       ->orwhere('nota_pedidos.estado','=','Pendiente Entrega');

@@ -121,7 +121,12 @@
                                              @endif
                                              @if ( $row->getTranslatedAttribute('display_name')=='Fecha'  )
                                                 @php
-                                                $date= Carbon\Carbon::now()->format('Y-m-d');
+                                                if (!$edit) {
+                                                    $date= Carbon\Carbon::now()->format('Y-m-d');
+                                                }else{
+                                                    $date=Carbon\Carbon::createFromDate($dataTypeContent->fecha)->format('Y-m-d');
+                                                }
+                                               
                                             
                                                 @endphp
                                                 <div class="form-group  col-md-3 ">

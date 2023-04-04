@@ -263,12 +263,12 @@ public function remitos()
                      'nota_pedidos.observaciones',
                      'nota_pedidos.descuento',
                      'nota_pedidos.estado',
-                     DB::raw('nota_pedidos.totalgravado*nota_pedidos.descuento/100 as montodescuento'),
-                     DB::raw('nota_pedidos.totalgravado+(nota_pedidos.totalgravado*nota_pedidos.descuento/100) as gravadocondescuento'),
-                      DB::raw('nota_pedidos.totalgravado+(nota_pedidos.totalgravado*nota_pedidos.descuento/100)+nota_pedidos.monto_iva as totalconiva'),
+                     DB::raw('nota_pedidos.totalgravado*coalesce(nota_pedidos.descuento/100,0) as montodescuento'),
+                     DB::raw('nota_pedidos.totalgravado+(nota_pedidos.totalgravado*coalesce(nota_pedidos.descuento/100,0)) as gravadocondescuento'),
+                      DB::raw('nota_pedidos.totalgravado+(nota_pedidos.totalgravado*coalesce(nota_pedidos.descuento/100,0))+nota_pedidos.monto_iva as totalconiva'),
                ])           
            ->first();
-           
+           //dd($datosPedidos);
            
            $detallesPedidos= DB::table('nota_pedidos')
            ->join('renglones_notapedidos','nota_pedidos.id','=','renglones_notapedidos.id_pedido')

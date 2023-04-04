@@ -1,0 +1,51 @@
+
+
+html, body {
+    height: 100%;
+  }
+  
+  body {
+    background-image: url("../images/remitos/PRESUPUESTO2.jpg");;
+    background-size: cover;
+    margin: 0;
+    padding-top: 4cm;
+    padding-left: 2cm;
+    padding-right: 2cm;
+  }
+  
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2cm;
+    /* background-color: #2a0927;
+    color: white; */
+    text-align: center;
+    line-height: 30px;
+  }
+  
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2cm;
+    /* background-color: #2a0927;
+    color: white; */
+    text-align: center;
+    line-height: 35px;
+  }
+  
+
+  table {
+    font-size: 12px;
+    border-collapse: collapse; /* Fusionar los bordes de las celdas */
+    width: 80%; /* Ancho total de la tabla */
+  }
+  
+  td {
+    text-align: right; /* Justificar el contenido a la derecha */
+    /* width: 10px;  Ancho fijo de 20px para cada columna */
+    word-wrap: break-word; /* Ajustar el texto dinámicamente a la columna */
+  }
