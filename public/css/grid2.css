@@ -1,0 +1,91 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+html{
+    height: 100%;
+    width: 100%;
+}
+body{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    min-height: 100%;
+}
+.container_Presup {
+    font-family: arial;
+    font-size: 10px;
+    margin: 80px;
+    width: 700px;
+    height: 900px;
+    background-image: url("../images/remitos/PRESUPUESTO2.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+  
+  }
+
+
+  p {
+ 
+    text-align: center;
+  }
+
+.filas{
+    display: grid;
+    grid-template-rows: 181px 438px 181px;
+}
+.grid{
+    display: grid;
+    grid-template-columns: 10% 90%;
+}
+.lateral {
+      
+        padding: 1em;
+        width: 250px;
+        height: 100%;       
+        
+  }
+
+.grid div:hover {
+    border: 1px solid #F87405;
+}
+.cuerpo {
+   
+    width: 77%;
+    padding-left: 110px; 
+
+}
+
+.cabeza{  
+    padding: 1em;
+    width: 90%;
+    height:100px; 
+}
+
+.right {
+    padding-top: 10px;
+    padding-left: 197px;
+    margin-left: 10px;
+    position: relative;
+    float: left;
+    height: auto;
+    }
+
+    .right_NPedido_livewire {
+            text-align:right;
+            border: 1px text-align:right;
+            font-family: Tahoma, Verdana, Segoe, sans-serif;
+            font-size: 15px;
+            font-style: normal;
+             
+        }
+    .caja{
+      border:1px solid black;
+      text-align:right;
+      border: 1px text-align:right;
+      font-family: Tahoma, Verdana, Segoe, sans-serif;
+      font-size: 15px;
+      font-style: normal;
+       }
+
+      

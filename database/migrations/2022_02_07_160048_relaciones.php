@@ -62,6 +62,10 @@ class Relaciones extends Migration
         Schema::table('productos', function (Blueprint $table) {
             $table->foreign('id_molde')->references('id')->on('moldes');
         });
+        Schema::table('productos', function (Blueprint $table) {
+            $table->foreign('id_base')->references('id')->on('bases');
+        });
+
 
         Schema::table('renglones_notapedidos', function (Blueprint $table) {
             $table->foreign('id_pedido')->references('id')->on('nota_pedidos')->onDelete('cascade')->onUpdate('cascade');
@@ -78,14 +82,12 @@ class Relaciones extends Migration
 
 
         Schema::table('Dosificaciones', function (Blueprint $table) {
-        $table->foreign('id_producto_componente')->references('id')->on('productos');
+        $table->foreign('id_insumo_producto')->references('id')->on('productos');
         });
         Schema::table('Dosificaciones', function (Blueprint $table) {
-        $table->foreign('id_base')->references('id')->on('Bases_listones');
-         });       
-         Schema::table('Bases_listones', function (Blueprint $table) {
             $table->foreign('id_producto')->references('id')->on('productos');
-        });
+        });  
+        
 
         Schema::table('mov_financieros', function (Blueprint $table) {
             $table->foreign('id_cuenta_bancaria')->references('id')->on('cuentas_bancos');

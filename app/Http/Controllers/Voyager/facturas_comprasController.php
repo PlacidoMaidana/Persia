@@ -255,8 +255,8 @@ public function show(Request $request, $id)
         //<<<<<<<<<<<<<<    <<<<   <<<<<<    <<<<<<<<<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
         //<<<<<<<<<<<<<<       <<<<<<<<<<           <<<<<<<<<<<<     <<<<<<<<<<<<<<<<<<<<<<<<
         //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        $renglones=$this->obtener_lineas($id);
-        $totales=$this->obtener_totales_lineas($id);
+    //    $renglones=$this->obtener_lineas($id);
+    //   $totales=$this->obtener_totales_lineas($id);
       
 
  // Replace relationships' keys for labels and create READ links if a slug is provided.
@@ -280,7 +280,8 @@ public function show(Request $request, $id)
      $view = "voyager::$slug.read";
  }
 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones','totales'));
+ //return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted','renglones','totales'));
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'isSoftDeleted'));
 }
 
 //***************************************
@@ -318,8 +319,8 @@ public function edit(Request $request, $id)
      $dataTypeContent = DB::table($dataType->name)->where('id', $id)->first();
  }
 
- $renglones=$this->obtener_lineas($id);
- $totales=$this->obtener_totales_lineas($id);
+// $renglones=$this->obtener_lineas($id);
+// $totales=$this->obtener_totales_lineas($id);
  
 
  foreach ($dataType->editRows as $key => $row) {
@@ -343,9 +344,9 @@ public function edit(Request $request, $id)
  if (view()->exists("voyager::$slug.edit-add")) {
      $view = "voyager::$slug.edit-add";
  }
+$id_compra=$id;
 
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','renglones','totales'));
- // dd($request['total_general']);
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','id_compra'));
 }
 
 public function obtener_lineas($id_factura)
@@ -368,7 +369,7 @@ public function obtener_lineas($id_factura)
     return $renglones=   DB::table('facturas_compras')
     ->join('detalles_facturas_compras as r','facturas_compras.id','=','r.id_factura_compra')
     ->join('productos as p','r.id_producto','=','p.id')
-    ->select('r.id', 'id_producto','descripcion','cantidad','p.preciovta' ,'r.total_linea', 'facturas_compras.nro_factura as factura')
+    ->select('r.id', 'id_producto','descripcion','cantidad','r.precio_c' ,'r.total_linea', 'facturas_compras.nro_factura as factura')
     ->where('facturas_compras.id',$id_factura)->get();
 
 
@@ -385,6 +386,7 @@ public function obtener_totales_lineas($id_factura)
 // POST BR(E)AD
 public function update(Request $request, $id)
 {
+   // dd($request);
  $slug = $this->getSlug($request);
 
  $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -425,16 +427,19 @@ public function update(Request $request, $id)
        
 
         
-      
-        $data->total_factura=$request['total_general'];
+       // $data->iva_10_5=$request['iva_10_5']; 
+       // $data->iva_21=$request['iva_21']; 
+       // $data->iva_27=$request['iva_27']; 
+        $data->iva=$request['iva']; 
+        $data->total_factura=$request['total_general'] + $request['total_impuestos'];
         $data->subtotal=$request['total_general']; 
         $data->save();
         
 
         $tabla_detalles=unserialize($request['detalles_string']);
         //dd($request['detalles_string']);
-        $this->eliminar_renglones_de_compra($data->id);
-        $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
+       // $this->eliminar_renglones_de_compra($data->id);
+       // $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
             
 
 
@@ -509,8 +514,9 @@ public function create(Request $request)
      $view = "voyager::$slug.edit-add";
  }
 
-
- return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+ $totales=$request['total_general'] ; //$this->obtener_totales_lineas($id);
+ $id_compra=0 ; 
+ return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable','totales','id_compra' ));
 }
 
 /**
@@ -574,7 +580,7 @@ public function store(Request $request)
 
             $tabla_detalles=unserialize($request['detalles_string']);
             // dd($request['detalles_string']);
-            $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
+           // $this->cargar_renglones_de_compra( $tabla_detalles,$data->id);
             
             
             //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -603,13 +609,14 @@ public function eliminar_renglones_de_compra($id_factura)
 
 public function cargar_renglones_de_compra($tabla_detalles,$id_factura)
 {
-    // dd($tabla_detalles);
+    //dd($tabla_detalles);
     foreach ($tabla_detalles as $r) {
         
-         
+        
         $renglon_fac=new RengFact_Compra();
         $renglon_fac->id_factura_compra=$id_factura; 
         $renglon_fac->cantidad=$r['cantidad'];
+        $renglon_fac->precio_c=$r['precio'];
         $renglon_fac->id_producto=$r['id_producto'];
         $renglon_fac->total_linea=$r['total-linea'];
         $renglon_fac->save();              

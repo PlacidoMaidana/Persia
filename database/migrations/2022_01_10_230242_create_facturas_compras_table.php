@@ -40,6 +40,8 @@ class CreateFacturasComprasTable extends Migration
             $table->integer('remito_nro')->nullable();
             $table->unsignedBigInteger('id_jurisdiccion')->nullable();
             $table->integer('nro_factura_ref')->nullable();
+            $table->char('forma_pago', 50)->nullable();
+            $table->char('estado_pago', 50)->nullable();
             $table->timestamps();
             
         });

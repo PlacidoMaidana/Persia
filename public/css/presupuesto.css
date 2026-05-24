@@ -1,0 +1,222 @@
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+html,
+body {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url("../images/remitos/PRESUPUESTO2.jpg");
+  background-repeat: no-repeat;
+  background-size: 210mm 297mm;
+  background-position: top left;
+  padding-top: 40mm;
+  padding-left: 20mm;
+  padding-right: 20mm;
+  box-sizing: border-box;
+  font-size: 11px;
+}
+
+.cuerpo {
+  width: 170mm;
+}
+
+.empresa-header {
+  font-size: 10px;
+  line-height: 1.25;
+  margin-bottom: 4mm;
+}
+
+.empresa-header strong {
+  font-weight: 700;
+}
+
+.empresa-header--compact {
+  margin-bottom: 0;
+}
+
+.empresa-title {
+  font-size: 10pt;
+  font-weight: 700;
+  margin-bottom: 1mm;
+}
+
+.empresa-subtitle {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  margin-bottom: 2mm;
+}
+
+.doc-top {
+  width: 100%;
+}
+
+.doc-top .empresa-header--compact {
+  display: inline-block;
+  width: 56%;
+  vertical-align: top;
+}
+
+.doc-meta {
+  display: inline-block;
+  width: 42%;
+  text-align: right;
+  vertical-align: top;
+}
+
+.doc-title {
+  font-size: 20pt;
+  font-weight: 700;
+  margin: 0 0 4mm 0;
+}
+
+.estado-pill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.2mm 2.4mm;
+  font-size: 8pt;
+  background: #dbe6f8;
+  color: #24334b;
+  border-radius: 1mm;
+}
+
+.separador {
+  border: none;
+  border-top: 0.2mm solid #d0d0d0;
+  margin: 6mm 0;
+}
+
+.info-grid {
+  width: 100%;
+  margin-bottom: 5mm;
+}
+
+.info-box {
+  display: inline-block;
+  width: 48%;
+  vertical-align: top;
+}
+
+.info-label {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 2mm;
+}
+
+.info-value {
+  font-size: 10pt;
+  line-height: 1.35;
+}
+
+.intro-text {
+  margin-bottom: 3mm;
+  font-size: 10pt;
+}
+
+.caja {
+  min-height: 90mm;
+}
+  
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2cm;
+    /* background-color: #2a0927;
+    color: white; */
+    text-align: center;
+    line-height: 30px;
+  }
+  
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2cm;
+    /* background-color: #2a0927;
+    color: white; */
+    text-align: center;
+    line-height: 35px;
+  }
+  
+
+  table {
+    font-size: 12px;
+    border-collapse: collapse; /* Fusionar los bordes de las celdas */
+    width: 100%; /* Ancho total de la tabla */
+    table-layout: fixed;
+  }
+
+  .table th,
+  .table td {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    padding: 1.6mm 1.4mm;
+  }
+
+  .table th {
+    background: #e5e5e5;
+    font-size: 8.5pt;
+    text-align: left;
+  }
+
+  .table td {
+    font-size: 9.5pt;
+  }
+
+  .table th:nth-child(1),
+  .table td:nth-child(1) { width: 16%; }
+  .table th:nth-child(2),
+  .table td:nth-child(2) { width: 42%; }
+  .table th:nth-child(3),
+  .table td:nth-child(3) { width: 10%; }
+  .table th:nth-child(4),
+  .table td:nth-child(4) { width: 10%; }
+  .table th:nth-child(5),
+  .table td:nth-child(5) { width: 11%; }
+  .table th:nth-child(6),
+  .table td:nth-child(6) { width: 11%; }
+
+  .table th:nth-child(3),
+  .table th:nth-child(4),
+  .table th:nth-child(5),
+  .table th:nth-child(6),
+  .table td:nth-child(3),
+  .table td:nth-child(4),
+  .table td:nth-child(5),
+  .table td:nth-child(6) {
+    text-align: right;
+  }
+
+  .totales-wrap {
+    width: 100%;
+    margin-top: 3mm;
+  }
+
+  .totales-table {
+    width: 58%;
+    margin-left: auto;
+    table-layout: auto;
+  }
+
+  .forma-pago {
+    font-size: 8.5pt;
+    margin-top: 3mm;
+  }
+  
+  td {
+    text-align: right; /* Justificar el contenido a la derecha */
+    /* width: 10px;  Ancho fijo de 20px para cada columna */
+    word-wrap: break-word; /* Ajustar el texto dinámicamente a la columna */
+  }

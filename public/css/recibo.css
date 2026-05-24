@@ -1,0 +1,138 @@
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: DejaVu Sans, Arial, sans-serif;
+  color: #111;
+  font-size: 11px;
+}
+
+.recibo-page {
+  width: 210mm;
+  min-height: 297mm;
+  box-sizing: border-box;
+}
+
+.recibo-header {
+  height: 36mm;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 100% auto;
+}
+
+.recibo-content {
+  padding: 10mm 18mm 12mm;
+}
+
+.empresa-header {
+  font-size: 10.5px;
+  line-height: 1.35;
+  margin-bottom: 8mm;
+}
+
+.empresa-header strong {
+  font-weight: 700;
+}
+
+.doc-top {
+  width: 100%;
+  margin-bottom: 3mm;
+}
+
+.doc-title-wrap {
+  display: inline-block;
+  width: 64%;
+  vertical-align: top;
+}
+
+.doc-date {
+  display: inline-block;
+  width: 34%;
+  text-align: right;
+  vertical-align: top;
+  font-size: 11px;
+  padding-top: 3mm;
+}
+
+.doc-title {
+  margin: 0;
+  font-size: 17pt;
+  letter-spacing: 0.4mm;
+}
+
+.doc-number {
+  font-size: 19pt;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.separator {
+  width: 100%;
+  height: 0;
+  border-top: 0.6mm solid #4d4d4d;
+  margin: 2mm 0 5mm;
+}
+
+.info-box {
+  border: 0.35mm solid #9f9f9f;
+  padding: 4mm;
+  margin-bottom: 6mm;
+}
+
+.info-row {
+  margin-bottom: 1.5mm;
+  font-size: 13px;
+}
+
+.payment-box {
+  margin-top: 2mm;
+}
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.payment-table td {
+  border: 0.35mm solid #8f8f8f;
+  padding: 3.2mm;
+  vertical-align: top;
+}
+
+.payment-table .label {
+  width: 35%;
+  background: #f1f1f1;
+  font-weight: 700;
+}
+
+.payment-table .value {
+  width: 65%;
+}
+
+.signatures {
+  margin-top: 22mm;
+  width: 100%;
+}
+
+.signature-line {
+  display: inline-block;
+  width: 47%;
+  border-top: 0.3mm solid #666;
+  padding-top: 1.5mm;
+  text-align: center;
+  color: #444;
+  font-size: 10px;
+}
+
+.signature-line + .signature-line {
+  margin-left: 5%;
+}
