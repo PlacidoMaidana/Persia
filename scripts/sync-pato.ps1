@@ -74,7 +74,7 @@ $robocopyArgs = @(
     $SourceRepo,
     $MirrorRepo,
     "/MIR",
-    "/XD", ".git", "vendor", "node_modules", "storage\framework\cache", "storage\framework\sessions", "storage\framework\views", "storage\logs",
+    "/XD", ".git", "vendor", "node_modules", "database\backups", "storage\framework\cache", "storage\framework\sessions", "storage\framework\views", "storage\logs",
     "/XF", ".env"
 )
 
